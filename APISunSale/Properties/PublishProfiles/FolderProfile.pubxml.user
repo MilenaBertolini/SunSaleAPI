@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\SunSaleApi</_PublishTargetUrl>
-    <History>True|2023-03-10T15:20:58.9819175Z;True|2023-03-10T12:06:47.9124923-03:00;</History>
+    <History>True|2023-03-11T02:23:57.1315904Z;False|2023-03-10T23:22:47.9134833-03:00;False|2023-03-10T23:21:34.3926094-03:00;True|2023-03-10T12:20:58.9819175-03:00;True|2023-03-10T12:06:47.9124923-03:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
