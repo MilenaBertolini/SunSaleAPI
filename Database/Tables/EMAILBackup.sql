@@ -1,0 +1,10 @@
+﻿CREATE TABLE [EMAILBackup] (
+    [CODIGO]       INT            NOT NULL,
+    [DESTINATARIO] VARCHAR (300)  NOT NULL,
+    [ASSUNTO]      VARCHAR (300)  NOT NULL,
+    [TEXTO]        VARCHAR (8000) NOT NULL,
+    [DATAENVIO]    DATETIME       NOT NULL,
+    [STATUS]       CHAR (1)       NOT NULL,
+    [OBSERVACAO]   VARCHAR (1000) NULL
+);
+

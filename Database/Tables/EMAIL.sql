@@ -1,0 +1,10 @@
+﻿CREATE TABLE [EMAIL] (
+    [CODIGO]       INT             NOT NULL,
+    [DESTINATARIO] VARCHAR (300)   DEFAULT ('') NOT NULL,
+    [ASSUNTO]      VARCHAR (300)   DEFAULT ('') NOT NULL,
+    [TEXTO]        VARBINARY (MAX) NULL,
+    [DATAENVIO]    DATETIME        NOT NULL,
+    [STATUS]       CHAR (1)        DEFAULT ('0') NOT NULL,
+    [OBSERVACAO]   VARCHAR (1000)  NULL
+);
+

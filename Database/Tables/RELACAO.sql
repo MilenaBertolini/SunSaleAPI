@@ -1,0 +1,13 @@
+﻿CREATE TABLE [RELACAO] (
+    [CODIGO]               INT           DEFAULT ((0)) NOT NULL,
+    [CODIGOPROJETO]        INT           DEFAULT ((0)) NOT NULL,
+    [TABELAORIGEM]         INT           DEFAULT ((0)) NOT NULL,
+    [CAMPOORIGEM]          INT           DEFAULT ((0)) NOT NULL,
+    [TABELADESTINO]        INT           DEFAULT ((0)) NOT NULL,
+    [CAMPODESTINO]         INT           DEFAULT ((0)) NOT NULL,
+    [CARDINALIDADEORIGEM]  VARCHAR (1)   DEFAULT ('') NOT NULL,
+    [CARDINALIDADEDESTINO] VARCHAR (1)   DEFAULT ('') NOT NULL,
+    [FOREINGKEY]           VARCHAR (200) NULL,
+    PRIMARY KEY CLUSTERED ([CODIGO] ASC)
+);
+

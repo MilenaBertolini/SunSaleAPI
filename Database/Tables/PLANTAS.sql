@@ -1,0 +1,17 @@
+﻿CREATE TABLE [PLANTAS] (
+    [ID]             INT            NOT NULL,
+    [IDBIOMA]        INT            NOT NULL,
+    [NOMECIENTIFICO] VARCHAR (200)  NULL,
+    [NOMEPOPULAR]    VARCHAR (200)  NULL,
+    [HABITATE]       VARCHAR (1000) NULL,
+    [FOLHA]          VARCHAR (8000) NULL,
+    [FLOR]           VARCHAR (8000) NULL,
+    [FRUTO]          VARCHAR (8000) NULL,
+    [FAMILIA]        VARCHAR (200)  NULL,
+    [TRIBO]          VARCHAR (200)  NULL,
+    [IDUSUARIO]      INT            NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC),
+    FOREIGN KEY ([IDBIOMA]) REFERENCES [BIOMAS] ([ID]),
+    FOREIGN KEY ([IDUSUARIO]) REFERENCES [USUARIOS] ([ID])
+);
+

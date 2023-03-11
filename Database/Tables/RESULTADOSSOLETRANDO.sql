@@ -1,0 +1,7 @@
+﻿CREATE TABLE [RESULTADOSSOLETRANDO] (
+    [ID]            INT           NOT NULL,
+    [NOME]          VARCHAR (100) NOT NULL,
+    [NUMEROACERTOS] INT           NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+

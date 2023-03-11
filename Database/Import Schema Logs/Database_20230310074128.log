@@ -1,0 +1,87 @@
+10/03/2023 16:41:28	This log contains information about the import schema operation into project 'Database' on computer 'RODRIGOMACHADO' by user 'rodri'.
+10/03/2023 16:41:28	Import of database schema has started.
+10/03/2023 16:41:48	Gathering database credentials
+10/03/2023 16:41:48	Gathering database options
+10/03/2023 16:41:48	Gathering generic database scoped configuration option
+10/03/2023 16:41:48	Gathering users
+10/03/2023 16:41:48	Gathering roles
+10/03/2023 16:41:48	Gathering application roles
+10/03/2023 16:41:48	Gathering role memberships
+10/03/2023 16:41:48	Gathering filegroups
+10/03/2023 16:41:48	Gathering full-text catalogs
+10/03/2023 16:41:48	Gathering assemblies
+10/03/2023 16:41:48	Gathering certificates
+10/03/2023 16:41:48	Gathering asymmetric keys
+10/03/2023 16:41:48	Gathering symmetric keys
+10/03/2023 16:41:48	Gathering encrypted symmetric keys
+10/03/2023 16:41:48	Gathering schemas
+10/03/2023 16:41:48	Gathering XML schema collections
+10/03/2023 16:41:48	Gathering user-defined data types
+10/03/2023 16:41:48	Gathering user-defined types
+10/03/2023 16:41:48	Gathering table types
+10/03/2023 16:41:48	Gathering unique keys for table types
+10/03/2023 16:41:48	Gathering primary keys for table types
+10/03/2023 16:41:48	Gathering indexes for table types
+10/03/2023 16:41:48	Gathering check constraints for table types
+10/03/2023 16:41:48	Gathering default constraints for table types
+10/03/2023 16:41:48	Gathering partition functions
+10/03/2023 16:41:48	Gathering partition schemes
+10/03/2023 16:41:48	Gathering functions
+10/03/2023 16:41:48	Gathering encrypted functions
+10/03/2023 16:41:48	Gathering aggregates
+10/03/2023 16:41:48	Gathering procedures
+10/03/2023 16:41:48	Gathering encrypted procedures
+10/03/2023 16:41:48	Gathering tables
+10/03/2023 16:41:49	Gathering primary keys
+10/03/2023 16:41:50	Gathering unique constraints
+10/03/2023 16:41:50	Gathering foreign keys
+10/03/2023 16:41:50	Gathering default constraints
+10/03/2023 16:41:50	Gathering check constraints
+10/03/2023 16:41:50	Gathering views
+10/03/2023 16:41:50	Gathering encrypted views
+10/03/2023 16:41:50	Gathering indexes
+10/03/2023 16:41:50	Gathering statistics
+10/03/2023 16:41:50	Gathering full-text index stoplists
+10/03/2023 16:41:50	Gathering search property lists
+10/03/2023 16:41:50	Gathering search properties
+10/03/2023 16:41:50	Gathering full-text indexes
+10/03/2023 16:41:50	Gathering column store indexes
+10/03/2023 16:41:50	Gathering spatial indexes
+10/03/2023 16:41:50	Gathering XML indexes
+10/03/2023 16:41:50	Gathering Selective XML indexes
+10/03/2023 16:41:50	Gathering encrypted triggers
+10/03/2023 16:41:50	Gathering triggers
+10/03/2023 16:41:51	Gathering encrypted and clr ddl triggers
+10/03/2023 16:41:51	Gathering ddl triggers
+10/03/2023 16:41:51	Creating edge constraints
+10/03/2023 16:41:51	Gathering synonyms
+10/03/2023 16:41:51	Gathering defaults
+10/03/2023 16:41:51	Gathering data constraint uddt bindings
+10/03/2023 16:41:51	Gathering rules
+10/03/2023 16:41:51	Gathering data constraint uddt bindings
+10/03/2023 16:41:51	Gathering message types
+10/03/2023 16:41:51	Gathering queues
+10/03/2023 16:41:51	Gathering contracts
+10/03/2023 16:41:51	Gathering services
+10/03/2023 16:41:51	Gathering event notifications
+10/03/2023 16:41:51	Gathering remote service bindings
+10/03/2023 16:41:51	Gathering broker priorities
+10/03/2023 16:41:51	Gathering signatures
+10/03/2023 16:41:51	Gathering compression options
+10/03/2023 16:41:51	Gathering sequence types
+10/03/2023 16:41:51	Gathering security policies
+10/03/2023 16:41:51	Gather column encryption keys
+10/03/2023 16:41:51	Gathering column master keys
+10/03/2023 16:41:51	Gathering external data sources
+10/03/2023 16:41:51	Gathering external file formats
+10/03/2023 16:41:51	Gathering external tables
+10/03/2023 16:41:51	Gathering extended properties
+10/03/2023 16:41:51	Gathering assemblies
+10/03/2023 16:41:57	Gathering credentials
+10/03/2023 16:41:57	Gathering logins
+10/03/2023 16:41:57	Gathering server audits
+10/03/2023 16:42:00	Scanning project for duplicate elements
+10/03/2023 16:42:00	Finished duplicate element processing
+10/03/2023 16:42:01	Finished importing database.
+10/03/2023 16:42:01	A summary of the import was saved to the following location: C:\REPOS\Sunsale\APISunSale\Database\Import Schema Logs\Database_20230310074128.log
+10/03/2023 16:42:01	Click Finish to continue...
