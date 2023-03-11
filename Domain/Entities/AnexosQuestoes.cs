@@ -1,20 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
-namespace Domain.ViewModel
+namespace Domain.Entities
 {
-    public class AnexoRespostaViewModel
+    public class AnexosQuestoes
+
     {
         [Key]
-        [JsonPropertyName("id")]
         public int Codigo { get; set; }
-
         [NotNull]
-        [JsonPropertyName("CodigoResposta")]
         public int CodigoQuestao { get; set; }
 
-        [NotNull]
         public DateTime DataRegistro { get; set; }
 
         public byte[] Anexo { get; set; }

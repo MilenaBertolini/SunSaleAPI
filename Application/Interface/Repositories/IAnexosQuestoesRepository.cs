@@ -1,11 +1,10 @@
-﻿using Main = Domain.Entities.Usuarios;
+﻿using Main = Domain.Entities.AnexosQuestoes;
 
 namespace Application.Interface.Repositories
 {
-    public interface IUsuariosRepository : IRepositoryBase<Main>
+    public interface IAnexosQuestoesRepository : IRepositoryBase<Main>
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
-        Task<Main> GetByLogin(string user, string pass);
     }
 }

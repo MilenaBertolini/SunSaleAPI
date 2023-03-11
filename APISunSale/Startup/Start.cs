@@ -27,11 +27,13 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IAcaoUsuarioService, AcaoUsuarioService>();
             _app.Services.AddScoped<IAnexoRespostaService, AnexoRespostaService>();
             _app.Services.AddScoped<IUsuariosService, UsuariosService>();
+            _app.Services.AddScoped<IAnexosQuestoesService, AnexosQuestoesService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
             _app.Services.AddScoped<IAnexoRespostaRepository, AnexoRespostaRepository>();
             _app.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+            _app.Services.AddScoped<IAnexosQuestoesRepository, AnexosQuestoesRepository>();
 
             Mapping();
 
@@ -60,6 +62,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<UsuariosViewModel, Usuarios>();
                 cfg.CreateMap<Usuarios, UsuariosViewModel>();
+
+                cfg.CreateMap<AnexosQuestoesViewModel, AnexosQuestoes>();
+                cfg.CreateMap<AnexosQuestoes, AnexosQuestoesViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

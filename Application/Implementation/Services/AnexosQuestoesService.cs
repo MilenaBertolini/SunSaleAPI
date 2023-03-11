@@ -1,13 +1,13 @@
-﻿using Main = Domain.Entities.Usuarios;
-using IService = Application.Interface.Services.IUsuariosService;
-using IRepository = Application.Interface.Repositories.IUsuariosRepository;
+﻿using Main = Domain.Entities.AnexosQuestoes;
+using IService = Application.Interface.Services.IAnexosQuestoesService;
+using IRepository = Application.Interface.Repositories.IAnexosQuestoesRepository;
 
 namespace Application.Implementation.Services
 {
-    public class UsuariosService : IService
+    public class AnexosQuestoesService : IService
     {
         private readonly IRepository _repository;
-        public UsuariosService(IRepository repository)
+        public AnexosQuestoesService(IRepository repository)
         {
             _repository = repository;
         }
@@ -45,11 +45,6 @@ namespace Application.Implementation.Services
         public void Dispose()
         {
             this._repository.Dispose();
-        }
-
-        public async Task<Main> GetByLogin(string user, string pass)
-        {
-            return await _repository.GetByLogin(user, pass);
         }
     }
 }

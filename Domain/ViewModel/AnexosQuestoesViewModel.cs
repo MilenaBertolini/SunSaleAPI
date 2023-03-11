@@ -4,17 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
-    public class AnexoRespostaViewModel
+    public class AnexosQuestoesViewModel
+
     {
         [Key]
         [JsonPropertyName("id")]
         public int Codigo { get; set; }
-
         [NotNull]
-        [JsonPropertyName("CodigoResposta")]
         public int CodigoQuestao { get; set; }
 
-        [NotNull]
         public DateTime DataRegistro { get; set; }
 
         public byte[] Anexo { get; set; }

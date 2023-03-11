@@ -1,8 +1,8 @@
-﻿using Main = Domain.Entities.Usuarios;
+﻿using Main = Domain.Entities.AnexosQuestoes;
 
 namespace Application.Interface.Services
 {
-    public interface IUsuariosService : IDisposable
+    public interface IAnexosQuestoesService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
@@ -10,7 +10,6 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
-        Task<Main> GetByLogin(string user, string pass);
 
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Data.Context;
-using Main = Domain.Entities.Usuarios;
-using IRepository = Application.Interface.Repositories.IUsuariosRepository;
+using Main = Domain.Entities.AnexosQuestoes;
+using IRepository = Application.Interface.Repositories.IAnexosQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Implementation.Repositories
 {
-    public class UsuariosRepository : RepositoryBase<Main>, IRepository
+    public class AnexosQuestoesRepository : RepositoryBase<Main>, IRepository
     {
-        public UsuariosRepository(DataContext dataContext) : base(dataContext)
+        public AnexosQuestoesRepository(DataContext dataContext) : base(dataContext)
         {
         }
 
@@ -36,19 +36,19 @@ namespace Application.Implementation.Repositories
 
         public async Task<Main> GetById(int id)
         {
-            var query = GetQueryable().Where(p => p.Id == id);
+            var query = GetQueryable().Where(p => p.Codigo == id);
             return await query.SingleOrDefaultAsync();
         }
 
         public async Task<Main> Update(Main entity)
         {
-            var model = await GetByIdAsync(entity.Id);
+            var model = await GetByIdAsync(entity.Codigo);
             if (model == null)
                 return null;
 
-            model.Login = entity.Login;
-            model.Nome = entity.Nome;
-            model.Pass = entity.Pass;
+            model.DataRegistro = entity.DataRegistro;
+            model.CodigoQuestao = entity.CodigoQuestao;
+            model.Anexo = entity.Anexo;
 
             base.Update(model);
             await base.CommitAsync();
@@ -58,12 +58,6 @@ namespace Application.Implementation.Repositories
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
             return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
-        }
-
-        public async Task<Main> GetByLogin(string user, string pass)
-        {
-            var query = GetQueryable().Where(p => p.Login.Equals(user) && p.Pass.Equals(pass));
-            return await query.SingleOrDefaultAsync();
         }
 
         public void Dispose()

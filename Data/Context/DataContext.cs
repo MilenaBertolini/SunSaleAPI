@@ -22,5 +22,6 @@ namespace Data.Context
         public DbSet<AcaoUsuario> AcaoUsuario { get; set; }
         public DbSet<AnexoResposta> AnexoResposta { get; set; }
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<AnexosQuestoes> AnexosQuestoes { get; set; }
     }
 }
