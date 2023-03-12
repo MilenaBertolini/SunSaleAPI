@@ -25,5 +25,7 @@ namespace Data.Context
         public DbSet<AnexosQuestoes> AnexosQuestoes { get; set; }
         public DbSet<Codigos_Table> Codigos_Table { get; set; }
         public DbSet<Prova> Prova { get; set; }
+        public DbSet<Questoes> Questoes { get; set; }
+        public DbSet<RespostasQuestoes> RespostasQuestoes { get; set; }
     }
 }

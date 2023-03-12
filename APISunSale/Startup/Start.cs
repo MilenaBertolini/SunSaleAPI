@@ -29,6 +29,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IUsuariosService, UsuariosService>();
             _app.Services.AddScoped<IAnexosQuestoesService, AnexosQuestoesService>();
             _app.Services.AddScoped<IProvaService, ProvaService>();
+            _app.Services.AddScoped<IQuestoesService, QuestoesService>();
+            _app.Services.AddScoped<IRespostasQuestoesService, RespostasQuestoesService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -37,6 +39,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IAnexosQuestoesRepository, AnexosQuestoesRepository>();
             _app.Services.AddScoped<ICodigosTableRepository, CodigosTableRepository>();
             _app.Services.AddScoped<IProvaRepository, ProvaRepository>();
+            _app.Services.AddScoped<IQuestoesRepository, QuestoesRepository>();
+            _app.Services.AddScoped<IRespostasQuestoesRepository, RespostasQuestoesRepository>();
 
             Mapping();
 
@@ -71,6 +75,12 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<ProvaViewModel, Prova>();
                 cfg.CreateMap<Prova, ProvaViewModel>();
+
+                cfg.CreateMap<QuestoesViewModel, Questoes>();
+                cfg.CreateMap<Questoes, QuestoesViewModel>();
+
+                cfg.CreateMap<RespostasQuestoesViewModel, RespostasQuestoes>();
+                cfg.CreateMap<RespostasQuestoes, RespostasQuestoesViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

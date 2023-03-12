@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
     public class ProvaViewModel
     {
         [Key]
+        [JsonPropertyName("id")]
         public int Codigo { get; set; }
 
         [NotNull]
