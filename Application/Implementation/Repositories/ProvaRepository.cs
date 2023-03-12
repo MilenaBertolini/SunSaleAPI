@@ -1,13 +1,13 @@
 ﻿using Data.Context;
-using Main = Domain.Entities.AnexoResposta;
-using IRepository = Application.Interface.Repositories.IAnexoRespostaRepository;
+using Main = Domain.Entities.Prova;
+using IRepository = Application.Interface.Repositories.IProvaRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Implementation.Repositories
 {
-    public class AnexoRespostaRepository : RepositoryBase<Main>, IRepository
+    public class ProvaRepository : RepositoryBase<Main>, IRepository
     {
-        public AnexoRespostaRepository(DataContext dataContext) : base(dataContext)
+        public ProvaRepository(DataContext dataContext) : base(dataContext)
         {
         }
 
@@ -47,8 +47,13 @@ namespace Application.Implementation.Repositories
                 return null;
 
             model.DataRegistro = entity.DataRegistro;
-            model.CodigoQuestao = entity.CodigoQuestao;
-            model.Anexo = entity.Anexo;
+            model.PROVA = entity.PROVA;
+            model.GABARITO = entity.GABARITO;
+            model.ObservacaoProva = entity.ObservacaoProva;
+            model.ObservacaoGabarito = entity.ObservacaoGabarito;
+            model.Banca = entity.Banca;
+            model.Local = entity.Local;
+            model.DataAplicacao = entity.DataAplicacao;
 
             base.Update(model);
             await base.CommitAsync();

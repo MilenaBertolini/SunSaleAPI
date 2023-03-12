@@ -36,7 +36,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "List created",
                     Success = true,
-                    Object = response
+                    Object = response,
+                    Quantity = response?.Count
                 };
             }
             catch (Exception ex)
@@ -61,7 +62,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "List created",
                     Success = true,
-                    Object = response
+                    Object = response,
+                    Quantity = response?.Count
                 };
             }
             catch (Exception ex)
@@ -86,7 +88,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "Search success",
                     Success = true,
-                    Object = response
+                    Object = response,
+                    Quantity = 1
                 };
             }
             catch (Exception ex)
@@ -110,7 +113,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "Created",
                     Success = true,
-                    Object = _mapper.Map<MainViewModel>(result)
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
                 };
             }
             catch (Exception ex)
@@ -134,7 +138,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "Updated",
                     Success = true,
-                    Object = _mapper.Map<MainViewModel>(result)
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
                 };
             }
             catch (Exception ex)
@@ -158,7 +163,8 @@ namespace APISunSale.Controllers
                 {
                     Message = "Deleted",
                     Success = true,
-                    Object = result
+                    Object = result,
+                    Quantity = 1
                 };
             }
             catch (Exception ex)

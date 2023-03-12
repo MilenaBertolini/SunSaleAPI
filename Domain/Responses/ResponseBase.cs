@@ -11,5 +11,7 @@ namespace Domain.Responses
         public string Message { get; set; }
         public bool Success { get; set; }
         public T Object { get; set; }
+
+        public int? Quantity { get; set; }
     }
 }

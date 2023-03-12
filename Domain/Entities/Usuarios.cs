@@ -21,5 +21,8 @@ namespace Domain.Entities
 
         [NotNull]
         public string Nome { get; set; }
+
+        [NotNull]
+        public string Email { get; set; }
     }
 }

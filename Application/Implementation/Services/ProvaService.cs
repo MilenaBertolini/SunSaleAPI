@@ -1,15 +1,16 @@
-﻿using Main = Domain.Entities.Usuarios;
-using IService = Application.Interface.Services.IUsuariosService;
-using IRepository = Application.Interface.Repositories.IUsuariosRepository;
+﻿using Main = Domain.Entities.Prova;
+using IService = Application.Interface.Services.IProvaService;
+using IRepository = Application.Interface.Repositories.IProvaRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
 
 namespace Application.Implementation.Services
 {
-    public class UsuariosService : IService
+    public class ProvaService : IService
     {
         private readonly IRepository _repository;
         private readonly IRepositoryCodes _repositoryCodes;
-        public UsuariosService(IRepository repository, IRepositoryCodes repositoryCodes)
+
+        public ProvaService(IRepository repository, IRepositoryCodes repositoryCodes)
         {
             _repository = repository;
             _repositoryCodes = repositoryCodes;
@@ -17,10 +18,9 @@ namespace Application.Implementation.Services
 
         public async Task<Main> Add(Main entity)
         {
-            entity.Id = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+            entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
 
-            if (entity.Id == -1) throw new Exception("Impossible to create a new Id");
-
+            if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
             return await _repository.Add(entity);
         }
 
@@ -52,11 +52,6 @@ namespace Application.Implementation.Services
         public void Dispose()
         {
             this._repository.Dispose();
-        }
-
-        public async Task<Main> GetByLogin(string user, string pass)
-        {
-            return await _repository.GetByLogin(user, pass);
         }
     }
 }

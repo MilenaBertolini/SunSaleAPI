@@ -58,7 +58,7 @@ namespace APISunSale.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var stringToken = tokenHandler.WriteToken(token);
-            return Results.Ok(new { token = stringToken, username = userModel.Result.Nome});
+            return Results.Ok(new { token = stringToken, username = userModel.Result.Email});
         }
     }
 }

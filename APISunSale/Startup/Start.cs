@@ -28,12 +28,15 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IAnexoRespostaService, AnexoRespostaService>();
             _app.Services.AddScoped<IUsuariosService, UsuariosService>();
             _app.Services.AddScoped<IAnexosQuestoesService, AnexosQuestoesService>();
+            _app.Services.AddScoped<IProvaService, ProvaService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
             _app.Services.AddScoped<IAnexoRespostaRepository, AnexoRespostaRepository>();
             _app.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
             _app.Services.AddScoped<IAnexosQuestoesRepository, AnexosQuestoesRepository>();
+            _app.Services.AddScoped<ICodigosTableRepository, CodigosTableRepository>();
+            _app.Services.AddScoped<IProvaRepository, ProvaRepository>();
 
             Mapping();
 
@@ -65,6 +68,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<AnexosQuestoesViewModel, AnexosQuestoes>();
                 cfg.CreateMap<AnexosQuestoes, AnexosQuestoesViewModel>();
+
+                cfg.CreateMap<ProvaViewModel, Prova>();
+                cfg.CreateMap<Prova, ProvaViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
@@ -84,8 +90,7 @@ namespace APISunSale.Startup
                 {
                     ValidIssuer = _app.Configuration["Jwt:Issuer"],
                     ValidAudience = _app.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(_app.Configuration["Jwt:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_app.Configuration["Jwt:Key"])),
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = false,

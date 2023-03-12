@@ -1,20 +1,27 @@
 ﻿using Main = Domain.Entities.AnexoResposta;
 using IService = Application.Interface.Services.IAnexoRespostaService;
 using IRepository = Application.Interface.Repositories.IAnexoRespostaRepository;
+using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
 
 namespace Application.Implementation.Services
 {
     public class AnexoRespostaService : IService
     {
         private readonly IRepository _repository;
-        public AnexoRespostaService(IRepository repository)
+        private readonly IRepositoryCodes _repositoryCodes;
+
+        public AnexoRespostaService(IRepository repository, IRepositoryCodes repositoryCodes)
         {
             _repository = repository;
+            _repositoryCodes = repositoryCodes;
         }
 
-        public Task<Main> Add(Main entity)
+        public async Task<Main> Add(Main entity)
         {
-            return _repository.Add(entity);
+            entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+
+            if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
+            return await _repository.Add(entity);
         }
 
         public Task<bool> DeleteById(int id)

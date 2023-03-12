@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
     public class UsuariosViewModel
     {
         [Key]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
         [NotNull]
@@ -21,5 +18,8 @@ namespace Domain.ViewModel
 
         [NotNull]
         public string Nome { get; set; }
+
+        [NotNull]
+        public string Email { get; set; }
     }
 }

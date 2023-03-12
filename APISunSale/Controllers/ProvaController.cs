@@ -4,21 +4,21 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.AcaoUsuarioViewModel;
-using MainEntity = Domain.Entities.AcaoUsuario;
-using Service = Application.Interface.Services.IAcaoUsuarioService;
+using MainViewModel = Domain.ViewModel.ProvaViewModel;
+using MainEntity = Domain.Entities.Prova;
+using Service = Application.Interface.Services.IProvaService;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class AcaoUsuarioController
+    public class ProvaController
     {
-        private readonly ILogger<AcaoUsuarioController> _logger;
+        private readonly ILogger<ProvaController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        public AcaoUsuarioController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper)
+        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper)
         {
             _logger = logger;
             _service = service;
@@ -89,7 +89,7 @@ namespace APISunSale.Controllers
                     Message = "Search success",
                     Success = true,
                     Object = response,
-                    Quantity = response != null ? 1 : 0
+                    Quantity = 1
                 };
             }
             catch (Exception ex)

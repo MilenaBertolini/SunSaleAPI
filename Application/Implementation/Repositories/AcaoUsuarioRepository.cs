@@ -2,7 +2,6 @@
 using Main = Domain.Entities.AcaoUsuario;
 using IRepository = Application.Interface.Repositories.IAcaoUsuarioRepository;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.Configuration.Annotations;
 
 namespace Application.Implementation.Repositories
 {

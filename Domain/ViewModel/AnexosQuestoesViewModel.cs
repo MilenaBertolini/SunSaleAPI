@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 namespace Domain.ViewModel
 {
     public class AnexosQuestoesViewModel
-
     {
         [Key]
         [JsonPropertyName("id")]
