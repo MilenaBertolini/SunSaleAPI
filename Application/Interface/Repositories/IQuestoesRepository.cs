@@ -1,4 +1,5 @@
-﻿using Main = Domain.Entities.Questoes;
+﻿using Application.Model;
+using Main = Domain.Entities.Questoes;
 
 namespace Application.Interface.Repositories
 {
@@ -6,5 +7,9 @@ namespace Application.Interface.Repositories
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
+        Task<IEnumerable<string>> GetMaterias(int prova = -1);
+        Task<IEnumerable<Test>> GetTests(int id = -1);
+        Task<IEnumerable<Main>> GetByProva(int prova);
+        Task<IEnumerable<Main>> GetByMateria(string materia);
     }
 }

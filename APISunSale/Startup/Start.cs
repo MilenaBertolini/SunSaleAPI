@@ -114,7 +114,18 @@ namespace APISunSale.Startup
         {
             _app.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SunSale API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "SunSale API", 
+                    Version = "v1", 
+                    Contact= new OpenApiContact() 
+                    { 
+                        Email = "sunsalesystem@gmail.com" , 
+                        Name = "SunSale System", 
+                        Url= new Uri("http://sunsalesystem.com.br")
+                    },
+                    Description = ""
+                });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -139,6 +150,7 @@ namespace APISunSale.Startup
                         new string[] {}
                     }
                 });
+                c.DocumentFilter<SwaggerControllerOrder>();
             });
         }
     }

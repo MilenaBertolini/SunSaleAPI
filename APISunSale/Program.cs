@@ -18,7 +18,15 @@ app.UseCors(options => options.AllowAnyOrigin());
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options => options.EnablePersistAuthorization());
+    app.UseSwaggerUI(options =>
+    {
+        options.EnablePersistAuthorization();
+        options.DefaultModelsExpandDepth(-1);
+        options.DefaultModelExpandDepth(-1);
+        options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+        options.EnableFilter();
+    }
+    );
 }
 
 app.UseHttpsRedirection();

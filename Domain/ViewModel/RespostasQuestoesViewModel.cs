@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.ViewModel
 {
@@ -10,8 +11,8 @@ namespace Domain.ViewModel
 
         [NotNull]
         public int CodigoQuestao { get; set; }
-        [NotNull]
 
+        [NotNull]
         public DateTime DataRegistro { get; set; }
 
         [NotNull]
@@ -19,7 +20,5 @@ namespace Domain.ViewModel
 
         [NotNull]
         public string Certa { get; set; }
-
-        public string ObservacaoResposta { get; set; }
     }
 }

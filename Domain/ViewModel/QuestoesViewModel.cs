@@ -22,5 +22,7 @@ namespace Domain.ViewModel
         public string NumeroQuestao { get; set; }
 
         public string Ativo { get; set; }
+
+        public virtual ICollection<RespostasQuestoesViewModel> RespostasQuestoes { get; set; }
     }
 }

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Data.Helper
+{
+    public static class EnumeratorsTypes
+    {
+        public enum TipoArquivo 
+        { 
+            PROVA = 0,
+            GABARITO = 1
+        }
+    }
+}

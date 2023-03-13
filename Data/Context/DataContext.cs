@@ -19,6 +19,10 @@ namespace Data.Context
             options.UseSqlServer(Configuration.GetConnectionString("connection"));
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
+
         public DbSet<AcaoUsuario> AcaoUsuario { get; set; }
         public DbSet<AnexoResposta> AnexoResposta { get; set; }
         public DbSet<Usuarios> Usuarios { get; set; }

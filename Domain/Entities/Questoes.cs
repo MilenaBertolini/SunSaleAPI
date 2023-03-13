@@ -1,9 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
     public class Questoes
     {
+        public Questoes() 
+        { 
+            RespostasQuestoes = new HashSet<RespostasQuestoes>();
+            AnexosQuestoes = new HashSet<AnexosQuestoes>();
+        }
+
         [Key]
         public int Codigo { get; set; }
 
@@ -20,5 +27,13 @@ namespace Domain.Entities
         public string NumeroQuestao { get; set; }
 
         public string Ativo { get; set; }
+
+        [ForeignKey("CodigoQuestao")]
+        public virtual ICollection<RespostasQuestoes> RespostasQuestoes { get; set; }
+
+        [ForeignKey("CodigoQuestao")]
+        public virtual ICollection<AnexosQuestoes> AnexosQuestoes { get; set; }
+
+
     }
 }

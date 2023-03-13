@@ -1,19 +1,24 @@
 ﻿using Main = Domain.Entities.Questoes;
 using IService = Application.Interface.Services.IQuestoesService;
 using IRepository = Application.Interface.Repositories.IQuestoesRepository;
+using IRepositoryRespostas = Application.Interface.Repositories.IRespostasQuestoesRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using Application.Model;
+using Domain.Entities;
 
 namespace Application.Implementation.Services
 {
     public class QuestoesService : IService
     {
         private readonly IRepository _repository;
+        private readonly IRepositoryRespostas _repositoryRespostas;
         private readonly IRepositoryCodes _repositoryCodes;
 
-        public QuestoesService(IRepository repository, IRepositoryCodes repositoryCodes)
+        public QuestoesService(IRepository repository, IRepositoryCodes repositoryCodes, IRepositoryRespostas repositoryRespostas)
         {
             _repository = repository;
             _repositoryCodes = repositoryCodes;
+            _repositoryRespostas = repositoryRespostas;
         }
 
         public async Task<Main> Add(Main entity)
@@ -52,6 +57,28 @@ namespace Application.Implementation.Services
         public void Dispose()
         {
             this._repository.Dispose();
+        }
+
+        public Task<IEnumerable<string>> GetMaterias(int? prova)
+        {
+            return _repository.GetMaterias(prova == null ? -1 : prova.Value);
+        }
+
+        public Task<IEnumerable<Test>> GetTests(int? id)
+        {
+            return _repository.GetTests(id == null ? -1 : id.Value);   
+        }
+
+        public async Task<IEnumerable<Main>> GetQuestoesByProva(int prova)
+        {
+            var response = await _repository.GetByProva(prova);
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetQuestoesByMateria(string materia)
+        {
+            var response = await _repository.GetByMateria(materia);
+            return response;
         }
     }
 }

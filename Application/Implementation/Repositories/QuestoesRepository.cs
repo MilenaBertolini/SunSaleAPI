@@ -2,11 +2,16 @@
 using Main = Domain.Entities.Questoes;
 using IRepository = Application.Interface.Repositories.IQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
+using Application.Model;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Domain.Entities;
 
 namespace Application.Implementation.Repositories
 {
     public class QuestoesRepository : RepositoryBase<Main>, IRepository
     {
+        private static readonly string includes = "RespostasQuestoes;AnexosQuestoes";
+
         public QuestoesRepository(DataContext dataContext) : base(dataContext)
         {
         }
@@ -31,12 +36,15 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync();
+            return await GetAllAsync(includes: includes.Split(';'));
         }
 
         public async Task<Main> GetById(int id)
         {
             var query = GetQueryable().Where(p => p.Codigo == id);
+            
+            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+
             return await query.SingleOrDefaultAsync();
         }
 
@@ -62,7 +70,7 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
-            return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
+            return await base.GetAllPagedAsync(base.GetQueryable().Include(includes), page, quantity);
         }
 
         public void Dispose()
@@ -70,5 +78,62 @@ namespace Application.Implementation.Repositories
             this.Dispose(true);
         }
 
+        public async Task<IEnumerable<string>> GetMaterias(int prova = -1)
+        {
+            var query = (from q in _dataContext.Questoes
+                         where 
+                         q.CodigoProva == prova
+                         ||
+                         prova == -1
+                        select q.Materia).Distinct();
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<Test>> GetTests(int id = -1)
+        {
+            var query = _dataContext.Prova.Select(i => new Test
+            {
+                Banca = i.Banca,
+                Codigo = i.Codigo,
+                DataAplicacao = i.DataAplicacao,
+                Local = i.Local,
+                NomeProva = i.NomeProva,
+                ObservacaoGabarito = i.ObservacaoGabarito,
+                ObservacaoProva = i.ObservacaoProva,
+                TipoProva = i.TipoProva
+            }).Where(t => t.Codigo.Equals(id) || id == -1);
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetByProva(int prova)
+        {
+            var query = (from q in _dataContext.Questoes
+                        where q.CodigoProva == prova
+                        select q);
+
+            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+
+            var response = query.AsEnumerable();
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetByMateria(string materia)
+        {
+            var query = (from q in _dataContext.Questoes
+                        where q.Materia == materia
+                        select q);
+
+            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
     }
 }

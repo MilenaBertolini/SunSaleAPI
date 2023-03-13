@@ -62,6 +62,15 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
         }
 
+        public async Task<IEnumerable<Main>> GetByCodigoQuestao(int codigo)
+        {
+            var query = from r in base.GetQueryable()
+                        where r.CodigoQuestao == codigo
+                        select r;
+
+            return await query.ToListAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);
