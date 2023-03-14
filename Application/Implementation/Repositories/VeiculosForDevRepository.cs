@@ -67,6 +67,13 @@ namespace Application.Implementation.Repositories
             return await query.SingleOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Main>> GetRandom(int qt)
+        {
+            int count = _dataContext.VeiculosForDev.Count();
+            int index = new Random().Next(count);
+            return _dataContext.VeiculosForDev.Skip(index).Take(qt).ToList();
+        }
+
         public Task<Main> GetById(int id)
         {
             throw new NotImplementedException();

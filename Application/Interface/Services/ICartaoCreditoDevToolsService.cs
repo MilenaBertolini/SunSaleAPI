@@ -10,6 +10,7 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
+        Task<IEnumerable<Main>> GetRandom(int? random);
 
     }
 }

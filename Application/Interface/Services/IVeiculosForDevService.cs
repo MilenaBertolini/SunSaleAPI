@@ -9,5 +9,6 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<Main> GetByRenavam(string renavam);
+        Task<IEnumerable<Main>> GetRandom(int? random);
     }
 }

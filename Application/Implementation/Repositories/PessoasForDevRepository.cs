@@ -71,6 +71,13 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
         }
 
+        public async Task<IEnumerable<Main>> GetRandom(int qt)
+        {
+            int count = _dataContext.PessoasForDev.Count();
+            int index = new Random().Next(count);
+            return _dataContext.PessoasForDev.Skip(index).Take(qt).ToList();
+        }
+
         public Task<Main> GetById(int id)
         {
             throw new NotImplementedException();

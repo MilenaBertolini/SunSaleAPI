@@ -7,5 +7,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
         Task<Main> GetByCartao(string cartao);
+        Task<IEnumerable<Main>> GetRandom(int qt);
     }
 }

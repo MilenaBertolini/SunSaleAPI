@@ -8,5 +8,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
 
         Task<Main> GetByCnpj(string cpf);
+        Task<IEnumerable<Main>> GetRandom(int qt);
     }
 }

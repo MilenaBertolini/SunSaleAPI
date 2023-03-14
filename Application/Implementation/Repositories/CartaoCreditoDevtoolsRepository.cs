@@ -65,6 +65,13 @@ namespace Application.Implementation.Repositories
             this.Dispose(true);
         }
 
+        public async Task<IEnumerable<Main>> GetRandom(int qt)
+        {
+            int count = _dataContext.CartaoCreditoDevTools.Count();
+            int index = new Random().Next(count);
+            return _dataContext.CartaoCreditoDevTools.Skip(index).Take(qt).ToList();
+        }
+
         public Task<Main> GetById(int id)
         {
             throw new NotImplementedException();

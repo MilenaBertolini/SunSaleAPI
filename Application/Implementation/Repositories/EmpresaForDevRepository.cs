@@ -74,6 +74,13 @@ namespace Application.Implementation.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<Main>> GetRandom(int qt)
+        {
+            int count = _dataContext.EmpresaForDev.Count();
+            int index = new Random().Next(count);
+            return _dataContext.EmpresaForDev.Skip(index).Take(qt).ToList();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

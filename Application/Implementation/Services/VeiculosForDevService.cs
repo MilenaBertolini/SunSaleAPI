@@ -45,6 +45,11 @@ namespace Application.Implementation.Services
             return _repository.Update(entity);
         }
 
+        public async Task<IEnumerable<Main>> GetRandom(int? qt)
+        {
+            return await _repository.GetRandom(qt == null ? 1 : qt.Value);
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();
