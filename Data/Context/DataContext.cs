@@ -31,5 +31,9 @@ namespace Data.Context
         public DbSet<Prova> Prova { get; set; }
         public DbSet<Questoes> Questoes { get; set; }
         public DbSet<RespostasQuestoes> RespostasQuestoes { get; set; }
+        public DbSet<PessoasForDev> PessoasForDev { get; set; }
+        public DbSet<EmpresaForDev> EmpresaForDev { get; set; }
+        public DbSet<CartaoCreditoDevTools> CartaoCreditoDevTools { get; set; }
+        public DbSet<VeiculosForDev> VeiculosForDev { get; set; }
     }
 }

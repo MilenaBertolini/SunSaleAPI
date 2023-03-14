@@ -31,6 +31,11 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IProvaService, ProvaService>();
             _app.Services.AddScoped<IQuestoesService, QuestoesService>();
             _app.Services.AddScoped<IRespostasQuestoesService, RespostasQuestoesService>();
+            _app.Services.AddScoped<IRespostasQuestoesService, RespostasQuestoesService>();
+            _app.Services.AddScoped<IPessoasForDevService, PessoasForDevService>();
+            _app.Services.AddScoped<IEmpresaForDevService, EmpresaForDevService>();
+            _app.Services.AddScoped<ICartaoCreditoDevToolsService, CartaoCreditoDevToolsService>();
+            _app.Services.AddScoped<IVeiculosForDevService, VeiculosForDevService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -41,6 +46,10 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IProvaRepository, ProvaRepository>();
             _app.Services.AddScoped<IQuestoesRepository, QuestoesRepository>();
             _app.Services.AddScoped<IRespostasQuestoesRepository, RespostasQuestoesRepository>();
+            _app.Services.AddScoped<IPessoasForDevRepository, PessoasForDevRepository>();
+            _app.Services.AddScoped<IEmpresaForDevRepository, EmpresaForDevRepository>();
+            _app.Services.AddScoped<ICartaoCreditoDevToolsRepository, CartaoCreditoDevtoolsRepository>();
+            _app.Services.AddScoped<IVeiculosForDevRepository, VeiculosForDevRepository>();
 
             Mapping();
 
@@ -81,6 +90,18 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<RespostasQuestoesViewModel, RespostasQuestoes>();
                 cfg.CreateMap<RespostasQuestoes, RespostasQuestoesViewModel>();
+
+                cfg.CreateMap<PessoasForDevViewModel, PessoasForDev>();
+                cfg.CreateMap<PessoasForDev, PessoasForDevViewModel>();
+
+                cfg.CreateMap<EmpresaForDevViewModel, EmpresaForDev>();
+                cfg.CreateMap<EmpresaForDev, EmpresaForDevViewModel>();
+
+                cfg.CreateMap<CartaoCreditoDevToolsViewModel, CartaoCreditoDevTools>();
+                cfg.CreateMap<CartaoCreditoDevTools, CartaoCreditoDevToolsViewModel>();
+
+                cfg.CreateMap<VeiculosForDevViewModel, VeiculosForDev>();
+                cfg.CreateMap<VeiculosForDev, VeiculosForDevViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
