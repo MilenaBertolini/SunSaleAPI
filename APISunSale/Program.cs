@@ -15,19 +15,16 @@ var app = builder.Build();
 app.UseCors(options => options.AllowAnyOrigin());
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.EnablePersistAuthorization();
-        options.DefaultModelsExpandDepth(-1);
-        options.DefaultModelExpandDepth(-1);
-        options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-        options.EnableFilter();
-    }
-    );
+    options.EnablePersistAuthorization();
+    options.DefaultModelsExpandDepth(-1);
+    options.DefaultModelExpandDepth(-1);
+    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+    options.EnableFilter();
 }
+);
 
 app.UseHttpsRedirection();
 

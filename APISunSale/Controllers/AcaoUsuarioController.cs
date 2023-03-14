@@ -11,7 +11,7 @@ using Service = Application.Interface.Services.IAcaoUsuarioService;
 namespace APISunSale.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class AcaoUsuarioController
     {

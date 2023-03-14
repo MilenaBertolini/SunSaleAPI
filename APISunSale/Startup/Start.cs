@@ -52,7 +52,7 @@ namespace APISunSale.Startup
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             _app.Services.AddEndpointsApiExplorer();
 
-            AddSwagger();
+            AddSwagger(_app.Environment.IsDevelopment());
 
             return this;
         }
@@ -110,7 +110,7 @@ namespace APISunSale.Startup
             _app.Services.AddAuthorization();
         }
 
-        private void AddSwagger()
+        private void AddSwagger(bool dev)
         {
             _app.Services.AddSwaggerGen(c =>
             {
@@ -126,31 +126,36 @@ namespace APISunSale.Startup
                     },
                     Description = ""
                 });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                if(!dev)
+                    c.DocumentFilter<SwaggerControllerOrderProd>();
+                else
                 {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    In = ParameterLocation.Header,
-                    Description = "Enter the Bearer Authorization string as following: `Token`"
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+                    c.DocumentFilter<SwaggerControllerOrder>();
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                     {
-                        new OpenApiSecurityScheme
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                        In = ParameterLocation.Header,
+                        Description = "Enter the Bearer Authorization string as following: `Token`"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
                         {
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-                            Reference = new OpenApiReference
+                            new OpenApiSecurityScheme
                             {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
-                c.DocumentFilter<SwaggerControllerOrder>();
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+                        }
+                    });
+                }
             });
         }
     }

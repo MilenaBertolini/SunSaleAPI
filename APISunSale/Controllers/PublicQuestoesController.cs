@@ -13,8 +13,9 @@ using ServiceRespostas = Application.Interface.Services.IRespostasQuestoesServic
 namespace APISunSale.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [AllowAnonymous]
+
     public class PublicQuestoesController
     {
         private readonly ILogger<PublicQuestoesController> _logger;

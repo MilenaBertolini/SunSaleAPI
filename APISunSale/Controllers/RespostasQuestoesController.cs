@@ -11,7 +11,7 @@ using Service = Application.Interface.Services.IRespostasQuestoesService;
 namespace APISunSale.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class RespostasQuestoesController
     {

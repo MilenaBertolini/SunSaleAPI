@@ -11,7 +11,7 @@ using Service = Application.Interface.Services.IUsuariosService;
 namespace APISunSale.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class UsuariosController
     {
