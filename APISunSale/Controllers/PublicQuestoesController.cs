@@ -49,7 +49,7 @@ namespace APISunSale.Controllers
                     {
                         Message = "List created",
                         Success = true,
-                        Object = result.ToList(),
+                        Object = result?.ToList(),
                         Quantity = result?.ToList()?.Count
                     }
                 );
@@ -88,7 +88,7 @@ namespace APISunSale.Controllers
                 return new OkObjectResult(
                     new
                     {
-                        File= tipo == TipoArquivo.GABARITO ? result.GABARITO : result.PROVA
+                        File= tipo == TipoArquivo.GABARITO ? result.LinkGabarito : result.LinkProva
                     }
                 );
             }

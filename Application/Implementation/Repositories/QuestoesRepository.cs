@@ -103,8 +103,10 @@ namespace Application.Implementation.Repositories
                 NomeProva = i.NomeProva,
                 ObservacaoGabarito = i.ObservacaoGabarito,
                 ObservacaoProva = i.ObservacaoProva,
-                TipoProva = i.TipoProva
-            }).Where(t => t.Codigo.Equals(id) || id == -1);
+                TipoProva = i.TipoProva,
+                LinkGabarito = i.LinkGabarito,
+                LinkProva = i.LinkProva
+            }).Where(t => (t.Codigo.Equals(id) || id == -1) && t.Codigo != 9999);
 
             var response = query.AsEnumerable();
 

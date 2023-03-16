@@ -47,8 +47,8 @@ namespace Application.Implementation.Repositories
                 return null;
 
             model.DataRegistro = entity.DataRegistro;
-            model.PROVA = entity.PROVA;
-            model.GABARITO = entity.GABARITO;
+            model.LinkProva = entity.LinkProva;
+            model.LinkGabarito = entity.LinkGabarito;
             model.ObservacaoProva = entity.ObservacaoProva;
             model.ObservacaoGabarito = entity.ObservacaoGabarito;
             model.Banca = entity.Banca;

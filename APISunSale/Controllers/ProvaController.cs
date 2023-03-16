@@ -104,27 +104,31 @@ namespace APISunSale.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main)
+        public async Task<ActionResult> Add([FromBodyAttribute] MainViewModel main, int codigoUsuario)
         {
             try
             {
-                var result = await _service.Add(_mapper.Map<MainEntity>(main));
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = "Created",
-                    Success = true,
-                    Object = _mapper.Map<MainViewModel>(result),
-                    Quantity = 1
-                };
+                var result = await _service.Add(_mapper.Map<MainEntity>(main), codigoUsuario);
+                return new OkObjectResult(
+                    new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Created",
+                        Success = true,
+                        Object = _mapper.Map<MainViewModel>(result),
+                        Quantity = 1
+                    }
+                );
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return new BadRequestObjectResult(
+                    new
+                    {
+                        Message = ex.Message,
+                        Success = false
+                    }
+                );
             }
         }
 

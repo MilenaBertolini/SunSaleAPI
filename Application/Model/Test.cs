@@ -17,5 +17,8 @@
         public string ObservacaoGabarito { get; set; }
 
         public string Banca { get; set; }
+
+        public string LinkProva { get; set; }
+        public string LinkGabarito { get; set; }
     }
 }

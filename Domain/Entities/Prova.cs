@@ -17,11 +17,9 @@ namespace Domain.Entities
 
         public string DataAplicacao { get; set; }
 
-        [NotNull]
-        public byte[] PROVA { get; set; }
+        public string LinkProva { get; set; }
 
-        [NotNull]
-        public byte[] GABARITO { get; set; }
+        public string LinkGabarito { get; set; }
 
         public string ObservacaoProva { get; set; }
 
