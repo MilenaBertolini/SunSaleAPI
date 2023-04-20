@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUEBoJ2in7Ey0xsTn5SUe0gAAAAACAAAAAAAQZgAAAAEAACAAAAAbWHw1NW/TaLN3q2OP80KOK9uKfMo0Up8tEQBnRvIprQAAAAAOgAAAAAIAACAAAADBnRb/gVb1RvumESeSdDpZ42NyuR+bx7MKk5ili6cLvoAAAACWvUiuPlc9a+HRZYbzRb1fh5HQxenW7zOApw4NmhNuWYn0GLYXnq9aByd253zb8Jzdt8wGBdYPJiGkfHGv+BMh7nwqxMuUhUZ9EoJ5jMkJtVqt7/DzJoDV8PJbw7gd7CcXUKVjC65VUfnqL2Z/Hpy/Mw5/2vcVpT0ioa9TEWrba0AAAAAUnx6s7whFnex30wQLdPitinYsk/fUZ9W3NuAXchgZ+6j+qIWNlivHtSwLA2rdctgo8XNrZoHBs0ofDZssvWvM</EncryptedPassword>
+    <History>True|2023-04-20T15:44:29.8673893Z;True|2023-04-20T12:41:09.3842848-03:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="connection">
+      <Value>Server=tcp:sunsale.database.windows.net,1433%3bInitial Catalog=devtools%3bPersist Security Info=False%3bUser ID=rodrigo%3bPassword=qbj1ACjd%2a%2a%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

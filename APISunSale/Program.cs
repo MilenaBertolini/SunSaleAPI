@@ -12,6 +12,18 @@ new Start(builder).Builder();
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger/index.html");
+    }
+    else
+    {
+        await next();
+    }
+});
+
 app.UseCors(options => options.AllowAnyOrigin());
 
 // Configure the HTTP request pipeline.
