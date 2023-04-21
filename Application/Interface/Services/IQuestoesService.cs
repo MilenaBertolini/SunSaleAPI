@@ -6,7 +6,7 @@ namespace Application.Interface.Services
     public interface IQuestoesService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
+        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);

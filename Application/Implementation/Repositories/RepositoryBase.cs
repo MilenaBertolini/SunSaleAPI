@@ -292,6 +292,18 @@ namespace Application.Implementation.Repositories
 
         private bool _disposed = false;
 
+        public string[] GetIncludes(string include)
+        {
+            List<string> includes = new List<string>();
+
+            if(!string.IsNullOrEmpty(include))
+            {
+                includes.AddRange(include.Split(';'));
+            }
+
+            return includes.ToArray<string>();
+        } 
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed && disposing)

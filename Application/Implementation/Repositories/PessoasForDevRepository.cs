@@ -2,11 +2,14 @@
 using Main = Domain.Entities.PessoasForDev;
 using IRepository = Application.Interface.Repositories.IPessoasForDevRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Application.Implementation.Repositories
 {
     public class PessoasForDevRepository : RepositoryBase<Main>, IRepository
     {
+        private static readonly string includes = "";
+
         public PessoasForDevRepository(DataContext dataContext) : base(dataContext)
         {
         }
@@ -31,12 +34,14 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync();
+            return await GetAllAsync(includes: GetIncludes(includes));
         }
 
         public async Task<Main> GetByCpf(string cpf)
         {
             var query = GetQueryable().Where(p => p.CPF == cpf);
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
             return await query.SingleOrDefaultAsync();
         }
 
@@ -68,14 +73,33 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
-            return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
+            var query = base.GetQueryable();
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await base.GetAllPagedAsync(query, page, quantity);
         }
 
         public async Task<IEnumerable<Main>> GetRandom(int qt)
         {
             int count = _dataContext.PessoasForDev.Count();
-            int index = new Random().Next(count);
-            return _dataContext.PessoasForDev.Skip(index).Take(qt).ToList();
+
+            List<Main> list = new List<Main>();
+
+            int limite = 1000;
+            int i = 0;
+
+            while (list.Count < qt && i != limite)
+            {
+                i++;
+                int index = new Random().Next(count);
+                var temp = _dataContext.PessoasForDev.Skip(index).FirstOrDefault();
+
+                if (temp == null) continue;
+
+                if (!list.Contains(temp)) list.Add(temp);
+            }
+
+            return list;
         }
 
         public Task<Main> GetById(int id)

@@ -2,11 +2,14 @@
 using Main = Domain.Entities.CartaoCreditoDevTools;
 using IRepository = Application.Interface.Repositories.ICartaoCreditoDevToolsRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Application.Implementation.Repositories
 {
     public class CartaoCreditoDevtoolsRepository : RepositoryBase<Main>, IRepository
     {
+        private static readonly string includes = "";
+
         public CartaoCreditoDevtoolsRepository(DataContext dataContext) : base(dataContext)
         {
         }
@@ -31,12 +34,14 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync();
+            return await GetAllAsync(includes: GetIncludes(includes));
         }
 
         public async Task<Main> GetByCartao(string cartao)
         {
             var query = GetQueryable().Where(p => p.NumeroCartao == cartao);
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
             return await query.SingleOrDefaultAsync();
         }
 
@@ -57,7 +62,10 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
-            return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
+            var query = base.GetQueryable();
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await base.GetAllPagedAsync(query, page, quantity);
         }
 
         public void Dispose()
@@ -68,8 +76,24 @@ namespace Application.Implementation.Repositories
         public async Task<IEnumerable<Main>> GetRandom(int qt)
         {
             int count = _dataContext.CartaoCreditoDevTools.Count();
-            int index = new Random().Next(count);
-            return _dataContext.CartaoCreditoDevTools.Skip(index).Take(qt).ToList();
+
+            List<Main> list = new List<Main>();
+
+            int limite = 1000;
+            int i = 0;
+
+            while (list.Count < qt && i != limite)
+            {
+                i++;
+                int index = new Random().Next(count);
+                var temp = _dataContext.CartaoCreditoDevTools.Skip(index).FirstOrDefault();
+
+                if (temp == null) continue;
+
+                if (!list.Contains(temp)) list.Add(temp);
+            }
+
+            return list;
         }
 
         public Task<Main> GetById(int id)

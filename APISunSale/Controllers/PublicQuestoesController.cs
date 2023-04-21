@@ -68,44 +68,6 @@ namespace APISunSale.Controllers
         }
 
         /// <summary>
-        /// Método que busca o arquivo da prova
-        /// </summary>
-        /// <param name="id">Id da prova para buscar o arquivo</param>
-        /// <param name="tipo">Tipos aceitos: PROVA ou GABARITO</param>
-        /// <returns>Listagem de todas as provas</returns>
-        [HttpGet("GetTestsFile/{tipo}")]
-        public async Task<ActionResult> GetArquivoProva([FromRoute] TipoArquivo tipo, int id)
-        {
-            try
-            {
-                var result = await _serviceProva.GetById(id);
-
-                if(result == null)
-                {
-                    return new BadRequestObjectResult(new { message = "Prova pesquisada não existe" });
-                }
-
-                return new OkObjectResult(
-                    new
-                    {
-                        File= tipo == TipoArquivo.GABARITO ? result.LinkGabarito : result.LinkProva
-                    }
-                );
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new BadRequestObjectResult(
-                    new
-                    {
-                        Message = ex.Message,
-                        Success = false
-                    }
-                );
-            }
-        }
-
-        /// <summary>
         /// Busca todas as matérias que tem questões cadastradas
         /// </summary>
         /// <param name="prova">Você pode passar o parâmetro para selecionar pelo código da prova ou pode não passar para retornar todas</param>

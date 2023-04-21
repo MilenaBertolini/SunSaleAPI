@@ -7,6 +7,8 @@ namespace Application.Implementation.Repositories
 {
     public class RespostasQuestoesRepository : RepositoryBase<Main>, IRepository
     {
+        private static readonly string includes = "";
+
         public RespostasQuestoesRepository(DataContext dataContext) : base(dataContext)
         {
         }
@@ -31,12 +33,15 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync();
+            return await GetAllAsync(includes: GetIncludes(includes));
         }
 
         public async Task<Main> GetById(int id)
         {
             var query = GetQueryable().Where(p => p.Codigo == id);
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
             return await query.SingleOrDefaultAsync();
         }
 
@@ -59,7 +64,10 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
-            return await base.GetAllPagedAsync(base.GetQueryable(), page, quantity);
+            var query = base.GetQueryable();
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await base.GetAllPagedAsync(query, page, quantity);
         }
 
         public async Task<IEnumerable<Main>> GetByCodigoQuestao(int codigo)

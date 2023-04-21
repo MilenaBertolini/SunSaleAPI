@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Domain.Entities
 {
     public class AnexosQuestoes
-
     {
         [Key]
         public int Codigo { get; set; }

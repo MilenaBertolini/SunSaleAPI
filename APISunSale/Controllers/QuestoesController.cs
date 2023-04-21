@@ -25,38 +25,12 @@ namespace APISunSale.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAll()
-        {
-            try
-            {
-                var result = await _service.GetAll();
-                var response = _mapper.Map<List<MainViewModel>>(result);
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = "List created",
-                    Success = true,
-                    Object = response,
-                    Quantity = response?.Count
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }
-        }
-
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
         {
             try
             {
-                var result = await _service.GetAllPagged(page, quantity);
+                var result = await _service.GetAllPagged(page, quantity, codigoProva, subject);
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {

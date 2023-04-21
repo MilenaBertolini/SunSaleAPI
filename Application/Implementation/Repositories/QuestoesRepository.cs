@@ -3,14 +3,12 @@ using Main = Domain.Entities.Questoes;
 using IRepository = Application.Interface.Repositories.IQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Domain.Entities;
 
 namespace Application.Implementation.Repositories
 {
     public class QuestoesRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "RespostasQuestoes;AnexosQuestoes";
+        private static readonly string includes = "RespostasQuestoes;RespostasQuestoes.AnexoResposta;AnexosQuestoes";
 
         public QuestoesRepository(DataContext dataContext) : base(dataContext)
         {
@@ -36,14 +34,14 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync(includes: includes.Split(';'));
+            return await GetAllAsync(includes: GetIncludes(includes));
         }
 
         public async Task<Main> GetById(int id)
         {
             var query = GetQueryable().Where(p => p.Codigo == id);
             
-            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await query.SingleOrDefaultAsync();
         }
@@ -68,9 +66,23 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
         {
-            return await base.GetAllPagedAsync(base.GetQueryable().Include(includes), page, quantity);
+            var query = base.GetQueryable();
+
+            if (codigoProva.HasValue)
+            {
+                query = query.Where(q => q.CodigoProva.Equals(codigoProva));
+            }
+
+            if (!string.IsNullOrEmpty(subject))
+            {
+                query = query.Where(q => q.Materia.ToUpper().Contains(subject.ToUpper()));
+            }
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await base.GetAllPagedAsync(query, page, quantity);
         }
 
         public void Dispose()
@@ -119,7 +131,7 @@ namespace Application.Implementation.Repositories
                         where q.CodigoProva == prova
                         select q);
 
-            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             var response = query.AsEnumerable();
             return response;
@@ -131,7 +143,7 @@ namespace Application.Implementation.Repositories
                         where q.Materia == materia
                         select q);
 
-            includes.Split(';').ToList().ForEach(p => query = query.Include(p));
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             var response = query.AsEnumerable();
 

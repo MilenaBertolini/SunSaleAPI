@@ -61,12 +61,64 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpGet("person/pagged")]
+        public async Task<ResponseBase<List<PessoaMainViewModel>>> GetAllPersonPagged(int page, int quantity)
+        {
+            try
+            {
+                var result = await _servicePerson.GetAllPagged(page, quantity);
+                var response = _mapper.Map<List<PessoaMainViewModel>>(result);
+                return new ResponseBase<List<PessoaMainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<PessoaMainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         [HttpGet("company/random")]
         public async Task<ResponseBase<List<EmpresaMainViewModel>>> GetRandomCompany(int? qt)
         {
             try
             {
                 var result = await _serviceEmpresa.GetRandom(qt);
+                var response = _mapper.Map<List<EmpresaMainViewModel>>(result);
+                return new ResponseBase<List<EmpresaMainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<EmpresaMainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("company/pagged")]
+        public async Task<ResponseBase<List<EmpresaMainViewModel>>> GetAllCompanyPagged(int page, int quantity)
+        {
+            try
+            {
+                var result = await _serviceEmpresa.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<EmpresaMainViewModel>>(result);
                 return new ResponseBase<List<EmpresaMainViewModel>>()
                 {
@@ -113,12 +165,64 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpGet("card/pagged")]
+        public async Task<ResponseBase<List<CartaoCreditoMainViewModel>>> GetAllCardsPagged(int page, int quantity)
+        {
+            try
+            {
+                var result = await _serviceCartao.GetAllPagged(page, quantity);
+                var response = _mapper.Map<List<CartaoCreditoMainViewModel>>(result);
+                return new ResponseBase<List<CartaoCreditoMainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<CartaoCreditoMainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         [HttpGet("vehicle/random")]
         public async Task<ResponseBase<List<VeiculosMainViewModel>>> GetRandomVehicle(int? qt)
         {
             try
             {
                 var result = await _serviceVeiculo.GetRandom(qt);
+                var response = _mapper.Map<List<VeiculosMainViewModel>>(result);
+                return new ResponseBase<List<VeiculosMainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<VeiculosMainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("vehicle/pagged")]
+        public async Task<ResponseBase<List<VeiculosMainViewModel>>> GetAllVehiclePagged(int page, int quantity)
+        {
+            try
+            {
+                var result = await _serviceVeiculo.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<VeiculosMainViewModel>>(result);
                 return new ResponseBase<List<VeiculosMainViewModel>>()
                 {

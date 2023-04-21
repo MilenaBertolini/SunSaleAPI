@@ -20,5 +20,7 @@ namespace Domain.ViewModel
 
         [NotNull]
         public string Certa { get; set; }
+
+        public virtual ICollection<AnexoRespostaViewModel> AnexoResposta { get; set; }
     }
 }

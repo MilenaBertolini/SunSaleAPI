@@ -39,9 +39,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
         {
-            return await _repository.GetAllPagged(page, quantity);
+            return await _repository.GetAllPagged(page, quantity, codigoProva, subject);
         }
 
         public async Task<Main> GetById(int id)

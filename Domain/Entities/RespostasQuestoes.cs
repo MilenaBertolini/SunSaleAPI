@@ -28,6 +28,7 @@ namespace Domain.Entities
 
         public string ObservacaoResposta { get; set; }
 
+        [ForeignKey("CodigoQuestao")]
         public virtual ICollection<AnexoResposta> AnexoResposta { get; set; }
 
     }
