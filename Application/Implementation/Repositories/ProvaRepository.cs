@@ -59,9 +59,13 @@ namespace Application.Implementation.Repositories
             model.Banca = entity.Banca;
             model.Local = entity.Local;
             model.DataAplicacao = entity.DataAplicacao;
+            model.UpdatedBy = entity.UpdatedBy;
+            model.UpdatedOn = entity.UpdatedOn;
+            model.CreatedBy = entity.CreatedBy;
 
             base.Update(model);
             await base.CommitAsync();
+
             return model;
         }
         

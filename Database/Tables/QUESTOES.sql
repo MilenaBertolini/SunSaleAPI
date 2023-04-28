@@ -7,6 +7,9 @@
     [CODIGOPROVA]       INT            DEFAULT ((0)) NOT NULL,
     [NUMEROQUESTAO]     VARCHAR (20)   NULL,
     [ativo]             CHAR (1)       DEFAULT ('1') NOT NULL,
+    [UpdatedBy]         INT,
+    [UpdatedOn]         DATETIME,
+    [CreatedBy]         INT,
     PRIMARY KEY CLUSTERED ([CODIGO] ASC)
 );
 

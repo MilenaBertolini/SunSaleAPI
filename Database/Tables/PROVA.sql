@@ -10,6 +10,9 @@
     [OBSERVACAOGABARITO] VARCHAR (2000)  DEFAULT ('') NOT NULL,
     [DATAREGISTRO]       DATETIME        NOT NULL,
     [BANCA]              VARCHAR (1000)  NULL,
+    [UpdatedBy]         INT,
+    [UpdatedOn]         DATETIME,
+    [CreatedBy]         INT,
     PRIMARY KEY CLUSTERED ([CODIGO] ASC)
 );
 

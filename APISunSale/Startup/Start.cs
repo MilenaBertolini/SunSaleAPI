@@ -150,8 +150,11 @@ namespace APISunSale.Startup
                     },
                     Description = ""
                 });
-                if(!dev)
+
+                if (!dev)
+                {
                     c.DocumentFilter<SwaggerControllerOrderProd>();
+                }
                 else
                 {
                     c.DocumentFilter<SwaggerControllerOrder>();
