@@ -48,33 +48,26 @@ namespace Application.Implementation.Repositories
         public async Task<Main> Update(Main entity)
         {
             var model = await GetByIdAsync(entity.Codigo);
+            entity.DataRegistro = model.DataRegistro;
             if (model == null)
                 return null;
 
-            model.DataRegistro = entity.DataRegistro;
-            model.LinkProva = entity.LinkProva;
-            model.LinkGabarito = entity.LinkGabarito;
-            model.ObservacaoProva = entity.ObservacaoProva;
-            model.ObservacaoGabarito = entity.ObservacaoGabarito;
-            model.Banca = entity.Banca;
-            model.Local = entity.Local;
-            model.DataAplicacao = entity.DataAplicacao;
-            model.UpdatedBy = entity.UpdatedBy;
-            model.UpdatedOn = entity.UpdatedOn;
-            model.CreatedBy = entity.CreatedBy;
-
+            base.Merge(model, entity);
             base.Update(model);
             await base.CommitAsync();
 
             return model;
         }
         
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity)
         {
             var query = base.GetQueryable();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            var response = await base.GetAllPagedAsync(query, page, quantity);
+            var qt = await base.GetAllPagedTotalAsync(query);
+
+            return Tuple.Create(response, qt);
         }
 
         public void Dispose()

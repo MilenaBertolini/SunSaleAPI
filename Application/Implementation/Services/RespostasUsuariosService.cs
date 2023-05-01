@@ -1,16 +1,15 @@
-﻿using Main = Domain.Entities.AnexoResposta;
-using IService = Application.Interface.Services.IAnexoRespostaService;
-using IRepository = Application.Interface.Repositories.IAnexoRespostaRepository;
+﻿using Main = Domain.Entities.RespostasUsuarios;
+using IService = Application.Interface.Services.IRespostasUsuariosService;
+using IRepository = Application.Interface.Repositories.IRespostasUsuariosRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
 
 namespace Application.Implementation.Services
 {
-    public class AnexoRespostaService : IService
+    public class RespostasUsuariosService : IService
     {
         private readonly IRepository _repository;
         private readonly IRepositoryCodes _repositoryCodes;
-
-        public AnexoRespostaService(IRepository repository, IRepositoryCodes repositoryCodes)
+        public RespostasUsuariosService(IRepository repository, IRepositoryCodes repositoryCodes)
         {
             _repository = repository;
             _repositoryCodes = repositoryCodes;
@@ -19,11 +18,11 @@ namespace Application.Implementation.Services
         public async Task<Main> Add(Main entity)
         {
             entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+            entity.DataResposta = DateTime.Now;
 
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
-            var result = await _repository.Add(entity);
 
-            return result;
+            return await _repository.Add(entity);
         }
 
         public Task<bool> DeleteById(int id)
@@ -50,6 +49,22 @@ namespace Application.Implementation.Services
         {
             return _repository.Update(entity);
         }
+
+        public Task<IEnumerable<Main>> GetByUser(int user)
+        {
+            return _repository.GetByUser(user);
+        }
+
+        public Task<IEnumerable<Main>> GetByQuestao(int questao)
+        {
+            return _repository.GetByQuestao(questao);
+        }
+
+        public Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao)
+        {
+            return _repository.GetByUserQuestao(user, questao);
+        }
+        
 
         public void Dispose()
         {

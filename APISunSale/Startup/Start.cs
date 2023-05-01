@@ -36,6 +36,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IEmpresaForDevService, EmpresaForDevService>();
             _app.Services.AddScoped<ICartaoCreditoDevToolsService, CartaoCreditoDevToolsService>();
             _app.Services.AddScoped<IVeiculosForDevService, VeiculosForDevService>();
+            _app.Services.AddScoped<IRespostasUsuariosService, RespostasUsuariosService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -50,6 +51,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IEmpresaForDevRepository, EmpresaForDevRepository>();
             _app.Services.AddScoped<ICartaoCreditoDevToolsRepository, CartaoCreditoDevtoolsRepository>();
             _app.Services.AddScoped<IVeiculosForDevRepository, VeiculosForDevRepository>();
+            _app.Services.AddScoped<IRespostasUsuariosRepository, RespostasUsuariosRepository>();
 
             Mapping();
 
@@ -62,6 +64,8 @@ namespace APISunSale.Startup
             _app.Services.AddEndpointsApiExplorer();
 
             AddSwagger(_app.Environment.IsDevelopment());
+
+            _app.Services.AddHttpContextAccessor();
 
             return this;
         }
@@ -105,6 +109,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<VeiculosForDevViewModel, VeiculosForDev>();
                 cfg.CreateMap<VeiculosForDev, VeiculosForDevViewModel>();
+
+                cfg.CreateMap<RespostasUsuariosViewModel, RespostasUsuarios>();
+                cfg.CreateMap<RespostasUsuarios, RespostasUsuariosViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
@@ -190,7 +197,7 @@ namespace APISunSale.Startup
     public class Base64Converter : ITypeConverter<string, byte[]>, ITypeConverter<byte[], string>
     {
         public byte[] Convert(string source, byte[] destination, ResolutionContext context)
-            => System.Convert.FromBase64String(source);
+            => System.Convert.FromBase64String(source.Replace("data:image/png;base64,", ""));
 
         public string Convert(byte[] source, string destination, ResolutionContext context)
             => System.Convert.ToBase64String(source);

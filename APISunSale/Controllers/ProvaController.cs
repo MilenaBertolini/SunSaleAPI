@@ -1,5 +1,4 @@
-﻿using Application.Interface.Services;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,22 +6,30 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.ProvaViewModel;
 using MainEntity = Domain.Entities.Prova;
 using Service = Application.Interface.Services.IProvaService;
+using QuestoesService = Application.Interface.Services.IQuestoesService;
+using UserService = Application.Interface.Services.IUsuariosService;
+using APISunSale.Utils;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ProvaController
+    public class ProvaController 
     {
         private readonly ILogger<ProvaController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper)
+        private readonly MainUtils _utils;
+        private readonly QuestoesService _questoesService;
+
+        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService, QuestoesService questoesService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
+            _utils = new MainUtils(httpContextAccessor, userService);
+            _questoesService = questoesService;
         }
 
         [HttpGet]
@@ -56,14 +63,24 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
                 var result = await _service.GetAllPagged(page, quantity);
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var response = _mapper.Map<List<MainViewModel>>(result.Item1);
+
+                foreach(var item in response)
+                {
+                    item.QuantidadeQuestoesResolvidas = await _questoesService.QuantidadeQuestoes(item.Codigo, user.Id);
+                    item.QuantidadeQuestoesTotal = await _questoesService.QuantidadeQuestoes(item.Codigo);
+                }
+
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = response?.Count
+                    Quantity = response?.Count,
+                    Total = result?.Item2
                 };
             }
             catch (Exception ex)
@@ -104,11 +121,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add([FromBodyAttribute] MainViewModel main, int codigoUsuario)
+        public async Task<ActionResult> Add([FromBodyAttribute] MainViewModel main)
         {
             try
             {
-                var result = await _service.Add(_mapper.Map<MainEntity>(main), codigoUsuario);
+                var user = await _utils.GetUserFromContextAsync();
+
+                var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
                 return new OkObjectResult(
                     new ResponseBase<MainViewModel>()
                     {
@@ -137,7 +156,18 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.Update(_mapper.Map<MainEntity>(main));
+                if(await _service.GetById(main.Codigo) == null)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Prova doesn't exists",
+                        Success = false
+                    };
+                }
+
+                var user = await _utils.GetUserFromContextAsync();
+
+                var result = await _service.Update(_mapper.Map<MainEntity>(main), user.Id);
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",

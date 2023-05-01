@@ -51,9 +51,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.DataRegistro = entity.DataRegistro;
-            model.CodigoQuestao = entity.CodigoQuestao;
-            model.Anexo = entity.Anexo;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

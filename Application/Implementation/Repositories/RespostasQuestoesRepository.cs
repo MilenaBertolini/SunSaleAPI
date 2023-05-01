@@ -7,7 +7,7 @@ namespace Application.Implementation.Repositories
 {
     public class RespostasQuestoesRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "AnexoResposta";
 
         public RespostasQuestoesRepository(DataContext dataContext) : base(dataContext)
         {
@@ -51,11 +51,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.DataRegistro = entity.DataRegistro;
-            model.Certa = entity.Certa;
-            model.CodigoQuestao = entity.CodigoQuestao;
-            model.ObservacaoResposta = entity.ObservacaoResposta;
-            model.TextoResposta = entity.TextoResposta;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

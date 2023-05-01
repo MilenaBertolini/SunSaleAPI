@@ -54,6 +54,11 @@ namespace Application.Implementation.Services
             return await _repository.VerifyLogin(user, pass);
         }
 
+        public async Task<Main> GetByEmail(string email)
+        {
+            return await _repository.GetByEmail(email);
+        }
+
         public async Task<bool> ExistsEmail(string email)
         {
             var temp = await _repository.GetByEmail(email);

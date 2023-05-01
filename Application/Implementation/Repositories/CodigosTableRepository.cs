@@ -30,7 +30,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.Codigo = entity.Codigo;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

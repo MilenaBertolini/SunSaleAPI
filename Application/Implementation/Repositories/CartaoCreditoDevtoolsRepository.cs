@@ -51,9 +51,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.CodigoSeguranca = entity.CodigoSeguranca;
-            model.Created = entity.Created;
-            model.DataValidade = entity.DataValidade;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

@@ -51,20 +51,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.Altura = entity.Altura;
-            model.Bairro = entity.Bairro;
-            model.Celular = entity.Celular;
-            model.Cep = entity.Cep;
-            model.Cidade= entity.Cidade;
-            model.CorFavorita = entity.CorFavorita;
-            model.DataNascimento = entity.DataNascimento;
-            model.Email = entity.Email;
-            model.Endereco = entity.Email;
-            model.Estado = entity.Estado;
-            model.Idade = entity.Idade;
-            model.Mae = entity.Mae;
-            model.Nome = entity.Nome;
-            model.Numero = entity.Numero;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

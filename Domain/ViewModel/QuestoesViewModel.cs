@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
@@ -23,8 +24,16 @@ namespace Domain.ViewModel
 
         public string Ativo { get; set; }
 
+        public DateTime UpdatedOn { get; set; }
+
+        public int UpdatedBy { get; set; }
+
+        public int CreatedBy { get; set; }
+
         public virtual ICollection<RespostasQuestoesViewModel> RespostasQuestoes { get; set; }
 
         public virtual ICollection<AnexosQuestoesViewModel> AnexosQuestoes { get; set; }
+
+        public virtual ICollection<RespostasUsuariosViewModel> RespostasUsuarios { get; set; }
     }
 }

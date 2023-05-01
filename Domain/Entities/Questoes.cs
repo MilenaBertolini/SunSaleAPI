@@ -28,12 +28,17 @@ namespace Domain.Entities
 
         public string Ativo { get; set; }
 
+        public DateTime UpdatedOn { get; set; }
+
+        public int UpdatedBy { get; set; }
+
+        public int CreatedBy { get; set; }
+
         [ForeignKey("CodigoQuestao")]
         public virtual ICollection<RespostasQuestoes> RespostasQuestoes { get; set; }
 
         [ForeignKey("CodigoQuestao")]
         public virtual ICollection<AnexosQuestoes> AnexosQuestoes { get; set; }
-
 
     }
 }

@@ -52,22 +52,11 @@ namespace Application.Implementation.Repositories
         public async Task<Main> Update(Main entity)
         {
             var model = await GetByIdAsync(entity.Id);
+            entity.Created = model.Created;
             if (model == null)
                 return null;
 
-            if(!string.IsNullOrEmpty(entity.Login))
-                model.Login = entity.Login;
-
-            if(!string.IsNullOrEmpty(entity.Pass))
-                model.Pass = entity.Pass;
-
-            if (!string.IsNullOrEmpty(entity.Email))
-                model.Email = entity.Email;
-
-            model.Nome = entity.Nome;
-            model.Admin = entity.Admin;
-            model.DataNascimento = entity.DataNascimento;
-            model.Updated = DateTime.Now;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

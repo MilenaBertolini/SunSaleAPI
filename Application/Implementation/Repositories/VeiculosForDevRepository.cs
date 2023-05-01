@@ -42,11 +42,7 @@ namespace Application.Implementation.Repositories
             if (model == null)
                 return null;
 
-            model.Ano = entity.Ano;
-            model.Cor = entity.Cor;
-            model.Marca = entity.Marca;
-            model.Modelo = entity.Modelo;
-            model.PlacaVeiculo = entity.PlacaVeiculo;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();

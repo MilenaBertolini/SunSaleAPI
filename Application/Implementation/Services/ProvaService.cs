@@ -3,6 +3,7 @@ using IService = Application.Interface.Services.IProvaService;
 using IRepository = Application.Interface.Repositories.IProvaRepository;
 using IServiceAcao = Application.Interface.Services.IAcaoUsuarioService;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using AutoMapper.Internal.Mappers;
 
 namespace Application.Implementation.Services
 {
@@ -25,6 +26,9 @@ namespace Application.Implementation.Services
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
 
             entity.DataRegistro = DateTime.Now;
+            entity.CreatedBy = codigoUsuario;
+            entity.UpdatedBy = codigoUsuario;
+            entity.UpdatedOn = DateTime.Now;
 
             var result = await _repository.Add(entity);
 
@@ -47,7 +51,7 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity)
         {
             return await _repository.GetAllPagged(page, quantity);
         }
@@ -57,8 +61,11 @@ namespace Application.Implementation.Services
             return await _repository.GetById(id);
         }
 
-        public Task<Main> Update(Main entity)
+        public Task<Main> Update(Main entity, int user)
         {
+            entity.UpdatedBy = user;
+            entity.UpdatedOn = DateTime.Now;
+
             return _repository.Update(entity);
         }
 

@@ -1,8 +1,8 @@
-﻿using Main = Domain.Entities.Usuarios;
+﻿using Main = Domain.Entities.RespostasUsuarios;
 
 namespace Application.Interface.Services
 {
-    public interface IUsuariosService : IDisposable
+    public interface IRespostasUsuariosService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
@@ -10,9 +10,9 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
-        Task<Main> GetByLogin(string user, string pass);
-        Task<Main> GetByEmail(string email);
-        Task<bool> ExistsEmail(string email);
-        Task<bool> ExistsLogin(string login);
+        Task<IEnumerable<Main>> GetByUser(int user);
+        Task<IEnumerable<Main>> GetByQuestao(int questao);
+        Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao);
+
     }
 }

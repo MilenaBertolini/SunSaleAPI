@@ -49,24 +49,18 @@ namespace Application.Implementation.Repositories
         public async Task<Main> Update(Main entity)
         {
             var model = await GetByIdAsync(entity.Codigo);
+            entity.DataRegistro = model.DataRegistro;
             if (model == null)
                 return null;
 
-            model.DataRegistro = entity.DataRegistro;
-            model.ObservacaoQuestao = entity.ObservacaoQuestao;
-            model.CampoQuestao = entity.CampoQuestao;
-            model.NumeroQuestao = entity.NumeroQuestao;
-            model.CodigoProva = entity.CodigoProva;
-            model.Ativo = entity.Ativo;
-            model.DataRegistro = entity.DataRegistro;
-            model.Materia = entity.Materia;
+            base.Merge(model, entity);
 
             base.Update(model);
             await base.CommitAsync();
             return model;
         }
         
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
         {
             var query = base.GetQueryable();
 
@@ -82,7 +76,10 @@ namespace Application.Implementation.Repositories
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            var response = await base.GetAllPagedAsync(query, page, quantity);
+            var qt = await base.GetAllPagedTotalAsync(query);
+
+            return Tuple.Create(response, qt);
         }
 
         public void Dispose()
@@ -125,11 +122,16 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
-        public async Task<IEnumerable<Main>> GetByProva(int prova)
+        public async Task<IEnumerable<Main>> GetByProva(int prova, int numero = -1)
         {
             var query = (from q in _dataContext.Questoes
                         where q.CodigoProva == prova
                         select q);
+
+            if(numero != -1)
+            {
+                query = query.Where(q => q.NumeroQuestao.Equals(numero.ToString()));
+            }
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
@@ -146,6 +148,27 @@ namespace Application.Implementation.Repositories
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             var response = query.AsEnumerable();
+
+            return response;
+        }
+
+        public async Task<int> QuantidadeQuestoes(int prova, int user = -1)
+        {
+            var query = user == -1 ?
+                (from q in _dataContext.Questoes
+                 where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
+
+                 select q)
+                :
+                (from q in _dataContext.Questoes
+                         join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
+                         join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
+                         where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
+                         && u.CodigoUsuario.Equals(user)
+
+                         select q);
+
+            var response = await query.CountAsync();
 
             return response;
         }

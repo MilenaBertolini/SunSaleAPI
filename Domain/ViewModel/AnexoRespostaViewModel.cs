@@ -17,6 +17,6 @@ namespace Domain.ViewModel
         [NotNull]
         public DateTime DataRegistro { get; set; }
 
-        public byte[] Anexo { get; set; }
+        public string Anexo { get; set; }
     }
 }

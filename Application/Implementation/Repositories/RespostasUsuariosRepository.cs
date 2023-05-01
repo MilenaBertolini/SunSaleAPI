@@ -1,15 +1,16 @@
 ﻿using Data.Context;
-using Main = Domain.Entities.AcaoUsuario;
-using IRepository = Application.Interface.Repositories.IAcaoUsuarioRepository;
+using Main = Domain.Entities.RespostasUsuarios;
+using IRepository = Application.Interface.Repositories.IRespostasUsuariosRepository;
 using Microsoft.EntityFrameworkCore;
+using Application.Model;
 
 namespace Application.Implementation.Repositories
 {
-    public class AcaoUsuarioRepository : RepositoryBase<Main>, IRepository
+    public class RespostasUsuariosRepository : RepositoryBase<Main>, IRepository
     {
         private static readonly string includes = "";
 
-        public AcaoUsuarioRepository(DataContext dataContext) : base(dataContext)
+        public RespostasUsuariosRepository(DataContext dataContext) : base(dataContext)
         {
         }
 
@@ -66,6 +67,41 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(query, page, quantity);
         }
 
+        public async Task<IEnumerable<Main>> GetByUser(int user)
+        {
+            var query = base.GetQueryable().Where(r => r.CodigoUsuario.Equals(user));
+
+            return await base.GetAllAsync(query);
+        }
+
+        public async Task<IEnumerable<Main>> GetByQuestao(int questao)
+        {
+            var query = (from q in _dataContext.Questoes
+                         join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
+                         join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
+
+                         where q.Codigo.Equals(questao)
+                         select u);
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao)
+        {
+            var query = (from q in _dataContext.Questoes
+                         join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
+                         join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
+
+                         where q.Codigo.Equals(questao) && u.CodigoUsuario.Equals(user)
+                         select u);
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+        
         public void Dispose()
         {
             this.Dispose(true);
