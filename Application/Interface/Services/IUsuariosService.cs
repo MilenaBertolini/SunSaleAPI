@@ -12,5 +12,7 @@ namespace Application.Interface.Services
         Task<bool> DeleteById(int id);
         Task<Main> GetByLogin(string user, string pass);
 
+        Task<bool> ExistsEmail(string email);
+        Task<bool> ExistsLogin(string login);
     }
 }

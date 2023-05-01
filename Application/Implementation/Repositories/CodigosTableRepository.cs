@@ -20,7 +20,7 @@ namespace Application.Implementation.Repositories
 
         public async Task<Main> GetByTable(string table)
         {
-            var query = GetQueryable().Where(p => p.Tabela.Equals(table));
+            var query = GetQueryable().Where(p => p.Tabela.ToUpper().Equals(table.ToUpper()));
             return await query.SingleOrDefaultAsync();
         }
 
@@ -41,7 +41,11 @@ namespace Application.Implementation.Repositories
         public async Task<int> GetNextCodigo(string table)
         {
             var model = await GetByTable(table);
-            if (model == null) return -1;
+            if (model == null)
+            {
+                Add(new Main { Tabela = table, Codigo = 1000 });
+                model = await GetByTable(table);
+            }
 
             model.Codigo++;
             await this.Update(model);

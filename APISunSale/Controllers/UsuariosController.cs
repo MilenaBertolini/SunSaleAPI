@@ -108,6 +108,24 @@ namespace APISunSale.Controllers
         {
             try
             {
+                if (await _service.ExistsEmail(main.Email))
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Already exists a user with this email",
+                        Success = false
+                    };
+                }
+
+                if (await _service.ExistsLogin(main.Login))
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Already exists a user with this login",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -133,6 +151,15 @@ namespace APISunSale.Controllers
         {
             try
             {
+                if(await _service.GetById(main.Id) == null)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "User not found",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {

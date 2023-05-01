@@ -49,14 +49,28 @@ namespace Application.Implementation.Services
             return _repository.Update(entity);
         }
 
+        public async Task<Main> GetByLogin(string user, string pass)
+        {
+            return await _repository.VerifyLogin(user, pass);
+        }
+
+        public async Task<bool> ExistsEmail(string email)
+        {
+            var temp = await _repository.GetByEmail(email);
+
+            return temp != null;
+        }
+
+        public async Task<bool> ExistsLogin(string login)
+        {
+            var temp = await _repository.GetByLogin(login);
+
+            return temp != null;
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();
-        }
-
-        public async Task<Main> GetByLogin(string user, string pass)
-        {
-            return await _repository.GetByLogin(user, pass);
         }
     }
 }

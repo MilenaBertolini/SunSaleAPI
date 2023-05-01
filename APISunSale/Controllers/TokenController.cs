@@ -27,9 +27,9 @@ namespace APISunSale.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IResult Token(User user) 
+        public async Task<IResult> TokenAsync(User user) 
         {
-            var userModel = _service.GetByLogin(user.UserName, user.Password);
+            var userModel = await _service.GetByLogin(user.UserName, user.Password);
             
             if(userModel == null)
             {
@@ -59,7 +59,7 @@ namespace APISunSale.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var stringToken = tokenHandler.WriteToken(token);
-            return Results.Ok(new { token = stringToken, username = userModel.Result.Email});
+            return Results.Ok(new { token = stringToken, username = userModel.Email});
         }
     }
 }

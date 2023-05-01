@@ -10,16 +10,16 @@ namespace Domain.ViewModel
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [NotNull]
         public string Login { get; set; }
 
-        [NotNull]
         public string Pass { get; set; }
 
-        [NotNull]
         public string Nome { get; set; }
 
-        [NotNull]
         public string Email { get; set; }
+
+        public DateTime? DataNascimento { get; set; }
+
+        public string Admin { get; set; }
     }
 }

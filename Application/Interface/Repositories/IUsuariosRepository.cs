@@ -6,6 +6,9 @@ namespace Application.Interface.Repositories
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
-        Task<Main> GetByLogin(string user, string pass);
+        Task<Main> VerifyLogin(string user, string pass);
+
+        Task<Main> GetByEmail(string email);
+        Task<Main> GetByLogin(string login);
     }
 }
