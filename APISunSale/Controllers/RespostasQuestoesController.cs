@@ -7,6 +7,9 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.RespostasQuestoesViewModel;
 using MainEntity = Domain.Entities.RespostasQuestoes;
 using Service = Application.Interface.Services.IRespostasQuestoesService;
+using RespostaUsuarioService = Application.Interface.Services.IRespostasUsuariosService;
+using UserService = Application.Interface.Services.IUsuariosService;
+using APISunSale.Utils;
 
 namespace APISunSale.Controllers
 {
@@ -18,11 +21,16 @@ namespace APISunSale.Controllers
         private readonly ILogger<RespostasQuestoesController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper)
+        private readonly RespostaUsuarioService _respostaUsuarioService;
+        private readonly MainUtils _utils;
+
+        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper, RespostaUsuarioService respostaUsuarioService, IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
+            _respostaUsuarioService = respostaUsuarioService;
+            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
@@ -149,6 +157,70 @@ namespace APISunSale.Controllers
                     Message = ex.Message,
                     Success = false,
                     Object = false
+                };
+            }
+        }
+
+        [HttpGet("validaResposta")]
+        public async Task<ResponseBase<MainViewModel>> ValidaResposta(int id)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                var result = await _service.GetById(id);
+
+                await _respostaUsuarioService.Add(new Domain.Entities.RespostasUsuarios()
+                {
+                    CodigoResposta = result.Codigo,
+                    CodigoUsuario = user.Id,
+                    DataResposta = DateTime.Now,
+                    CodigoQuestao = result.CodigoQuestao
+                });
+
+                var response = _mapper.Map<MainViewModel>(result);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("getRespostaCorreta")]
+        public async Task<ResponseBase<MainViewModel>> GetRespostaCorreta(int questao)
+        {
+            try
+            {
+                var result = await _service.GetRespostaCorreta(questao);
+                var response = _mapper.Map<MainViewModel>(result);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }

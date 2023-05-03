@@ -8,6 +8,7 @@ using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableReposit
 using IServiceAcao = Application.Interface.Services.IAcaoUsuarioService;
 using Application.Model;
 using Domain.Entities;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace Application.Implementation.Services
 {
@@ -102,9 +103,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject)
         {
-            return await _repository.GetAllPagged(page, quantity, codigoProva, subject);
+            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, codigoProva, subject);
         }
 
         public async Task<Main> GetById(int id)
@@ -129,11 +130,6 @@ namespace Application.Implementation.Services
             return result;
         }
 
-        public void Dispose()
-        {
-            this._repository.Dispose();
-        }
-
         public Task<IEnumerable<string>> GetMaterias(int? prova)
         {
             return _repository.GetMaterias(prova == null ? -1 : prova.Value);
@@ -144,9 +140,15 @@ namespace Application.Implementation.Services
             return _repository.GetTests(id == null ? -1 : id.Value);   
         }
 
-        public async Task<IEnumerable<Main>> GetQuestoesByProva(int prova, int numero = -1)
+        public async Task<Main> GetQuestoesByProva(int prova, int numero)
         {
             var response = await _repository.GetByProva(prova, numero);
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetQuestoesByProva(int prova)
+        {
+            var response = await _repository.GetByProva(prova);
             return response;
         }
 
@@ -160,5 +162,21 @@ namespace Application.Implementation.Services
         {
             return await _repository.QuantidadeQuestoes(prova, user);
         }
+
+        public async Task<IEnumerable<string>> GetAllMateris()
+        {
+            return await _repository.GetAllMateris();
+        }
+
+        public async Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca)
+        {
+            return await _repository.GetQuestoesAleatoria(tipo, subject, banca);
+        }
+
+        public void Dispose()
+        {
+            this._repository.Dispose();
+        }
+
     }
 }

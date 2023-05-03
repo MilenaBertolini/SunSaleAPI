@@ -10,6 +10,7 @@ using UserService = Application.Interface.Services.IUsuariosService;
 using RespostasUserService = Application.Interface.Services.IRespostasUsuariosService;
 using APISunSale.Utils;
 using Domain.ViewModel;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace APISunSale.Controllers
 {
@@ -34,13 +35,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, int? codigoProva, string? subject)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, codigoProva, subject);
+                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, codigoProva, subject);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
                 foreach(var item in response)
@@ -112,7 +113,7 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getQuestao")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetQuestao(int codigoProva, int numeroQuestao)
+        public async Task<ResponseBase<MainViewModel>> GetQuestao(int codigoProva, int numeroQuestao)
         {
             try
             {
@@ -122,22 +123,18 @@ namespace APISunSale.Controllers
 
                 if (result == null)
                 {
-                    return new ResponseBase<List<MainViewModel>>()
+                    return new ResponseBase<MainViewModel>()
                     {
                         Message = "Not registered",
                         Success = false
                     };
                 }
 
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var response = _mapper.Map<MainViewModel>(result);
+                var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
+                response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
 
-                foreach (var item in response)
-                {
-                    var temp = await _respostasUserService.GetByUserQuestao(user.Id, item.Codigo);
-                    item.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
-                }
-
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<MainViewModel>()
                 {
                     Message = "Search success",
                     Success = true,
@@ -148,7 +145,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
                     Success = false
@@ -240,6 +237,118 @@ namespace APISunSale.Controllers
                     Message = ex.Message,
                     Success = false,
                     Object = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllMaterias")]
+        public async Task<ResponseBase<List<string>>> GetAllMaterias()
+        {
+            try
+            {
+                var result = await _service.GetAllMateris();
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = result?.ToList(),
+                    Quantity = result?.Count()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("getQuestaoAleatoria")]
+        public async Task<ResponseBase<MainViewModel>> GetQuestaoAleatoria(TipoQuestoes tipo, string? subject, string? bancas)
+        {
+            try
+            {
+                var result = await _service.GetQuestoesAleatoria(tipo, subject, bancas);
+
+                if (result == null)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not registered",
+                        Success = false
+                    };
+                }
+
+                var user = await _utils.GetUserFromContextAsync();
+                var response = _mapper.Map<MainViewModel>(result);
+                var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
+                response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("solicitaVerificacao")]
+        public async Task<ResponseBase<MainViewModel>> SolicitaVerificacao(int id)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                var result = await _service.GetById(id);
+
+                if (result == null)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not registered",
+                        Success = false
+                    };
+                }
+
+                result.Ativo = "0";
+                await _service.Update(result, user.Id);
+
+                var response = _mapper.Map<MainViewModel>(result);
+
+                var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
+                response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }

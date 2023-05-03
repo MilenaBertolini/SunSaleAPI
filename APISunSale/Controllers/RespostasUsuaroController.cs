@@ -4,87 +4,40 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.UsuariosViewModel;
-using MainEntity = Domain.Entities.Usuarios;
-using Service = Application.Interface.Services.IUsuariosService;
-using RespostasService = Application.Interface.Services.IRespostasUsuariosService;
+using MainViewModel = Domain.ViewModel.RespostasUsuariosViewModel;
+using MainEntity = Domain.Entities.RespostasUsuarios;
+using Service = Application.Interface.Services.IRespostasUsuariosService;
+using UserService = Application.Interface.Services.IUsuariosService;
 using APISunSale.Utils;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [AllowAnonymous]
-    public class UsuariosController
+    [Authorize]
+    public class RespostasUsuaroController
     {
-        private readonly ILogger<UsuariosController> _logger;
+        private readonly ILogger<AcaoUsuarioController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
         private readonly MainUtils _utils;
-        private readonly RespostasService _respostasService;
-        public UsuariosController(ILogger<UsuariosController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, RespostasService respostasService)
+
+        public RespostasUsuaroController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
-            _utils = new MainUtils(httpContextAccessor, service);
-            _respostasService = respostasService;
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAll()
-        {
-            try
-            {
-                var user = await _utils.GetUserFromContextAsync();
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<List<MainViewModel>>()
-                    {
-                        Message = "Just for admin",
-                        Success = false
-                    };
-                }
-
-                var result = await _service.GetAll();
-                var response = _mapper.Map<List<MainViewModel>>(result);
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = "List created",
-                    Success = true,
-                    Object = response,
-                    Quantity = response?.Count
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }
+            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
-        [Authorize]
         public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<List<MainViewModel>>()
-                    {
-                        Message = "Just for admin",
-                        Success = false
-                    };
-                }
 
-                var result = await _service.GetAllPagged(page, quantity);
+                var result = await _service.GetAllPagged(page, quantity, user.Id);
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {
@@ -106,21 +59,10 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getById")]
-        [Authorize]
         public async Task<ResponseBase<MainViewModel>> GetById(int id)
         {
             try
             {
-                var user = await _utils.GetUserFromContextAsync();
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Just for admin",
-                        Success = false
-                    };
-                }
-
                 var result = await _service.GetById(id);
                 var response = _mapper.Map<MainViewModel>(result);
                 return new ResponseBase<MainViewModel>()
@@ -128,7 +70,7 @@ namespace APISunSale.Controllers
                     Message = "Search success",
                     Success = true,
                     Object = response,
-                    Quantity = 1
+                    Quantity = response != null ? 1 : 0
                 };
             }
             catch (Exception ex)
@@ -143,29 +85,10 @@ namespace APISunSale.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main)
         {
             try
             {
-                if (await _service.ExistsEmail(main.Email))
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Already exists a user with this email",
-                        Success = false
-                    };
-                }
-
-                if (await _service.ExistsLogin(main.Login))
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Already exists a user with this login",
-                        Success = false
-                    };
-                }
-
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -187,20 +110,10 @@ namespace APISunSale.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public async Task<ResponseBase<MainViewModel>> Update([FromBodyAttribute] MainViewModel main)
         {
             try
             {
-                if(await _service.GetById(main.Id) == null)
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "User not found",
-                        Success = false
-                    };
-                }
-
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -222,22 +135,10 @@ namespace APISunSale.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
         public async Task<ResponseBase<bool>> Delete(int id)
         {
             try
             {
-                var user = await _utils.GetUserFromContextAsync();
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<bool>()
-                    {
-                        Message = "Just for admin",
-                        Success = false,
-                        Object = false
-                    };
-                }
-
                 var result = await _service.DeleteById(id);
                 return new ResponseBase<bool>()
                 {
@@ -259,29 +160,26 @@ namespace APISunSale.Controllers
             }
         }
 
-        [HttpGet("getPerfil")]
-        public async Task<ResponseBase<PerfilUsuario>> GetPerfilUsuario()
+        [HttpGet("getHistory")]
+        public async Task<ResponseBase<List<HistoricoUsuario>>> GetHistory()
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetPerfil(user.Id);
-                result.QuantidadeQuestoesAcertadas = await _respostasService.GetQuantidadeQuestoesCertas(user.Id);
-                result.QuantidadeQuestoesResolvidas = await _respostasService.GetQuantidadeQuestoesTentadas(user.Id);
-                result.Usuario.Pass = string.Empty;
-
-                return new ResponseBase<PerfilUsuario>()
+                var result = await _service.GetHistory(user.Id);
+                return new ResponseBase<List<HistoricoUsuario>>()
                 {
                     Message = "List created",
                     Success = true,
-                    Object = result,
+                    Object = result?.ToList(),
+                    Quantity = result?.Count()
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                return new ResponseBase<PerfilUsuario>()
+                return new ResponseBase<List<HistoricoUsuario>>()
                 {
                     Message = ex.Message,
                     Success = false

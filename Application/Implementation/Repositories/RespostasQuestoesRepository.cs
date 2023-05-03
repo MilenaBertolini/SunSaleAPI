@@ -75,6 +75,13 @@ namespace Application.Implementation.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<Main> GetRespostaCorreta(int questao)
+        {
+            var query = base.GetQueryable().Where(q => q.CodigoQuestao.Equals(questao) && q.Certa.Equals("1"));
+
+            return await query.FirstOrDefaultAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

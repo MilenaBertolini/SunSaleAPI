@@ -13,5 +13,11 @@ namespace Data.Helper
             PROVA = 0,
             GABARITO = 1
         }
+
+        public enum TipoQuestoes 
+        { 
+            GENERIC = 0,
+            ENEM = 1
+        }
     }
 }

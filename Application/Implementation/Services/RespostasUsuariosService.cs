@@ -2,6 +2,7 @@
 using IService = Application.Interface.Services.IRespostasUsuariosService;
 using IRepository = Application.Interface.Repositories.IRespostasUsuariosRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using Domain.Responses;
 
 namespace Application.Implementation.Services
 {
@@ -35,9 +36,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user)
         {
-            return await _repository.GetAllPagged(page, quantity);
+            return await _repository.GetAllPagged(page, quantity, user);
         }
 
         public async Task<Main> GetById(int id)
@@ -64,7 +65,21 @@ namespace Application.Implementation.Services
         {
             return _repository.GetByUserQuestao(user, questao);
         }
-        
+
+        public async Task<IEnumerable<HistoricoUsuario>> GetHistory(int user)
+        {
+            return await _repository.GetHistory(user);
+        }
+
+        public async Task<int> GetQuantidadeQuestoesCertas(int user)
+        {
+            return await _repository.GetQuantidadeQuestoesCertas(user);
+        }
+
+        public async Task<int> GetQuantidadeQuestoesTentadas(int user)
+        {
+            return await _repository.GetQuantidadeQuestoesTentadas(user);
+        }
 
         public void Dispose()
         {

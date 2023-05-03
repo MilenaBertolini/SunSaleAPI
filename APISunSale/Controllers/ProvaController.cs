@@ -212,5 +212,68 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpGet]
+        [Route("GetAllBancas")]
+        public async Task<ResponseBase<List<string>>> GetAllBancas()
+        {
+            try
+            {
+                var result = await _service.GetAll();
+                List<string> response = _mapper.Map<List<string>>(result.Select(r => r.Banca)).Distinct().ToList();
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllProvas")]
+        public async Task<ResponseBase<List<PorvasReturn>>> GetAllProvas()
+        {
+            try
+            {
+                var result = await _service.GetAll();
+                List<PorvasReturn> response = _mapper.Map<List<PorvasReturn>>(
+                result.Select(r => 
+                new PorvasReturn() 
+                { 
+                    Codigo = r.Codigo, 
+                    Nome = r.NomeProva 
+                } 
+                )).Distinct().ToList();
+
+                return new ResponseBase<List<PorvasReturn>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<PorvasReturn>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }

@@ -3,12 +3,13 @@ using Main = Domain.Entities.RespostasUsuarios;
 using IRepository = Application.Interface.Repositories.IRespostasUsuariosRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
+using Domain.Responses;
 
 namespace Application.Implementation.Repositories
 {
     public class RespostasUsuariosRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "RespostasQuestoes";
 
         public RespostasUsuariosRepository(DataContext dataContext) : base(dataContext)
         {
@@ -59,9 +60,9 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user)
         {
-            var query = base.GetQueryable();
+            var query = base.GetQueryable().Where(u => u.CodigoUsuario.Equals(user)).Distinct();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await base.GetAllPagedAsync(query, page, quantity);
@@ -101,7 +102,52 @@ namespace Application.Implementation.Repositories
 
             return response;
         }
-        
+
+        public async Task<IEnumerable<HistoricoUsuario>> GetHistory(int user)
+        {
+            var query = (from r in _dataContext.RespostasUsuarios
+                         join re in _dataContext.RespostasQuestoes on r.CodigoResposta equals re.Codigo
+                         join q in _dataContext.Questoes on re.CodigoQuestao equals q.Codigo
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where q.Ativo.Equals("1")
+                         && r.CodigoUsuario.Equals(user)
+
+                         select new HistoricoUsuario
+                         {
+                             Codigo = r.Codigo,
+                             RespostaCorreta = re.Certa,
+                             NumeroQuestao = q.NumeroQuestao,
+                             NomeProva = p.NomeProva,
+                             DataResposta = r.DataResposta,
+                             CodigoQuestao = q.Codigo
+                         });
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+
+        public async Task<int> GetQuantidadeQuestoesCertas(int user)
+        {
+            var query = (from r in _dataContext.RespostasUsuarios
+                         join re in _dataContext.RespostasQuestoes on r.CodigoResposta equals re.Codigo
+                         where r.CodigoUsuario.Equals(user) && re.Certa.Equals("1")
+
+                         select r.CodigoResposta).Distinct();
+
+            return query.Count();
+        }
+
+        public async Task<int> GetQuantidadeQuestoesTentadas(int user)
+        {
+            var query = (from r in _dataContext.RespostasUsuarios
+                         where r.CodigoUsuario.Equals(user)
+
+                         select r.CodigoResposta).Distinct();
+
+            return query.Count();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

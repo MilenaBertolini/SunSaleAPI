@@ -3,6 +3,7 @@ using Main = Domain.Entities.Questoes;
 using IRepository = Application.Interface.Repositories.IQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace Application.Implementation.Repositories
 {
@@ -60,10 +61,9 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject)
         {
             var query = base.GetQueryable();
-
             if (codigoProva.HasValue)
             {
                 query = query.Where(q => q.CodigoProva.Equals(codigoProva));
@@ -74,9 +74,15 @@ namespace Application.Implementation.Repositories
                 query = query.Where(q => q.Materia.ToUpper().Contains(subject.ToUpper()));
             }
 
-            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+            string include = includes;
+            if (!includeAnexos)
+                include = include.Replace(";RespostasQuestoes.AnexoResposta;AnexosQuestoes", "");
+
+            var list = GetIncludes(include).ToList();
+            list.ForEach(p => query = query.Include(p));
 
             var response = await base.GetAllPagedAsync(query, page, quantity);
+
             var qt = await base.GetAllPagedTotalAsync(query);
 
             return Tuple.Create(response, qt);
@@ -122,16 +128,23 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
-        public async Task<IEnumerable<Main>> GetByProva(int prova, int numero = -1)
+        public async Task<Main> GetByProva(int prova, int numero)
         {
             var query = (from q in _dataContext.Questoes
-                        where q.CodigoProva == prova
+                        where q.CodigoProva == prova && q.NumeroQuestao.Equals(numero.ToString())
                         select q);
 
-            if(numero != -1)
-            {
-                query = query.Where(q => q.NumeroQuestao.Equals(numero.ToString()));
-            }
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            var response = await query.FirstOrDefaultAsync();
+            return response;
+        }
+
+        public async Task<IEnumerable<Main>> GetByProva(int prova)
+        {
+            var query = (from q in _dataContext.Questoes
+                         where q.CodigoProva == prova
+                         select q);
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
@@ -171,6 +184,56 @@ namespace Application.Implementation.Repositories
             var response = await query.CountAsync();
 
             return response;
+        }
+
+        public async Task<IEnumerable<string>> GetAllMateris()
+        {
+            var query = (from q in _dataContext.Questoes
+                         where q.Ativo.Equals("1")
+                         select q.Materia).Distinct();
+
+            return query.AsEnumerable();
+        }
+
+        public async Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca)
+        {
+            var query = GetQueryable();
+            if(tipo == TipoQuestoes.ENEM)
+            {
+                query = (from q in _dataContext.Questoes
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where p.NomeProva.ToUpper().Contains("ENEM")
+
+                         select q);
+
+            }
+
+            if (!string.IsNullOrEmpty(subject))
+            {
+                string[] array = subject.Split(';');
+
+                int random = new Random().Next(array.Length);
+                query = query.Where(q => q.Materia.Equals(array[random]));
+            }
+
+            if(!string.IsNullOrEmpty(banca))
+            {
+                string[] array = banca.Split(';');
+
+                int random = new Random().Next(array.Length);
+
+                var queryProva = (from p in _dataContext.Prova where p.Banca.ToUpper().Contains(array[random]) select p);
+                var prova = queryProva.FirstOrDefault();
+
+                if(prova != null)
+                    query = query.Where(q => q.CodigoProva == prova.Codigo);
+            }
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            int index = new Random().Next(query.Count());
+
+            return await query.Skip(index).FirstOrDefaultAsync();
         }
     }
 }

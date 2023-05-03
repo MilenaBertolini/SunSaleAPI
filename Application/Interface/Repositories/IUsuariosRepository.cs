@@ -1,4 +1,5 @@
-﻿using Main = Domain.Entities.Usuarios;
+﻿using Domain.Responses;
+using Main = Domain.Entities.Usuarios;
 
 namespace Application.Interface.Repositories
 {
@@ -10,5 +11,6 @@ namespace Application.Interface.Repositories
 
         Task<Main> GetByEmail(string email);
         Task<Main> GetByLogin(string login);
+        Task<PerfilUsuario> GetPerfil(int user);
     }
 }

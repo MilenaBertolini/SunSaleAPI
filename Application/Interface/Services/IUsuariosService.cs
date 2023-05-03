@@ -1,4 +1,5 @@
-﻿using Main = Domain.Entities.Usuarios;
+﻿using Domain.Responses;
+using Main = Domain.Entities.Usuarios;
 
 namespace Application.Interface.Services
 {
@@ -14,5 +15,6 @@ namespace Application.Interface.Services
         Task<Main> GetByEmail(string email);
         Task<bool> ExistsEmail(string email);
         Task<bool> ExistsLogin(string login);
+        Task<PerfilUsuario> GetPerfil(int user);
     }
 }

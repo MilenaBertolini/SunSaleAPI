@@ -39,6 +39,5 @@ namespace Domain.Entities
 
         [ForeignKey("CodigoQuestao")]
         public virtual ICollection<AnexosQuestoes> AnexosQuestoes { get; set; }
-
     }
 }

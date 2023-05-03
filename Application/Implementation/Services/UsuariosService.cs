@@ -2,6 +2,7 @@
 using IService = Application.Interface.Services.IUsuariosService;
 using IRepository = Application.Interface.Repositories.IUsuariosRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using Domain.Responses;
 
 namespace Application.Implementation.Services
 {
@@ -72,6 +73,12 @@ namespace Application.Implementation.Services
 
             return temp != null;
         }
+
+        public async Task<PerfilUsuario> GetPerfil(int user)
+        {
+            return await _repository.GetPerfil(user);
+        }
+
 
         public void Dispose()
         {

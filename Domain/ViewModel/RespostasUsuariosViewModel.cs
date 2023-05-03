@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
@@ -15,7 +16,8 @@ namespace Domain.ViewModel
 
         [NotNull]
         public int CodigoResposta { get; set; }
-
+        [NotNull]
+        public int CodigoQuestao { get; set; }
         public DateTime DataResposta { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Main = Domain.Entities.Usuarios;
 using IRepository = Application.Interface.Repositories.IUsuariosRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
+using Domain.Responses;
 
 namespace Application.Implementation.Repositories
 {
@@ -87,6 +88,31 @@ namespace Application.Implementation.Repositories
         {
             var query = GetQueryable().Where(p => p.Login.Equals(login));
             return await query?.SingleOrDefaultAsync();
+        }
+
+        public async Task<PerfilUsuario> GetPerfil(int user)
+        {
+            var query = (from u in _dataContext.Usuarios
+                         where u.Id.Equals(user)
+
+                         select new PerfilUsuario
+                         {
+                             Admin = u.Admin,
+                             CodigoUsuario = u.Id,
+                             Usuario = new Domain.ViewModel.UsuariosViewModel() 
+                             {
+                                 Admin = u.Admin,
+                                 DataNascimento = u.DataNascimento,
+                                 Email = u.Email,
+                                 Id = u.Id,
+                                 Login = u.Login,
+                                 Nome = u.Nome,
+                                 Pass = u.Pass
+                             }
+                         });
+
+            var response = await query.FirstOrDefaultAsync();
+            return response;
         }
 
         public void Dispose()

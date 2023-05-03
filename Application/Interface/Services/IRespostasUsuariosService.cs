@@ -1,11 +1,12 @@
-﻿using Main = Domain.Entities.RespostasUsuarios;
+﻿using Domain.Responses;
+using Main = Domain.Entities.RespostasUsuarios;
 
 namespace Application.Interface.Services
 {
     public interface IRespostasUsuariosService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
+        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
@@ -13,6 +14,8 @@ namespace Application.Interface.Services
         Task<IEnumerable<Main>> GetByUser(int user);
         Task<IEnumerable<Main>> GetByQuestao(int questao);
         Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao);
-
+        Task<IEnumerable<HistoricoUsuario>> GetHistory(int user);
+        Task<int> GetQuantidadeQuestoesCertas(int user);
+        Task<int> GetQuantidadeQuestoesTentadas(int user);
     }
 }

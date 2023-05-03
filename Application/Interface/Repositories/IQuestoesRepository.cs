@@ -1,4 +1,5 @@
 ﻿using Application.Model;
+using static Data.Helper.EnumeratorsTypes;
 using Main = Domain.Entities.Questoes;
 
 namespace Application.Interface.Repositories
@@ -6,12 +7,14 @@ namespace Application.Interface.Repositories
     public interface IQuestoesRepository : IRepositoryBase<Main>
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int? codigoProva, string? subject);
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject);
         Task<IEnumerable<string>> GetMaterias(int prova = -1);
         Task<IEnumerable<Test>> GetTests(int id = -1);
-        Task<IEnumerable<Main>> GetByProva(int prova, int numero = -1);
+        Task<Main> GetByProva(int prova, int numero);
+        Task<IEnumerable<Main>> GetByProva(int prova);
         Task<IEnumerable<Main>> GetByMateria(string materia);
         Task<int> QuantidadeQuestoes(int prova, int user = -1);
-
+        Task<IEnumerable<string>> GetAllMateris();
+        Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca);
     }
 }

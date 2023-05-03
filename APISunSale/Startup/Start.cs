@@ -197,9 +197,9 @@ namespace APISunSale.Startup
     public class Base64Converter : ITypeConverter<string, byte[]>, ITypeConverter<byte[], string>
     {
         public byte[] Convert(string source, byte[] destination, ResolutionContext context)
-            => System.Convert.FromBase64String(source.Replace("data:image/png;base64,", ""));
+            => Encoding.UTF8.GetBytes(source);
 
         public string Convert(byte[] source, string destination, ResolutionContext context)
-            => System.Convert.ToBase64String(source);
+            => Encoding.UTF8.GetString(source);
     }
 }

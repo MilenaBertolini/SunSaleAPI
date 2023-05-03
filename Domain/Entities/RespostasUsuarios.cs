@@ -13,6 +13,8 @@ namespace Domain.Entities
 
         [NotNull]
         public int CodigoResposta { get; set; }
+        [NotNull]
+        public int CodigoQuestao { get; set; }
 
         public DateTime DataResposta { get; set; }
     }

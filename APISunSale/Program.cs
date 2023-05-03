@@ -24,7 +24,7 @@ app.Use(async (context, next) =>
     }
 });
 
-app.UseCors(options => options.AllowAnyOrigin());
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

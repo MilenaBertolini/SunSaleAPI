@@ -48,10 +48,15 @@ namespace Application.Implementation.Services
         {
             return _repository.Update(entity);
         }
+        public async Task<Main> GetRespostaCorreta(int questao)
+        {
+            return await _repository.GetRespostaCorreta(questao);
+        }
 
         public void Dispose()
         {
             this._repository.Dispose();
         }
+
     }
 }
