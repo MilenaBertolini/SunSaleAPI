@@ -6,13 +6,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project>
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUEBoJ2in7Ey0xsTn5SUe0gAAAAACAAAAAAAQZgAAAAEAACAAAAAbWHw1NW/TaLN3q2OP80KOK9uKfMo0Up8tEQBnRvIprQAAAAAOgAAAAAIAACAAAADBnRb/gVb1RvumESeSdDpZ42NyuR+bx7MKk5ili6cLvoAAAACWvUiuPlc9a+HRZYbzRb1fh5HQxenW7zOApw4NmhNuWYn0GLYXnq9aByd253zb8Jzdt8wGBdYPJiGkfHGv+BMh7nwqxMuUhUZ9EoJ5jMkJtVqt7/DzJoDV8PJbw7gd7CcXUKVjC65VUfnqL2Z/Hpy/Mw5/2vcVpT0ioa9TEWrba0AAAAAUnx6s7whFnex30wQLdPitinYsk/fUZ9W3NuAXchgZ+6j+qIWNlivHtSwLA2rdctgo8XNrZoHBs0ofDZssvWvM</EncryptedPassword>
-    <History>True|2023-05-03T11:57:14.6219968Z;True|2023-05-03T08:37:43.5458586-03:00;True|2023-05-02T21:25:55.0832959-03:00;True|2023-05-02T17:53:01.1918588-03:00;True|2023-05-01T17:10:13.2906671-03:00;True|2023-04-28T16:04:17.5944598-03:00;True|2023-04-21T17:35:51.0817768-03:00;True|2023-04-20T12:44:29.8673893-03:00;True|2023-04-20T12:41:09.3842848-03:00;</History>
-    <LastFailureDetails />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAUEBoJ2in7Ey0xsTn5SUe0gAAAAACAAAAAAAQZgAAAAEAACAAAAB9LEqw6BHYZk68irkPcgqU6v4x1TcO412wm17DgKLDXwAAAAAOgAAAAAIAACAAAAAalTanSG1OeKMJT27pPbKzj5cOZqYwDkMQciS/ewehi4AAAADNh2tJcBXLx3VQdreLQXBUr3ziPE0NemUAcBEcRmjoKMgrYElXZTiiczz4DOUM4GOnQZNGiMEmt0YTC/OSSUKAh7qpsbxDHvAl1Lwyts2moz94ijKZPkLIUxdEDZHI1OVCMtsj2vS9TIWec0OGfn6d8/LnUYaFPUgEfNhi6OFr7UAAAADd/WPB93oscan7lsrH9rVQWV7rS+f/tb6aVbS2Xx/HcMwZ6Pr/6PvVscc7zrGkQP2Lbqw3Rr+eeM9VC3Nte3ZR</EncryptedPassword>
   </PropertyGroup>
-  <ItemGroup>
-    <DestinationConnectionStrings Include="connection">
-      <Value>Server=tcp:sunsale.database.windows.net,1433%3bInitial Catalog=devtools%3bPersist Security Info=False%3bUser ID=rodrigo%3bPassword=qbj1ACjd%2a%2a%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
-    </DestinationConnectionStrings>
-  </ItemGroup>
 </Project>
