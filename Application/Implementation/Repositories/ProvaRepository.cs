@@ -59,10 +59,15 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova)
         {
             var query = base.GetQueryable();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            if (!string.IsNullOrEmpty(prova))
+            {
+                query = query.Where(q => q.NomeProva.ToUpper().Contains(prova.ToUpper()));
+            }
 
             var response = await base.GetAllPagedAsync(query, page, quantity);
             var qt = await base.GetAllPagedTotalAsync(query);

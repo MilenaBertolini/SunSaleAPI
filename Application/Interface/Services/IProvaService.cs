@@ -5,7 +5,7 @@ namespace Application.Interface.Services
     public interface IProvaService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity);
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity, int codigoUsuario);
         Task<Main> Update(Main entity, int user);
