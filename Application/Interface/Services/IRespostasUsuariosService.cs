@@ -17,5 +17,6 @@ namespace Application.Interface.Services
         Task<IEnumerable<HistoricoUsuario>> GetHistory(int user);
         Task<int> GetQuantidadeQuestoesCertas(int user);
         Task<int> GetQuantidadeQuestoesTentadas(int user);
+        Task<IEnumerable<Ranking>> GetRanking();
     }
 }

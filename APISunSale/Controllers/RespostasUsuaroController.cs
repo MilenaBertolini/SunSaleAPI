@@ -186,5 +186,31 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpGet("ranking")]
+        public async Task<ResponseBase<List<Ranking>>> GetRanking()
+        {
+            try
+            {
+                var result = await _service.GetRanking();
+
+                return new ResponseBase<List<Ranking>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = result?.ToList(),
+                    Quantity = result?.Count()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                return new ResponseBase<List<Ranking>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }

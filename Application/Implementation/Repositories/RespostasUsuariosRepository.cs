@@ -127,6 +127,33 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
+        public async Task<IEnumerable<Ranking>> GetRanking()
+        {
+            var query = (
+                from u in _dataContext.Usuarios
+                join ru in _dataContext.RespostasUsuarios on u.Id equals ru.CodigoUsuario into respostas
+
+                select new Ranking 
+                { 
+                    Login = u.Email,
+                    Nome = u.Nome,
+                    Quantidade = (
+                        from r in respostas
+                        join ru in _dataContext.RespostasQuestoes on r.CodigoResposta equals ru.Codigo
+                        join q in _dataContext.Questoes on r.CodigoQuestao equals q.Codigo
+                        where ru.Certa == "1" && q.Ativo.Equals("1")
+                        select new { r.CodigoQuestao })
+                                 .Distinct()
+                                 .Count()
+                }
+
+                ).Distinct().OrderByDescending(r =>r.Quantidade).Take(100);
+
+            var response = query.AsEnumerable();
+
+            return response;
+        }
+
         public async Task<int> GetQuantidadeQuestoesCertas(int user)
         {
             var query = (from r in _dataContext.RespostasUsuarios

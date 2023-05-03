@@ -81,6 +81,11 @@ namespace Application.Implementation.Services
             return await _repository.GetQuantidadeQuestoesTentadas(user);
         }
 
+        public async Task<IEnumerable<Ranking>> GetRanking()
+        {
+            return await _repository.GetRanking();
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();
