@@ -11,6 +11,7 @@ using RespostasUserService = Application.Interface.Services.IRespostasUsuariosSe
 using APISunSale.Utils;
 using Domain.ViewModel;
 using static Data.Helper.EnumeratorsTypes;
+using System.Collections.Generic;
 
 namespace APISunSale.Controllers
 {
@@ -44,10 +45,10 @@ namespace APISunSale.Controllers
                 var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, codigoProva, subject);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
+                var temp = _mapper.Map<IList<RespostasUsuariosViewModel>>(await _respostasUserService.GetByUserQuestao(user.Id));
                 foreach(var item in response)
                 {
-                    var temp = await _respostasUserService.GetByUserQuestao(user.Id, item.Codigo);
-                    item.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
+                    item.RespostasUsuarios = temp.Where(r => item.RespostasQuestoes.Where(re => re.Codigo.Equals(r.CodigoResposta)).Count() > 0).ToList();
                 }
 
                 return new ResponseBase<List<MainViewModel>>()

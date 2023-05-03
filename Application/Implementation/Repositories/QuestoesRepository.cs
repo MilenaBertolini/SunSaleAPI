@@ -177,7 +177,7 @@ namespace Application.Implementation.Repositories
                          join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
                          join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
                          where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
-                         && u.CodigoUsuario.Equals(user)
+                         && u.CodigoUsuario.Equals(user) && r.Certa.Equals("1")
 
                          select q);
 

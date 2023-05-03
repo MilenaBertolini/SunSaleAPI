@@ -61,7 +61,7 @@ namespace Application.Implementation.Services
             return _repository.GetByQuestao(questao);
         }
 
-        public Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao)
+        public Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao = -1)
         {
             return _repository.GetByUserQuestao(user, questao);
         }

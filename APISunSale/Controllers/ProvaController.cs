@@ -8,7 +8,9 @@ using MainEntity = Domain.Entities.Prova;
 using Service = Application.Interface.Services.IProvaService;
 using QuestoesService = Application.Interface.Services.IQuestoesService;
 using UserService = Application.Interface.Services.IUsuariosService;
+using RespostasUserService = Application.Interface.Services.IRespostasUsuariosService;
 using APISunSale.Utils;
+using Domain.ViewModel;
 
 namespace APISunSale.Controllers
 {
@@ -22,14 +24,16 @@ namespace APISunSale.Controllers
         private readonly IMapper _mapper;
         private readonly MainUtils _utils;
         private readonly QuestoesService _questoesService;
+        private readonly RespostasUserService _respostasUserService;
 
-        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService, QuestoesService questoesService)
+        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService, QuestoesService questoesService, RespostasUserService respostasUserService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _utils = new MainUtils(httpContextAccessor, userService);
             _questoesService = questoesService;
+            _respostasUserService = respostasUserService;
         }
 
         [HttpGet]
@@ -68,7 +72,7 @@ namespace APISunSale.Controllers
                 var result = await _service.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
-                foreach(var item in response)
+                foreach (var item in response)
                 {
                     item.QuantidadeQuestoesResolvidas = await _questoesService.QuantidadeQuestoes(item.Codigo, user.Id);
                     item.QuantidadeQuestoesTotal = await _questoesService.QuantidadeQuestoes(item.Codigo);

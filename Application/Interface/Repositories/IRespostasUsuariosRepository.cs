@@ -9,7 +9,7 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user);
         Task<IEnumerable<Main>> GetByUser(int user);
         Task<IEnumerable<Main>> GetByQuestao(int questao);
-        Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao);
+        Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao = -1);
         Task<IEnumerable<HistoricoUsuario>> GetHistory(int user);
         Task<int> GetQuantidadeQuestoesCertas(int user);
         Task<int> GetQuantidadeQuestoesTentadas(int user);

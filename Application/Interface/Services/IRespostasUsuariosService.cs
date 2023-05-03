@@ -13,7 +13,7 @@ namespace Application.Interface.Services
         Task<bool> DeleteById(int id);
         Task<IEnumerable<Main>> GetByUser(int user);
         Task<IEnumerable<Main>> GetByQuestao(int questao);
-        Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao);
+        Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao = -1);
         Task<IEnumerable<HistoricoUsuario>> GetHistory(int user);
         Task<int> GetQuantidadeQuestoesCertas(int user);
         Task<int> GetQuantidadeQuestoesTentadas(int user);

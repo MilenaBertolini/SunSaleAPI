@@ -89,13 +89,13 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
-        public async Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao)
+        public async Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao = -1)
         {
             var query = (from q in _dataContext.Questoes
                          join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
                          join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
 
-                         where q.Codigo.Equals(questao) && u.CodigoUsuario.Equals(user)
+                         where (q.Codigo.Equals(questao) || questao == -1) && u.CodigoUsuario.Equals(user)
                          select u);
 
             var response = query.AsEnumerable();
