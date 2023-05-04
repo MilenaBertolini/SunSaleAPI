@@ -37,6 +37,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<ICartaoCreditoDevToolsService, CartaoCreditoDevToolsService>();
             _app.Services.AddScoped<IVeiculosForDevService, VeiculosForDevService>();
             _app.Services.AddScoped<IRespostasUsuariosService, RespostasUsuariosService>();
+            _app.Services.AddScoped<ICrudFormsInstaladorService, CrudFormsInstaladorService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -52,6 +53,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<ICartaoCreditoDevToolsRepository, CartaoCreditoDevtoolsRepository>();
             _app.Services.AddScoped<IVeiculosForDevRepository, VeiculosForDevRepository>();
             _app.Services.AddScoped<IRespostasUsuariosRepository, RespostasUsuariosRepository>();
+            _app.Services.AddScoped<ICrudFormsInstaladorRepository, CrudFormsInstaladorRepository>();
 
             Mapping();
 
@@ -112,6 +114,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<RespostasUsuariosViewModel, RespostasUsuarios>();
                 cfg.CreateMap<RespostasUsuarios, RespostasUsuariosViewModel>();
+
+                cfg.CreateMap<CrudFormsInstaladorViewModel, CrudFormsInstalador>();
+                cfg.CreateMap<CrudFormsInstalador, CrudFormsInstaladorViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

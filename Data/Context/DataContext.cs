@@ -36,5 +36,6 @@ namespace Data.Context
         public DbSet<CartaoCreditoDevTools> CartaoCreditoDevTools { get; set; }
         public DbSet<VeiculosForDev> VeiculosForDev { get; set; }
         public DbSet<RespostasUsuarios> RespostasUsuarios { get; set; }
+        public DbSet<CrudFormsInstalador> CrudFormsInstalador { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Service = Application.Interface.Services.IUsuariosService;
+using CrudService = Application.Interface.Services.ICrudFormsInstaladorService;
 
 namespace APISunSale.Controllers
 {
@@ -17,12 +18,14 @@ namespace APISunSale.Controllers
         private readonly ILogger<TokenController> _logger;
         private readonly IConfiguration _builder;
         private readonly Service _service;
+        private readonly CrudService _crudService;
 
-        public TokenController(ILogger<TokenController> logger, Service service, IConfiguration builder)
+        public TokenController(ILogger<TokenController> logger, Service service, IConfiguration builder, CrudService crudService)
         {
             _logger = logger;
             _service = service;
             _builder = builder;
+            _crudService = crudService;
         }
 
         [AllowAnonymous]
@@ -59,7 +62,10 @@ namespace APISunSale.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var stringToken = tokenHandler.WriteToken(token);
-            return Results.Ok(new { token = stringToken, username = userModel.Email});
+
+            var crudVersao = await _crudService.GetLastVerion();
+
+            return Results.Ok(new { token = stringToken, username = userModel.Email, admin = userModel.Admin, Id = userModel.Id, crudVersao = crudVersao});
         }
     }
 }
