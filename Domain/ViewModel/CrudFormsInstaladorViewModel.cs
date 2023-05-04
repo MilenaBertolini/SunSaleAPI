@@ -9,7 +9,6 @@ namespace Domain.ViewModel
         public int Codigo { get; set; }
         [NotNull]
         public string Versao { get; set; }
-        [NotNull]
         public DateTime Created { get; set; }
         [NotNull]
         public string Diretorio { get; set; }

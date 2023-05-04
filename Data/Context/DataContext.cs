@@ -37,5 +37,6 @@ namespace Data.Context
         public DbSet<VeiculosForDev> VeiculosForDev { get; set; }
         public DbSet<RespostasUsuarios> RespostasUsuarios { get; set; }
         public DbSet<CrudFormsInstalador> CrudFormsInstalador { get; set; }
+        public DbSet<Email> Email { get; set; }
     }
 }
