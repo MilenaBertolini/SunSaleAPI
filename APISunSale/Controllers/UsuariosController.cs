@@ -8,7 +8,10 @@ using MainViewModel = Domain.ViewModel.UsuariosViewModel;
 using MainEntity = Domain.Entities.Usuarios;
 using Service = Application.Interface.Services.IUsuariosService;
 using RespostasService = Application.Interface.Services.IRespostasUsuariosService;
+using EmailService = Application.Interface.Services.IEmailService;
 using APISunSale.Utils;
+using Domain.ViewModel;
+using Domain.Entities;
 
 namespace APISunSale.Controllers
 {
@@ -22,13 +25,15 @@ namespace APISunSale.Controllers
         private readonly IMapper _mapper;
         private readonly MainUtils _utils;
         private readonly RespostasService _respostasService;
-        public UsuariosController(ILogger<UsuariosController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, RespostasService respostasService)
+        private readonly EmailService _emailService;
+        public UsuariosController(ILogger<UsuariosController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, RespostasService respostasService, EmailService emailService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _utils = new MainUtils(httpContextAccessor, service);
             _respostasService = respostasService;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -167,6 +172,17 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
+
+                var email = new EmailViewModel()
+                {
+                    Assunto = "Bem vindo ao QuestoesAqui",
+                    Destinatario = main.Email,
+                    Status = "0",
+                    Texto = Utils.CrieEmail.CriaEmailBoasVindas(result)
+                };
+
+                await _emailService.Add(_mapper.Map<Email>(email));
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Created",
