@@ -20,7 +20,7 @@ namespace APISunSale.Utils
             sb.AppendLine($"    <h1>Parabéns {user.Nome?.Split(' ')?[0]}!</h1>");
             sb.AppendLine("    <p>Você acaba de se cadastrar no nosso site Questoesaqui.</p>");
             sb.AppendLine("    <p>Seus dados foram registrados e você já pode começar a usar nossos serviços.</p>");
-            sb.AppendLine("    <p>Agradecemos pela sua confiança e esperamos que você encontre as respostas para todas as suas perguntas aqui.</p>");
+            sb.AppendLine("    <p>Agradecemos pela sua confiança e esperamos que você encontre as respostas para todas as suas perguntas aqui. Acesse: <a href=\"https://www.questoesaqui.com/login\">QuestoesAqui</a></p>");
             sb.AppendLine("    <br>");
             sb.AppendLine("    <p>Atenciosamente,</p>");
             sb.AppendLine("    <p>A equipe do Questoesaqui</p>");
