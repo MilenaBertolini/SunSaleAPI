@@ -80,7 +80,7 @@ namespace Application.Implementation.Repositories
 
         public async Task<Main> GetByEmail(string email)
         {
-            var query = GetQueryable().Where(p => p.Email.Equals(email));
+            var query = GetQueryable().Where(p => p.Email.Equals(email) || p.Login.Equals(email));
             return await query?.SingleOrDefaultAsync();
         }
 
