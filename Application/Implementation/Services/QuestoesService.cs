@@ -50,11 +50,14 @@ namespace Application.Implementation.Services
 
                 foreach(var a in r.AnexoResposta)
                 {
-                    a.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexoResposta).Name);
-                    a.DataRegistro = DateTime.Now;
-                    a.CodigoQuestao = r.Codigo;
+                    if(a.Anexo.Length > 0)
+                    {
+                        a.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexoResposta).Name);
+                        a.DataRegistro = DateTime.Now;
+                        a.CodigoQuestao = r.Codigo;
 
-                    anexosRespostas.Add(a);
+                        anexosRespostas.Add(a);
+                    }
                 }
 
                 r.AnexoResposta.Clear();
@@ -69,11 +72,14 @@ namespace Application.Implementation.Services
             List<AnexosQuestoes> anexos = new List<AnexosQuestoes>();
             foreach(var r in entity.AnexosQuestoes)
             { 
-                r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexosQuestoes).Name);
-                r.CodigoQuestao = entity.Codigo;
-                r.DataRegistro = DateTime.Now;
+                if(r.Anexo.Length > 0)
+                {
+                    r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexosQuestoes).Name);
+                    r.CodigoQuestao = entity.Codigo;
+                    r.DataRegistro = DateTime.Now;
 
-                anexos.Add(r);
+                    anexos.Add(r);
+                }
             }
 
             entity.AnexosQuestoes.Clear();

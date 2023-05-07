@@ -14,7 +14,6 @@ namespace Domain.ViewModel
         [JsonPropertyName("CodigoResposta")]
         public int CodigoQuestao { get; set; }
 
-        [NotNull]
         public DateTime DataRegistro { get; set; }
 
         public string Anexo { get; set; }
