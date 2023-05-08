@@ -106,7 +106,6 @@
     <Build Include="Tables\RELACAO.sql" />
     <Build Include="Tables\RESPOSTASQUESTOES.sql" />
     <Build Include="Tables\RESPOSTASUSUARIOS.sql" />
-    <Build Include="Tables\RESULTADOS.sql" />
     <Build Include="Tables\RESULTADOSSOLETRANDO.sql" />
     <Build Include="Tables\TABELA.sql" />
     <Build Include="Tables\TABELAS.sql" />
@@ -123,5 +122,6 @@
     <Build Include="Tables\VERBOCONJUGADO.sql" />
     <Build Include="Tables\VERBOS.sql" />
     <Build Include="Tables\VERSAO.sql" />
+    <Build Include="Tables\ResultadosTabuadaDivertida.sql" />
   </ItemGroup>
 </Project>

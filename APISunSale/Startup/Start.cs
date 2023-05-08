@@ -39,6 +39,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IRespostasUsuariosService, RespostasUsuariosService>();
             _app.Services.AddScoped<ICrudFormsInstaladorService, CrudFormsInstaladorService>();
             _app.Services.AddScoped<IEmailService, EmailService>();
+            _app.Services.AddScoped<IResultadosTabuadaDivertidaService, ResultadosTabuadaDivertidaService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -56,6 +57,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IRespostasUsuariosRepository, RespostasUsuariosRepository>();
             _app.Services.AddScoped<ICrudFormsInstaladorRepository, CrudFormsInstaladorRepository>();
             _app.Services.AddScoped<IEmailRepository, EmailRepository>();
+            _app.Services.AddScoped<IResultadosTabuadaDivertidaRepository, ResultadosTabuadaDivertidaRepository>();
 
             Mapping();
 
@@ -122,6 +124,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<EmailViewModel, Email>();
                 cfg.CreateMap<Email, EmailViewModel>();
+
+                cfg.CreateMap<ResultadosTabuadaDivertidaViewModel, ResultadosTabuadaDivertida>();
+                cfg.CreateMap<ResultadosTabuadaDivertida, ResultadosTabuadaDivertidaViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

@@ -43,7 +43,7 @@ namespace Application.Implementation.Repositories
             var model = await GetByTable(table);
             if (model == null)
             {
-                Add(new Main { Tabela = table, Codigo = 1000 });
+                await Add(new Main { Tabela = table, Codigo = 1000 });
                 model = await GetByTable(table);
             }
 
