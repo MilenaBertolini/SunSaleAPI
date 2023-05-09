@@ -42,7 +42,7 @@ namespace Application.Implementation.Repositories
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await query.SingleOrDefaultAsync();
+            return await query?.SingleOrDefaultAsync();
         }
 
         public async Task<Main> Update(Main entity)

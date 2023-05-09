@@ -45,6 +45,7 @@ namespace Application.Implementation.Services
                 r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(RespostasQuestoes).Name);
                 r.DataRegistro = DateTime.Now;
                 r.CodigoQuestao = entity.Codigo;
+                r.ObservacaoResposta = string.Empty;
 
                 List<AnexoResposta> anexosRespostas = new List<AnexoResposta>();
 
