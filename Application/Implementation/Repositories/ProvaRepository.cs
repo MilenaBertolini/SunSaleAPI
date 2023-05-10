@@ -61,7 +61,12 @@ namespace Application.Implementation.Repositories
         
         public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova)
         {
-            var query = base.GetQueryable();
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         where q.Ativo.Equals("1")
+
+                         select p).Distinct();
+
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             if (!string.IsNullOrEmpty(prova))
