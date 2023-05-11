@@ -39,5 +39,6 @@ namespace Data.Context
         public DbSet<CrudFormsInstalador> CrudFormsInstalador { get; set; }
         public DbSet<Email> Email { get; set; }
         public DbSet<ResultadosTabuadaDivertida> ResultadosTabuadaDivertida { get; set; }
+        public DbSet<RecuperaSenha> RecuperaSenha { get; set; }
     }
 }

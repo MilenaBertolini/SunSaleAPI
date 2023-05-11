@@ -123,5 +123,6 @@
     <Build Include="Tables\VERBOS.sql" />
     <Build Include="Tables\VERSAO.sql" />
     <Build Include="Tables\ResultadosTabuadaDivertida.sql" />
+    <Build Include="Tables\RecuperaSenha.sql" />
   </ItemGroup>
 </Project>
