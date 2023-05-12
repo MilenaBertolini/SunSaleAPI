@@ -59,13 +59,17 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin)
         {
-            var query = (from p in _dataContext.Prova
+            var query = admin ? (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          where q.Ativo.Equals("1")
 
-                         select p).Distinct();
+                         select p).Distinct()
+                         :
+                         (from p in _dataContext.Prova
+
+                          select p).Distinct();
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 

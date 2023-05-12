@@ -69,7 +69,7 @@ namespace APISunSale.Controllers
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, prova);
+                var result = await _service.GetAllPagged(page, quantity, prova, user.Admin.Equals("1"));
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
                 foreach (var item in response)
