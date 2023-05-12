@@ -61,7 +61,7 @@ namespace Application.Implementation.Repositories
         
         public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin)
         {
-            var query = admin ? (from p in _dataContext.Prova
+            var query = !admin ? (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          where q.Ativo.Equals("1")
 
