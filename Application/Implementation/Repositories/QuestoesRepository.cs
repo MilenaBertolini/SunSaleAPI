@@ -81,6 +81,8 @@ namespace Application.Implementation.Repositories
             var list = GetIncludes(include).ToList();
             list.ForEach(p => query = query.Include(p));
 
+            query = query.OrderBy(q => q.NumeroQuestao);
+
             var response = await base.GetAllPagedAsync(query, page, quantity);
 
             var qt = await base.GetAllPagedTotalAsync(query);
