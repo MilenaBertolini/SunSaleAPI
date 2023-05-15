@@ -181,7 +181,7 @@ namespace Application.Implementation.Repositories
                          where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
                          && u.CodigoUsuario.Equals(user) && r.Certa.Equals("1")
 
-                         select q);
+                         select q).Distinct();
 
             var response = await query.CountAsync();
 
