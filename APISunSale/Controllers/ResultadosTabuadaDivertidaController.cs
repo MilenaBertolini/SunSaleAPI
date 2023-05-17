@@ -85,7 +85,7 @@ namespace APISunSale.Controllers
             {
                 var link = base.HttpContext.Request.Headers["Referer"];
 
-                if (!link.Contains("tabuadadivertida"))
+                if (!link.ToString().Contains("tabuadadivertida"))
                 {
                     return null;
                 }
