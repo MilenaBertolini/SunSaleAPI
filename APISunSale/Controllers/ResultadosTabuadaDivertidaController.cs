@@ -85,10 +85,10 @@ namespace APISunSale.Controllers
             {
                 var link = base.HttpContext.Request.Headers["Referer"];
 
-                if (!link.ToString().Contains("tabuadadivertida"))
+                /*if (!link.ToString().Contains("tabuadadivertida"))
                 {
                     return null;
-                }
+                }*/
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
