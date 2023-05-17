@@ -13,7 +13,7 @@ namespace APISunSale.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ResultadosTabuadaDivertidaController
+    public class ResultadosTabuadaDivertidaController : ControllerBase
     {
         private readonly ILogger<AcaoUsuarioController> _logger;
         private readonly Service _service;
@@ -83,6 +83,13 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var link = base.HttpContext.Request.Headers["Referer"];
+
+                if (!link.Contains("tabuadadivertida"))
+                {
+                    return null;
+                }
+
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
