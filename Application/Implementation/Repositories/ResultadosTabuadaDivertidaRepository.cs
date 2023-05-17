@@ -72,9 +72,9 @@ namespace Application.Implementation.Repositories
         public async Task<List<RankingTabuadaDivertida>> GetRankingTabuada()
         {
             var resultado = from r in _dataContext.ResultadosTabuadaDivertida
-                            where r.NumerAcertos == r.NumeroQuestoes
+                            where r.NumeroAcertos == r.NumeroQuestoes
                             group r by new { r.Nome, r.Tipo, r.NumeroQuestoes } into g
-                            orderby g.Max(x => Convert.ToInt32(x.NumerAcertos)) descending, g.Min(x => Convert.ToInt32(x.Tempo)) ascending
+                            orderby g.Max(x => Convert.ToInt32(x.NumeroAcertos)) descending, g.Min(x => Convert.ToInt32(x.Tempo)) ascending
                             select new
                             {
                                 Nome = g.Key.Nome,

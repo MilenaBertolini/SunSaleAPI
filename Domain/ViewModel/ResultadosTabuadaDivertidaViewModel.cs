@@ -15,7 +15,7 @@ namespace Domain.ViewModel
 
         public int Tempo { get; set; }
 
-        public int NumerAcertos { get; set; }
+        public int NumeroAcertos { get; set; }
 
         public DateTime DataInsercao { get; set; }
 
