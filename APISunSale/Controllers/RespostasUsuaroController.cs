@@ -161,19 +161,20 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getHistory")]
-        public async Task<ResponseBase<List<HistoricoUsuario>>> GetHistory()
+        public async Task<ResponseBase<List<HistoricoUsuario>>> GetHistory(int page, int quantity)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetHistory(user.Id);
+                var result = await _service.GetHistory(user.Id, page, quantity);
                 return new ResponseBase<List<HistoricoUsuario>>()
                 {
                     Message = "List created",
                     Success = true,
-                    Object = result?.ToList(),
-                    Quantity = result?.Count()
+                    Object = result?.Item1?.ToList(),
+                    Quantity = result?.Item3,
+                    Total = result?.Item2
                 };
             }
             catch (Exception ex)

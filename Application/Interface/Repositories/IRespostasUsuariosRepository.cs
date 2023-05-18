@@ -10,7 +10,7 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetByUser(int user);
         Task<IEnumerable<Main>> GetByQuestao(int questao);
         Task<IEnumerable<Main>> GetByUserQuestao(int user, int questao = -1);
-        Task<IEnumerable<HistoricoUsuario>> GetHistory(int user);
+        Task<Tuple<IEnumerable<HistoricoUsuario>, int, int>> GetHistory(int user, int page, int quantity);
         Task<int> GetQuantidadeQuestoesCertas(int user);
         Task<int> GetQuantidadeQuestoesTentadas(int user);
 

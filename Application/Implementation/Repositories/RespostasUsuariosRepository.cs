@@ -4,6 +4,7 @@ using IRepository = Application.Interface.Repositories.IRespostasUsuariosReposit
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
 using Domain.Responses;
+using Azure;
 
 namespace Application.Implementation.Repositories
 {
@@ -103,7 +104,7 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
-        public async Task<IEnumerable<HistoricoUsuario>> GetHistory(int user)
+        public async Task<Tuple<IEnumerable<HistoricoUsuario>, int, int>> GetHistory(int user, int page, int quantity)
         {
             var query = (from r in _dataContext.RespostasUsuarios
                          join re in _dataContext.RespostasQuestoes on r.CodigoResposta equals re.Codigo
@@ -121,9 +122,17 @@ namespace Application.Implementation.Repositories
                              CodigoQuestao = q.Codigo
                          }).OrderByDescending(c => c.DataResposta);
 
-            var response = query.AsEnumerable();
+            var qt = await query.CountAsync();
+            var qtCertas = await query.Where(r => r.RespostaCorreta.Equals("1")).CountAsync();
 
-            return response;
+            if (page <= 0)
+                page = 1;
+
+            var skip = (page - 1) * quantity;
+
+            var response = query.Skip(skip).Take(quantity).AsEnumerable();
+
+            return Tuple.Create(response, qt, qtCertas);
         }
 
         public async Task<IEnumerable<Ranking>> GetRanking()

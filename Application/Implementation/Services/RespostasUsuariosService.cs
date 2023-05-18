@@ -66,9 +66,9 @@ namespace Application.Implementation.Services
             return _repository.GetByUserQuestao(user, questao);
         }
 
-        public async Task<IEnumerable<HistoricoUsuario>> GetHistory(int user)
+        public async Task<Tuple<IEnumerable<HistoricoUsuario>, int, int>> GetHistory(int user, int page, int quantity)
         {
-            return await _repository.GetHistory(user);
+            return await _repository.GetHistory(user, page, quantity);
         }
 
         public async Task<int> GetQuantidadeQuestoesCertas(int user)
