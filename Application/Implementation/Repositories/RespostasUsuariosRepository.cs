@@ -109,8 +109,7 @@ namespace Application.Implementation.Repositories
                          join re in _dataContext.RespostasQuestoes on r.CodigoResposta equals re.Codigo
                          join q in _dataContext.Questoes on re.CodigoQuestao equals q.Codigo
                          join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
-                         where q.Ativo.Equals("1")
-                         && r.CodigoUsuario.Equals(user)
+                         where r.CodigoUsuario.Equals(user)
 
                          select new HistoricoUsuario
                          {
