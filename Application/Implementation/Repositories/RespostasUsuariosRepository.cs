@@ -119,7 +119,7 @@ namespace Application.Implementation.Repositories
                              NomeProva = p.NomeProva,
                              DataResposta = r.DataResposta,
                              CodigoQuestao = q.Codigo
-                         });
+                         }).OrderByDescending(c => c.DataResposta);
 
             var response = query.AsEnumerable();
 
