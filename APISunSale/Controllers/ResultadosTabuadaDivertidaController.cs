@@ -168,12 +168,14 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.GetRankingTabuada();
+                var qtTotal = await _service.GetAll();
                 return new ResponseBase<List<RankingTabuadaDivertida>>()
                 {
                     Message = "Listed",
                     Success = true,
                     Object = result,
-                    Quantity = 1
+                    Quantity = result.Count,
+                    Total = qtTotal.Count()
                 };
             }
             catch (Exception ex)
