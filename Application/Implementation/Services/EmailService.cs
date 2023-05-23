@@ -2,6 +2,8 @@
 using IService = Application.Interface.Services.IEmailService;
 using IRepository = Application.Interface.Repositories.IEmailRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using Microsoft.Extensions.Configuration;
+using AutoMapper;
 
 namespace Application.Implementation.Services
 {
@@ -9,6 +11,7 @@ namespace Application.Implementation.Services
     {
         private readonly IRepository _repository;
         private readonly IRepositoryCodes _repositoryCodes;
+
         public EmailService(IRepository repository, IRepositoryCodes repositoryCodes)
         {
             _repository = repository;
@@ -19,7 +22,6 @@ namespace Application.Implementation.Services
         {
             entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
             entity.DataEnvio = DateTime.Now;
-            entity.Status = "0";
 
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
 

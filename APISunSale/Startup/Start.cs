@@ -75,6 +75,14 @@ namespace APISunSale.Startup
 
             _app.Services.AddHttpContextAccessor();
 
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            _app.Services.AddSingleton(configuration);
+            _app.Services.Configure<EmailSettings>(configuration.GetSection("Email"));
+
             return this;
         }
 

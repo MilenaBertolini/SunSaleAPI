@@ -7,6 +7,8 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.EmailViewModel;
 using MainEntity = Domain.Entities.Email;
 using Service = Application.Interface.Services.IEmailService;
+using Domain.Entities;
+using Microsoft.Extensions.Options;
 
 namespace APISunSale.Controllers
 {
@@ -18,11 +20,13 @@ namespace APISunSale.Controllers
         private readonly ILogger<EmailController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        public EmailController(ILogger<EmailController> logger, Service service, IMapper mapper)
+        private readonly EmailSettings _emailSettings;
+        public EmailController(ILogger<EmailController> logger, Service service, IMapper mapper, IOptions<EmailSettings> emailSettings)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
+            _emailSettings = emailSettings.Value;
         }
 
         [HttpGet("pagged")]
@@ -82,7 +86,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                string remetente = _emailSettings.Remetente;
+                string smtp = _emailSettings.Smtp;
+                int porta = _emailSettings.Porta;
+                string email = _emailSettings.EmailCredential;
+                string senha = _emailSettings.Senha;
+
+                bool enviado = Utils.EmailSender.SendEmail(main, remetente, smtp, porta, email, senha);
+                main.Status = enviado ? "1" : "0";
+
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
+                
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Created",
