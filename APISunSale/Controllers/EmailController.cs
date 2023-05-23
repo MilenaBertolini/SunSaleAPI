@@ -92,7 +92,8 @@ namespace APISunSale.Controllers
                 string email = _emailSettings.EmailCredential;
                 string senha = _emailSettings.Senha;
 
-                bool enviado = Utils.EmailSender.SendEmail(main, remetente, smtp, porta, email, senha);
+                //bool enviado = Utils.EmailSender.SendEmail(main, remetente, smtp, porta, email, senha);
+                bool enviado = false;
                 main.Status = enviado ? "1" : "0";
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
