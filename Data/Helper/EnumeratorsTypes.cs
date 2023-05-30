@@ -19,5 +19,12 @@ namespace Data.Helper
             GENERIC = 0,
             ENEM = 1
         }
+
+        public enum TipoLog
+        {
+            INFO = 0,
+            WARNING = 1,
+            ERROR = 2,
+        }
     }
 }

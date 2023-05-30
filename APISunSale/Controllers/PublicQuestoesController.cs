@@ -5,10 +5,10 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using static Data.Helper.EnumeratorsTypes;
 using Service = Application.Interface.Services.IQuestoesService;
 using ServiceProva = Application.Interface.Services.IProvaService;
 using ServiceRespostas = Application.Interface.Services.IRespostasQuestoesService;
+using LoggerService = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
@@ -23,13 +23,16 @@ namespace APISunSale.Controllers
         private readonly ServiceRespostas _serviceResposta;
         private readonly ServiceProva _serviceProva;
         private readonly IMapper _mapper;
-        public PublicQuestoesController(ILogger<PublicQuestoesController> logger, Service service, IMapper mapper, ServiceRespostas serviceResposta, ServiceProva serviceProva)
+        private readonly LoggerService _loggerService;
+
+        public PublicQuestoesController(ILogger<PublicQuestoesController> logger, Service service, IMapper mapper, ServiceRespostas serviceResposta, ServiceProva serviceProva, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _serviceResposta = serviceResposta;
             _serviceProva = serviceProva;
+            _loggerService = loggerService;
         }
 
         /// <summary>
@@ -43,6 +46,7 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.GetTests(id);
+                await _loggerService.AddInfo("Buscando prova" + (id.HasValue ? $" filtrando por {id.Value}" : " sem filtro"));
 
                 return new OkObjectResult(
                     new ResponseBase<List<Test>>()
@@ -57,6 +61,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new BadRequestObjectResult(
                     new
                     {
@@ -78,6 +84,7 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.GetMaterias(prova);
+                await _loggerService.AddInfo("Buscando matérias de provas");
 
                 return new OkObjectResult(
                     new ResponseBase<List<string>>()
@@ -92,6 +99,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new BadRequestObjectResult(
                     new
                     {
@@ -123,6 +132,8 @@ namespace APISunSale.Controllers
                 { 
                     return new BadRequestObjectResult(new { message = "Foi passado o número da questão mas o mesmo não foi listado" });
                 }
+
+                await _loggerService.AddInfo("Buscando questões");
 
                 List<Questoes> result = new List<Questoes>();
 
@@ -159,6 +170,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new BadRequestObjectResult(
                     new
                     {
@@ -180,8 +193,9 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _serviceResposta.GetById(codigoResposta);
+                await _loggerService.AddInfo("Valida se resposta está correta");
 
-                if(result == null)
+                if (result == null)
                 {
                     return new BadRequestObjectResult(new { message = "Não existe a resposta selecionada" });
                 }
@@ -196,6 +210,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new BadRequestObjectResult(
                     new
                     {

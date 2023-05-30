@@ -10,6 +10,7 @@ using Service = Application.Interface.Services.IRespostasQuestoesService;
 using RespostaUsuarioService = Application.Interface.Services.IRespostasUsuariosService;
 using UserService = Application.Interface.Services.IUsuariosService;
 using APISunSale.Utils;
+using LoggerService = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
@@ -23,14 +24,16 @@ namespace APISunSale.Controllers
         private readonly IMapper _mapper;
         private readonly RespostaUsuarioService _respostaUsuarioService;
         private readonly MainUtils _utils;
+        private readonly LoggerService _loggerService;
 
-        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper, RespostaUsuarioService respostaUsuarioService, IHttpContextAccessor httpContextAccessor, UserService userService)
+        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper, RespostaUsuarioService respostaUsuarioService, IHttpContextAccessor httpContextAccessor, UserService userService, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _respostaUsuarioService = respostaUsuarioService;
             _utils = new MainUtils(httpContextAccessor, userService);
+            _loggerService = loggerService;
         }
 
         [HttpGet("pagged")]
@@ -51,6 +54,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = ex.Message,
@@ -77,6 +82,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -102,6 +109,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -127,6 +136,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -152,6 +163,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<bool>()
                 {
                     Message = ex.Message,
@@ -190,6 +203,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -217,6 +232,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,

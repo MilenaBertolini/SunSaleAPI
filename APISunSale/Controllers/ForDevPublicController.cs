@@ -11,6 +11,7 @@ using ServicePerson = Application.Interface.Services.IPessoasForDevService;
 using ServiceEmpresa = Application.Interface.Services.IEmpresaForDevService;
 using ServiceCartao = Application.Interface.Services.ICartaoCreditoDevToolsService;
 using ServiceVeiculo = Application.Interface.Services.IVeiculosForDevService;
+using LoggerService = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
@@ -25,7 +26,9 @@ namespace APISunSale.Controllers
         private readonly ServiceCartao _serviceCartao;
         private readonly ServiceVeiculo _serviceVeiculo;
         private readonly IMapper _mapper;
-        public ForDevPublicController(ILogger<ForDevPublicController> logger, ServicePerson servicePerson, IMapper mapper, ServiceEmpresa serviceEmpresa, ServiceCartao serviceCartao, ServiceVeiculo serviceVeiculo)
+        private readonly LoggerService _loggerService;
+
+        public ForDevPublicController(ILogger<ForDevPublicController> logger, ServicePerson servicePerson, IMapper mapper, ServiceEmpresa serviceEmpresa, ServiceCartao serviceCartao, ServiceVeiculo serviceVeiculo, LoggerService loggerService)
         {
             _logger = logger;
             _servicePerson = servicePerson;
@@ -33,6 +36,7 @@ namespace APISunSale.Controllers
             _serviceEmpresa = serviceEmpresa;
             _serviceCartao = serviceCartao;
             _serviceVeiculo = serviceVeiculo;
+            _loggerService = loggerService;
         }
 
         [HttpGet("person/random")]
@@ -42,6 +46,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _servicePerson.GetRandom(qt);
                 var response = _mapper.Map<List<PessoaMainViewModel>>(result);
+                await _loggerService.AddInfo($"Busca {(qt.HasValue ? qt.Value : 1)} pessoa aleatória");
+
                 return new ResponseBase<List<PessoaMainViewModel>>()
                 {
                     Message = "List created",
@@ -53,6 +59,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<PessoaMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -68,6 +76,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _servicePerson.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<PessoaMainViewModel>>(result);
+                await _loggerService.AddInfo("Busca pessoas paginadas");
+
                 return new ResponseBase<List<PessoaMainViewModel>>()
                 {
                     Message = "List created",
@@ -79,6 +89,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<PessoaMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -94,6 +106,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceEmpresa.GetRandom(qt);
                 var response = _mapper.Map<List<EmpresaMainViewModel>>(result);
+                await _loggerService.AddInfo($"Busca {(qt.HasValue ? qt.Value : 1)} empresa aleatória");
+
                 return new ResponseBase<List<EmpresaMainViewModel>>()
                 {
                     Message = "List created",
@@ -105,6 +119,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<EmpresaMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -120,6 +136,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceEmpresa.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<EmpresaMainViewModel>>(result);
+                await _loggerService.AddInfo("Busca empresa paginadas");
+
                 return new ResponseBase<List<EmpresaMainViewModel>>()
                 {
                     Message = "List created",
@@ -131,6 +149,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<EmpresaMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -146,6 +166,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceCartao.GetRandom(qt);
                 var response = _mapper.Map<List<CartaoCreditoMainViewModel>>(result);
+                await _loggerService.AddInfo($"Busca {(qt.HasValue ? qt.Value : 1)} cartão aleatório");
+
                 return new ResponseBase<List<CartaoCreditoMainViewModel>>()
                 {
                     Message = "List created",
@@ -157,6 +179,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<CartaoCreditoMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -172,6 +196,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceCartao.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<CartaoCreditoMainViewModel>>(result);
+                await _loggerService.AddInfo("Busca cartões paginados");
+
                 return new ResponseBase<List<CartaoCreditoMainViewModel>>()
                 {
                     Message = "List created",
@@ -183,6 +209,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<CartaoCreditoMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -198,6 +226,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceVeiculo.GetRandom(qt);
                 var response = _mapper.Map<List<VeiculosMainViewModel>>(result);
+                await _loggerService.AddInfo($"Busca {(qt.HasValue ? qt.Value : 1)} veículo aleatória");
+
                 return new ResponseBase<List<VeiculosMainViewModel>>()
                 {
                     Message = "List created",
@@ -209,6 +239,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<VeiculosMainViewModel>>()
                 {
                     Message = ex.Message,
@@ -224,6 +256,8 @@ namespace APISunSale.Controllers
             {
                 var result = await _serviceVeiculo.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<VeiculosMainViewModel>>(result);
+                await _loggerService.AddInfo("Busca veículos paginadas");
+
                 return new ResponseBase<List<VeiculosMainViewModel>>()
                 {
                     Message = "List created",
@@ -235,6 +269,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<VeiculosMainViewModel>>()
                 {
                     Message = ex.Message,

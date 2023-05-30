@@ -40,5 +40,6 @@ namespace Data.Context
         public DbSet<Email> Email { get; set; }
         public DbSet<ResultadosTabuadaDivertida> ResultadosTabuadaDivertida { get; set; }
         public DbSet<RecuperaSenha> RecuperaSenha { get; set; }
+        public DbSet<Logger> Logger { get; set; }
     }
 }

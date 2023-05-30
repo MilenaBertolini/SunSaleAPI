@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using Service = Application.Interface.Services.IUsuariosService;
 using CrudService = Application.Interface.Services.ICrudFormsInstaladorService;
+using LoggerService = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
@@ -19,13 +20,15 @@ namespace APISunSale.Controllers
         private readonly IConfiguration _builder;
         private readonly Service _service;
         private readonly CrudService _crudService;
+        private readonly LoggerService _loggerService;
 
-        public TokenController(ILogger<TokenController> logger, Service service, IConfiguration builder, CrudService crudService)
+        public TokenController(ILogger<TokenController> logger, Service service, IConfiguration builder, CrudService crudService, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
             _builder = builder;
             _crudService = crudService;
+            _loggerService = loggerService;
         }
 
         [AllowAnonymous]

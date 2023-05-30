@@ -1,36 +1,27 @@
-﻿using Application.Interface.Services;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.EmailViewModel;
-using MainEntity = Domain.Entities.Email;
-using Service = Application.Interface.Services.IEmailService;
-using Domain.Entities;
-using Microsoft.Extensions.Options;
-using LoggerService = Application.Interface.Services.ILoggerService;
+using MainViewModel = Domain.ViewModel.LoggerViewModel;
+using MainEntity = Domain.Entities.Logger;
+using Service = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class EmailController
+    public class LoggerController
     {
-        private readonly ILogger<EmailController> _logger;
+        private readonly ILogger<LoggerController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        private readonly EmailSettings _emailSettings;
-        private readonly LoggerService _loggerService;
-
-        public EmailController(ILogger<EmailController> logger, Service service, IMapper mapper, IOptions<EmailSettings> emailSettings, LoggerService loggerService)
+        public LoggerController(ILogger<LoggerController> logger, Service service, IMapper mapper)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
-            _emailSettings = emailSettings.Value;
-            _loggerService = loggerService;
         }
 
         [HttpGet("pagged")]
@@ -51,7 +42,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+                await _service.AddException(ex);
 
                 return new ResponseBase<List<MainViewModel>>()
                 {
@@ -79,7 +70,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+                await _service.AddException(ex);
 
                 return new ResponseBase<MainViewModel>()
                 {
@@ -94,18 +85,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                string remetente = _emailSettings.Remetente;
-                string smtp = _emailSettings.Smtp;
-                int porta = _emailSettings.Porta;
-                string email = _emailSettings.EmailCredential;
-                string senha = _emailSettings.Senha;
-
-                //bool enviado = Utils.EmailSender.SendEmail(main, remetente, smtp, porta, email, senha);
-                bool enviado = false;
-                main.Status = enviado ? "1" : "0";
-
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
-                
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Created",
@@ -117,7 +97,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+                await _service.AddException(ex);
 
                 return new ResponseBase<MainViewModel>()
                 {
@@ -133,6 +113,7 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",
@@ -144,7 +125,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+                await _service.AddException(ex);
 
                 return new ResponseBase<MainViewModel>()
                 {
@@ -171,7 +152,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+                await _service.AddException(ex);
 
                 return new ResponseBase<bool>()
                 {

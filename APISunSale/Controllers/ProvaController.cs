@@ -10,7 +10,7 @@ using QuestoesService = Application.Interface.Services.IQuestoesService;
 using UserService = Application.Interface.Services.IUsuariosService;
 using RespostasUserService = Application.Interface.Services.IRespostasUsuariosService;
 using APISunSale.Utils;
-using Domain.ViewModel;
+using LoggerService = Application.Interface.Services.ILoggerService;
 
 namespace APISunSale.Controllers
 {
@@ -25,8 +25,9 @@ namespace APISunSale.Controllers
         private readonly MainUtils _utils;
         private readonly QuestoesService _questoesService;
         private readonly RespostasUserService _respostasUserService;
+        private readonly LoggerService _loggerService;
 
-        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService, QuestoesService questoesService, RespostasUserService respostasUserService)
+        public ProvaController(ILogger<ProvaController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, UserService userService, QuestoesService questoesService, RespostasUserService respostasUserService, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
@@ -34,6 +35,7 @@ namespace APISunSale.Controllers
             _utils = new MainUtils(httpContextAccessor, userService);
             _questoesService = questoesService;
             _respostasUserService = respostasUserService;
+            _loggerService = loggerService;
         }
 
         [HttpGet]
@@ -54,6 +56,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = ex.Message,
@@ -90,6 +94,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = ex.Message,
@@ -116,6 +122,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -145,6 +153,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new BadRequestObjectResult(
                     new
                     {
@@ -183,6 +193,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
@@ -208,6 +220,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<bool>()
                 {
                     Message = ex.Message,
@@ -237,6 +251,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<string>>()
                 {
                     Message = ex.Message,
@@ -272,6 +288,8 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
                 return new ResponseBase<List<PorvasReturn>>()
                 {
                     Message = ex.Message,
