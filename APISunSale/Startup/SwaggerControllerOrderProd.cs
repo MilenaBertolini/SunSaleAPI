@@ -9,7 +9,7 @@ namespace APISunSale.Startup
     {
         void IDocumentFilter.Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            var paths = swaggerDoc.Paths.Where(p => p.Key.Contains("PublicQuestoes") || p.Key.Contains("ForDevPublic")).ToList();
+            var paths = swaggerDoc.Paths.Where(p => p.Key.Contains("PublicQuestoes") || p.Key.Contains("Image") || p.Key.Contains("ForDevPublic")).ToList();
 
             var list = new OpenApiPaths();
             foreach (var path in paths)

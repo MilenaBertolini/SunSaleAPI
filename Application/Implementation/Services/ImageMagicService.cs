@@ -16,7 +16,7 @@ namespace Application.Implementation.Services
 
         public async Task<Main> TreatAsync(Main input)
         {
-            Main output = new Main();
+            Main output = input;
             try
             {
                 string base64Data = input.Arquivo.Substring(input.Arquivo.IndexOf(',') + 1);
