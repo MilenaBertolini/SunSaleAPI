@@ -34,7 +34,7 @@ namespace Application.Implementation.Services
 
                 if(input.width.HasValue && input.height.HasValue)
                 {
-                    if (input.width != int.MinValue && input.height != int.MinValue)
+                    if (input.width >= 0 && input.height >= 0)
                     {
                         img.Resize(input.width.Value, input.height.Value);
                     }
