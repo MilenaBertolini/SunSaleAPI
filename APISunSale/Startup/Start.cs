@@ -42,6 +42,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IResultadosTabuadaDivertidaService, ResultadosTabuadaDivertidaService>();
             _app.Services.AddScoped<IRecuperaSenhaService, RecuperaSenhaService>();
             _app.Services.AddScoped<ILoggerService, LoggerService>();
+            _app.Services.AddScoped<IImageMagicService, ImageMagicService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
