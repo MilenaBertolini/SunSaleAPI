@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'APISunsale'
           slot-name: 'Production'
-          publish-profile: 'APISunsale - Web Deploy'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F70A6E1AFE1F49BDACD35134FDE3C367 }}
           package: .
