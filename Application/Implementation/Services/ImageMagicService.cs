@@ -22,11 +22,6 @@ namespace Application.Implementation.Services
                 string base64Data = input.Arquivo.Substring(input.Arquivo.IndexOf(',') + 1);
                 byte[] bytes = Convert.FromBase64String(base64Data);
 
-                if (!IsPngImage(bytes))
-                {
-                    throw (new Exception("Image is not a valid png!"));
-                }
-
                 var readSettings = new MagickReadSettings() { Format = GetFormat(input.tipo) };
                 MagickImage img = new MagickImage(bytes, readSettings);
 
