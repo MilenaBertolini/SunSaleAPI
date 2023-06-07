@@ -19,7 +19,7 @@ namespace Application.Implementation.Services
             Main output = input;
             try
             {
-                string base64Data = input.Arquivo.Substring(input.Arquivo.IndexOf(',') + 1);
+                string base64Data = input.Arquivo.Split(',')[1];
                 byte[] bytes = Convert.FromBase64String(base64Data);
 
                 var readSettings = new MagickReadSettings() { Format = GetFormat(input.tipo) };
@@ -34,13 +34,13 @@ namespace Application.Implementation.Services
 
                 if(input.width.HasValue && input.height.HasValue)
                 {
-                    if (input.width >= 0 && input.height >= 0)
+                    if (input.width > 0 && input.height > 0)
                     {
                         img.Resize(input.width.Value, input.height.Value);
                     }
                 }
 
-                output.Arquivo = Convert.ToBase64String(img.ToByteArray());
+                output.Arquivo = input.Arquivo.Split(',')[0] + "," + Convert.ToBase64String(img.ToByteArray());
 
             }
             catch(MagickCorruptImageErrorException ex)
