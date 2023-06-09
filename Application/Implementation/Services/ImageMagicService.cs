@@ -41,7 +41,6 @@ namespace Application.Implementation.Services
                 }
 
                 output.Arquivo = input.Arquivo.Split(',')[0] + "," + Convert.ToBase64String(img.ToByteArray());
-
             }
             catch(MagickCorruptImageErrorException ex)
             {
