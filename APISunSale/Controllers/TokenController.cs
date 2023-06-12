@@ -68,7 +68,7 @@ namespace APISunSale.Controllers
 
             var crudVersao = await _crudService.GetLastVerion();
 
-            return Results.Ok(new { token = stringToken, username = userModel.Email, admin = userModel.Admin, Id = userModel.Id, crudVersao = crudVersao});
+            return Results.Ok(new { token = stringToken, nome = userModel.Nome, username = userModel.Email, admin = userModel.Admin, Id = userModel.Id, crudVersao = crudVersao});
         }
     }
 }

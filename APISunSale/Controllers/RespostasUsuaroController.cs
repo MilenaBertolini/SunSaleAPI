@@ -174,13 +174,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getHistory")]
-        public async Task<ResponseBase<List<HistoricoUsuario>>> GetHistory(int page, int quantity)
+        public async Task<ResponseBase<List<HistoricoUsuario>>> GetHistory(int page, int quantity, int? userCode)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetHistory(user.Id, page, quantity);
+                var result = await _service.GetHistory(userCode.HasValue ? userCode.Value : user.Id, page, quantity);
                 return new ResponseBase<List<HistoricoUsuario>>()
                 {
                     Message = "List created",
