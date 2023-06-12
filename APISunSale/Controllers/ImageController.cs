@@ -34,6 +34,7 @@ namespace APISunSale.Controllers
         {
             try
             {
+                await _loggerService.AddInfo("Fazendo edição de imagem");
                 var result = await _service.TreatAsync(input);
                 return new ResponseBase<MainEntity>()
                 {
