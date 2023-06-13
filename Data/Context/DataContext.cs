@@ -41,5 +41,6 @@ namespace Data.Context
         public DbSet<ResultadosTabuadaDivertida> ResultadosTabuadaDivertida { get; set; }
         public DbSet<RecuperaSenha> RecuperaSenha { get; set; }
         public DbSet<Logger> Logger { get; set; }
+        public DbSet<Simulados> Simulados { get; set; }
     }
 }
