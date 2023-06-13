@@ -7,7 +7,7 @@ namespace Application.Implementation.Repositories
 {
     public class SimuladoRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "Prova";
 
         public SimuladoRepository(DataContext dataContext) : base(dataContext)
         {
