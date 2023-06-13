@@ -43,7 +43,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetAll();
+                var result = await _service.GetSimulados();
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {
@@ -237,7 +237,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetAll();
+                var result = await _service.GetSimulados();
                 List<string> response = _mapper.Map<List<string>>(result.Select(r => r.Banca)).Distinct().ToList();
 
                 return new ResponseBase<List<string>>()
@@ -262,12 +262,12 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllProvas")]
-        public async Task<ResponseBase<List<PorvasReturn>>> GetAllProvas()
+        [Route("GetSimulados")]
+        public async Task<ResponseBase<List<PorvasReturn>>> GetSimulados()
         {
             try
             {
-                var result = await _service.GetAll();
+                var result = await _service.GetSimulados();
                 List<PorvasReturn> response = _mapper.Map<List<PorvasReturn>>(
                 result.Select(r => 
                 new PorvasReturn() 

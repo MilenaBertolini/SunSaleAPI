@@ -4,7 +4,7 @@ namespace Application.Interface.Services
 {
     public interface IProvaService : IDisposable
     {
-        Task<IEnumerable<Main>> GetAll();
+        Task<IEnumerable<Main>> GetSimulados();
         Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity, int codigoUsuario);

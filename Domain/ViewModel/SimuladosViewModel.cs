@@ -12,5 +12,6 @@ namespace Domain.ViewModel
         public int CodigoProva { get; set; }
         public int? QuantidadeQuestoes { get; set; }
         public int? QuantidadeCertas { get; set; }
+        public int Tempo { get; set; }
     }
 }

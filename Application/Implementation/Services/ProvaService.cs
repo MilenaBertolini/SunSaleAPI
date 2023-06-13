@@ -46,9 +46,9 @@ namespace Application.Implementation.Services
             return _repository.Delete(id);
         }
 
-        public async Task<IEnumerable<Main>> GetAll()
+        public async Task<IEnumerable<Main>> GetSimulados()
         {
-            return await _repository.GetAll();
+            return await _repository.GetSimulados();
         }
 
         public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin)

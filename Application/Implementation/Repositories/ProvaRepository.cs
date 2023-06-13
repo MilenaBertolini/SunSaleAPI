@@ -2,6 +2,7 @@
 using Main = Domain.Entities.Prova;
 using IRepository = Application.Interface.Repositories.IProvaRepository;
 using Microsoft.EntityFrameworkCore;
+using ImageMagick;
 
 namespace Application.Implementation.Repositories
 {
@@ -31,9 +32,17 @@ namespace Application.Implementation.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Main>> GetAll()
+        public async Task<IEnumerable<Main>> GetSimulados()
         {
-            return await GetAllAsync(includes: GetIncludes(includes));
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         where q.Ativo.Equals("1")
+
+                         select p).Distinct();
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await GetAllAsync(query, orderBy: "codigo:desc");
         }
 
         public async Task<Main> GetById(int id)

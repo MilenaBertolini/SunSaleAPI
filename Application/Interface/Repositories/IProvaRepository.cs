@@ -4,7 +4,7 @@ namespace Application.Interface.Repositories
 {
     public interface IProvaRepository : IRepositoryBase<Main>
     {
-        Task<IEnumerable<Main>> GetAll();
+        Task<IEnumerable<Main>> GetSimulados();
         Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin);
     }
 }
