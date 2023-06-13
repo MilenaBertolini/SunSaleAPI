@@ -120,13 +120,15 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getQuestao")]
-        public async Task<ResponseBase<MainViewModel>> GetQuestao(int codigoProva, int numeroQuestao)
+        public async Task<ResponseBase<MainViewModel>> GetQuestao(int codigoProva, int? numeroQuestao)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetQuestoesByProva(codigoProva, numeroQuestao);
+                int questao = numeroQuestao.HasValue ? numeroQuestao.Value : 0;
+
+                var result = await _service.GetQuestoesByProva(codigoProva, questao);
 
                 if (result == null)
                 {

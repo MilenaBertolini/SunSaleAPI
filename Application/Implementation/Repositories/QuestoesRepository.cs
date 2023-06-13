@@ -132,9 +132,14 @@ namespace Application.Implementation.Repositories
 
         public async Task<Main> GetByProva(int prova, int numero)
         {
-            var query = (from q in _dataContext.Questoes
+            var query = numero > 0 ? (from q in _dataContext.Questoes
                         where q.CodigoProva == prova && q.NumeroQuestao.Equals(numero.ToString())
-                        select q);
+                        select q)
+                        :
+                        (from q in _dataContext.Questoes
+                         where q.CodigoProva == prova
+                         select q).OrderBy(q => q.NumeroQuestao);
+                        ;
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
