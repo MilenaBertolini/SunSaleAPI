@@ -45,6 +45,15 @@ namespace Application.Implementation.Repositories
             return await query.SingleOrDefaultAsync();
         }
 
+        public async Task<Main> GetByProvaUser(int provaCodigo, int user)
+        {
+            var query = GetQueryable().Where(p => p.CodigoProva.Equals(provaCodigo) && p.CodigoUsuario.Equals(user));
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await query.SingleOrDefaultAsync();
+        }
+
         public async Task<Main> Update(Main entity)
         {
             var model = await GetByIdAsync(entity.Codigo);

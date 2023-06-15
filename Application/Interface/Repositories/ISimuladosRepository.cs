@@ -6,5 +6,7 @@ namespace Application.Interface.Repositories
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user);
+
+        Task<Main> GetByProvaUser(int provaCodigo, int user);
     }
 }

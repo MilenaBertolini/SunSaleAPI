@@ -7,10 +7,12 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.SimuladosViewModel;
 using MainEntity = Domain.Entities.Simulados;
 using Service = Application.Interface.Services.ISimuladoService;
+using ServiceQuestoes = Application.Interface.Services.IQuestoesService;
 using LoggerService = Application.Interface.Services.ILoggerService;
 using UserService = Application.Interface.Services.IUsuariosService;
 using Application.Model;
 using APISunSale.Utils;
+using Domain.Entities;
 
 namespace APISunSale.Controllers
 {
@@ -21,17 +23,21 @@ namespace APISunSale.Controllers
     {
         private readonly ILogger<SimuladoController> _logger;
         private readonly Service _service;
+        private readonly ServiceQuestoes _serviceQuestoes;
+        private readonly UserService _userService;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
         private readonly MainUtils _utils;
 
-        public SimuladoController(ILogger<SimuladoController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService)
+        public SimuladoController(ILogger<SimuladoController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService, ServiceQuestoes serviceQuestoes)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
+            _userService = userService;
             _utils = new MainUtils(httpContextAccessor, userService);
+            _serviceQuestoes = serviceQuestoes;
         }
 
         [HttpGet("pagged")]
@@ -119,6 +125,61 @@ namespace APISunSale.Controllers
                 await _loggerService.AddException(ex);
 
                 return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("reportDetail")]
+        public async Task<ResponseBase<string>> GetRepostDetaild(int codigoProva, int? codigoUsuario)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+                if (!codigoUsuario.HasValue)
+                    codigoUsuario = user.Id;
+                else if(user.Admin != "1")
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
+                user = await _userService.GetById(codigoUsuario.Value);
+                var simulado = await _service.GetByProvaUser(codigoProva, codigoUsuario.Value);
+
+                if(simulado == null)
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Simulado não encontrado",
+                        Success = false
+                    };
+                }
+
+
+                List<Simulado> simulados = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Simulado>>(simulado.Respostas);
+                var questoes = await _serviceQuestoes.GetQuestoesByProva(codigoProva);
+
+                var result = _service.CriaDocumentoDetalhado(questoes, simulado, user, simulados);
+                return new ResponseBase<string>()
+                {
+                    Message = "Listed",
+                    Success = true,
+                    Object = result,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<string>()
                 {
                     Message = ex.Message,
                     Success = false

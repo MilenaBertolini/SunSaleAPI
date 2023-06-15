@@ -1,4 +1,6 @@
-﻿using Main = Domain.Entities.Simulados;
+﻿using Application.Model;
+using Domain.Entities;
+using Main = Domain.Entities.Simulados;
 
 namespace Application.Interface.Services
 {
@@ -10,6 +12,7 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
-
+        Task<Main> GetByProvaUser(int provaCodigo, int user);
+        string CriaDocumentoDetalhado(IEnumerable<Questoes> questoes, Main simulado, Usuarios user, List<Simulado> questoesResolvidas);
     }
 }
