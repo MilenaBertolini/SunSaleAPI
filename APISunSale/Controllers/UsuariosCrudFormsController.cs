@@ -192,6 +192,12 @@ namespace APISunSale.Controllers
         {
             try
             {
+                if (!main.UsuarioPai.HasValue)
+                {
+                    var user = await _utils.GetUserCrudFormsFromContextAsync();
+                    main.UsuarioPai = user.Codigo;
+                }
+
                 if (await _service.ExistsEmail(main.Email))
                 {
                     return new ResponseBase<MainViewModel>()
@@ -214,7 +220,7 @@ namespace APISunSale.Controllers
 
                 var email = new EmailViewModel()
                 {
-                    Assunto = "Bem vindo ao QuestoesAqui",
+                    Assunto = "Bem vindo ao CrudForms",
                     Destinatario = main.Email,
                     Status = "0",
                     Texto = Utils.CrieEmail.CriaEmailBoasVindasCrudForms(result)
@@ -249,7 +255,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                if(await _service.GetById(main.Codigo) == null)
+                if(await _service.GetById(main.Codigo.Value) == null)
                 {
                     return new ResponseBase<MainViewModel>()
                     {

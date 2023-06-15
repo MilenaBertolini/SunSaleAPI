@@ -5,7 +5,7 @@ namespace Domain.ViewModel
     public class UsuariosCrudFormsViewModel
     {
         [Key]
-        public int Codigo { get; set; }
+        public int? Codigo { get; set; }
 
         public string Login { get; set; }
 
@@ -18,10 +18,10 @@ namespace Domain.ViewModel
         public string Administrador { get; set; }
 
         public string Desenvolvedor { get; set; }
-        public int UsuarioPai { get; set; }
+        public int? UsuarioPai { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
 
-        public DateTime Updated { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

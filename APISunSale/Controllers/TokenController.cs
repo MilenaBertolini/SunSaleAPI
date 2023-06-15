@@ -93,8 +93,8 @@ namespace APISunSale.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("Id", Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Sub, userModel.Login),
+                    new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
                     new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())
                 }),

@@ -63,6 +63,7 @@ namespace Application.Implementation.Repositories
         {
             var model = await GetByIdAsync(entity.Codigo);
             entity.Created = model.Created;
+            entity.Updated = DateTime.Now;
             if (model == null)
                 return null;
 
