@@ -42,5 +42,6 @@ namespace Data.Context
         public DbSet<RecuperaSenha> RecuperaSenha { get; set; }
         public DbSet<Logger> Logger { get; set; }
         public DbSet<Simulados> Simulados { get; set; }
+        public DbSet<UsuariosCrudForms> UsuariosCrudForms { get; set; }
     }
 }
