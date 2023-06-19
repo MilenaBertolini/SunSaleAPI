@@ -217,7 +217,7 @@ namespace Application.Implementation.Repositories
 
             if (!string.IsNullOrEmpty(subject))
             {
-                string[] array = subject.Split(';');
+                string[] array = subject.Split(';', StringSplitOptions.RemoveEmptyEntries);
 
                 int random = new Random().Next(array.Length);
                 query = query.Where(q => q.Materia.Equals(array[random]));
@@ -225,7 +225,7 @@ namespace Application.Implementation.Repositories
 
             if(!string.IsNullOrEmpty(banca))
             {
-                string[] array = banca.Split(';');
+                string[] array = banca.Split(';', StringSplitOptions.RemoveEmptyEntries);
 
                 int random = new Random().Next(array.Length);
 
