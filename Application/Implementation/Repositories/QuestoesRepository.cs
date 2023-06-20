@@ -258,7 +258,12 @@ namespace Application.Implementation.Repositories
                          join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
                          join ru in _dataContext.RespostasUsuarios on r.Codigo equals ru.CodigoResposta
                          where r.Certa.Equals("1") && ru.CodigoUsuario.Equals(usuario)
-                         select q).OrderByDescending(q => q.DataRegistro);
+                         select q);
+
+            string include = includes.Replace(";RespostasQuestoes.AnexoResposta;AnexosQuestoes", "");
+            GetIncludes(include).ToList().ForEach(p => query = query.Include(p));
+
+            query = query.OrderByDescending(q => q.DataRegistro);
 
             return await query.ToListAsync();
         }
