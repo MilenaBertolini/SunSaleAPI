@@ -84,7 +84,7 @@ namespace Application.Implementation.Services
             builder.AppendLine("        }");
             builder.AppendLine($"    </style>");
             builder.AppendLine($"    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
-            builder.AppendLine($"    <title>Boletinho - Rodrigo Machado</title>");
+            builder.AppendLine($"    <title>Boletinho - {user.Nome}</title>");
             builder.AppendLine($"    <style type=\"text/css\" nonce=\"\">");
             builder.AppendLine($"        body,");
             builder.AppendLine("        td {");

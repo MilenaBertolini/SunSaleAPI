@@ -93,6 +93,11 @@ namespace Application.Implementation.Repositories
             return Tuple.Create(response, qt);
         }
 
+        public async Task<IEnumerable<Main>> GetAll()
+        {
+            return await GetAllAsync(GetQueryable(), orderBy: "DataRegistro:desc");
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

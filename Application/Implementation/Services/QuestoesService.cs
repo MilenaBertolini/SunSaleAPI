@@ -180,6 +180,11 @@ namespace Application.Implementation.Services
             return await _repository.GetQuestoesAleatoria(tipo, subject, banca);
         }
 
+        public async Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario)
+        {
+            return await _repository.GetQuestoesRespondidas(usuario);
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();

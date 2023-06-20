@@ -6,5 +6,6 @@ namespace Application.Interface.Repositories
     {
         Task<IEnumerable<Main>> GetSimulados();
         Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin);
+        Task<IEnumerable<Main>> GetAll();
     }
 }

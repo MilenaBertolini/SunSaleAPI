@@ -9,8 +9,10 @@ using MainEntity = Domain.Entities.RespostasQuestoes;
 using Service = Application.Interface.Services.IRespostasQuestoesService;
 using RespostaUsuarioService = Application.Interface.Services.IRespostasUsuariosService;
 using UserService = Application.Interface.Services.IUsuariosService;
+using ProvaService = Application.Interface.Services.IProvaService;
 using APISunSale.Utils;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using QuestoesService = Application.Interface.Services.IQuestoesService;
 
 namespace APISunSale.Controllers
 {
@@ -25,15 +27,21 @@ namespace APISunSale.Controllers
         private readonly RespostaUsuarioService _respostaUsuarioService;
         private readonly MainUtils _utils;
         private readonly LoggerService _loggerService;
+        private readonly UserService _userService;
+        private readonly QuestoesService _questoesService;
+        private readonly ProvaService _provaService;
 
-        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper, RespostaUsuarioService respostaUsuarioService, IHttpContextAccessor httpContextAccessor, UserService userService, LoggerService loggerService)
+        public RespostasQuestoesController(ILogger<RespostasQuestoesController> logger, Service service, IMapper mapper, RespostaUsuarioService respostaUsuarioService, IHttpContextAccessor httpContextAccessor, UserService userService, LoggerService loggerService, QuestoesService questoesService, ProvaService provaService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _respostaUsuarioService = respostaUsuarioService;
+            _userService = userService;
             _utils = new MainUtils(httpContextAccessor, userService);
             _loggerService = loggerService;
+            _questoesService = questoesService;
+            _provaService = provaService;
         }
 
         [HttpGet("pagged")]
@@ -235,6 +243,49 @@ namespace APISunSale.Controllers
                 await _loggerService.AddException(ex);
 
                 return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("reportDetail")]
+        public async Task<ResponseBase<string>> GetReportDetaild(int? codigoUsuario)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+                if (!codigoUsuario.HasValue)
+                    codigoUsuario = user.Id;
+                else if (user.Admin != "1")
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
+                user = await _userService.GetById(codigoUsuario.Value);
+                var questoes = await _questoesService.GetQuestoesRespondidas(user.Id);
+                var provas = await _provaService.GetAll();
+
+                var result = _service.CriaDocumentoDetalhado(questoes, user, provas.ToList());
+                return new ResponseBase<string>()
+                {
+                    Message = "Listed",
+                    Success = true,
+                    Object = result,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<string>()
                 {
                     Message = ex.Message,
                     Success = false

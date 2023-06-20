@@ -251,5 +251,16 @@ namespace Application.Implementation.Repositories
 
             return await query.Skip(index).FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario)
+        {
+            var query = (from q in _dataContext.Questoes
+                         join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
+                         join ru in _dataContext.RespostasUsuarios on r.Codigo equals ru.CodigoResposta
+                         where r.Certa.Equals("1") && ru.CodigoUsuario.Equals(usuario)
+                         select q).OrderByDescending(q => q.DataRegistro);
+
+            return await query.ToListAsync();
+        }
     }
 }

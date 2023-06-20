@@ -20,5 +20,6 @@ namespace Application.Interface.Services
         Task<int> QuantidadeQuestoes(int prova, int user = -1);
         Task<IEnumerable<string>> GetAllMateris();
         Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca);
+        Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario);
     }
 }
