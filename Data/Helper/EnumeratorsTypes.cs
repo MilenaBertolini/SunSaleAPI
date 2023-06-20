@@ -17,7 +17,8 @@ namespace Data.Helper
         public enum TipoQuestoes 
         { 
             GENERIC = 0,
-            ENEM = 1
+            ENEM = 1,
+            IFTM = 2
         }
 
         public enum TipoLog

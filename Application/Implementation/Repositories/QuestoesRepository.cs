@@ -214,6 +214,15 @@ namespace Application.Implementation.Repositories
                          select q);
 
             }
+            else if (tipo == TipoQuestoes.IFTM)
+            {
+                query = (from q in _dataContext.Questoes
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where p.NomeProva.ToUpper().Contains("IFTM")
+
+                         select q);
+
+            }
 
             if (!string.IsNullOrEmpty(subject))
             {
