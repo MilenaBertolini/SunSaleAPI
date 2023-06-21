@@ -73,7 +73,7 @@ namespace Application.Implementation.Repositories
         {
             var query = base.GetQueryable().Where(r => r.CodigoUsuario.Equals(user));
 
-            return await base.GetAllAsync(query);
+            return await base.GetAllAsync(query, orderBy: "codigo:desc");
         }
 
         public async Task<IEnumerable<Main>> GetByQuestao(int questao)

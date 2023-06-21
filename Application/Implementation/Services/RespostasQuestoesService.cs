@@ -61,9 +61,13 @@ namespace Application.Implementation.Services
             StringBuilder builder = new StringBuilder();
 
             List<Main> listaCertas = new List<Main>();
+            List<Main> listaErradas = new List<Main>();
 
             foreach (var questao in questoes)
+            {
                 listaCertas.AddRange(questao.RespostasQuestoes.Where(r => r.Certa.Equals("1")));
+                listaErradas.AddRange(questao.RespostasQuestoes.Where(r => r.Certa.Equals("0")));
+            }
 
             builder.AppendLine($"<!DOCTYPE html PUBLIC \" -//W3C//DTD HTML 4.01//EN\" \"https://www.w3.org/TR/html4/strict.dtd\">");
             builder.AppendLine($"<html lang=\"pt-BR\">");
@@ -177,7 +181,11 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                                <br/>");
             builder.AppendLine($"                                Quantidade de questões respondidas: {questoes.Count()}");
             builder.AppendLine($"                                <br/>");
-            builder.AppendLine($"                                Quantidade de questões acertadas: {respostasUsuarios.Where(r => listaCertas.Exists(l => l.Codigo.Equals(r.CodigoResposta))).Count()}");
+            builder.AppendLine($"                                Quantidade de tentativas respondidas: {respostasUsuarios.Count()}");
+            builder.AppendLine($"                                <br/>");
+            builder.AppendLine($"                                Quantidade de respostas certas: {respostasUsuarios.Where(r => listaCertas.Exists(l => l.Codigo.Equals(r.CodigoResposta))).Count()}");
+            builder.AppendLine($"                                <br/>");
+            builder.AppendLine($"                                Quantidade de respostas erradas: {respostasUsuarios.Where(r => listaErradas.Exists(l => l.Codigo.Equals(r.CodigoResposta))).Count()}");
             builder.AppendLine($"                                <br/>");
             builder.AppendLine($"                            </h3>");
             builder.AppendLine($"                        </td>");
@@ -211,31 +219,34 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                        </tr>");
             builder.AppendLine($"                    </thead>");
             builder.AppendLine($"                    <tbody>");
-            questoes.ToList().ForEach(questao =>
+            respostasUsuarios.ToList().ForEach(resposta =>
             {
-                var questaoDto = questoes.Where(q => q.NumeroQuestao.Equals(questao.NumeroQuestao)).FirstOrDefault();
-                builder.AppendLine($"                        <tr>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {provas.Where(p => p.Codigo.Equals(questao.CodigoProva)).FirstOrDefault()?.NomeProva}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {questao.NumeroQuestao}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {questaoDto?.Materia}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {(respostasUsuarios.Exists(r => questao.RespostasQuestoes.Where(q => q.Certa.Equals("1")).FirstOrDefault().Equals(r.CodigoResposta)) ? "Certa🥳" : "Errada😒")}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                        </tr>");
+                var questao = questoes.Where(q => q.Codigo.Equals(resposta.CodigoQuestao)).FirstOrDefault();
+                if (questao != null)
+                {
+                    builder.AppendLine($"                        <tr>");
+                    builder.AppendLine($"                            <td> ");
+                    builder.AppendLine($"                                <h3>");
+                    builder.AppendLine($"                                    {provas.Where(p => p.Codigo.Equals(questao?.CodigoProva)).FirstOrDefault()?.NomeProva}");
+                    builder.AppendLine($"                                </h3>");
+                    builder.AppendLine($"                            </td>");
+                    builder.AppendLine($"                            <td> ");
+                    builder.AppendLine($"                                <h3>");
+                    builder.AppendLine($"                                    {questao?.NumeroQuestao}");
+                    builder.AppendLine($"                                </h3>");
+                    builder.AppendLine($"                            </td>");
+                    builder.AppendLine($"                            <td> ");
+                    builder.AppendLine($"                                <h3>");
+                    builder.AppendLine($"                                    {questao?.Materia}");
+                    builder.AppendLine($"                                </h3>");
+                    builder.AppendLine($"                            </td>");
+                    builder.AppendLine($"                            <td> ");
+                    builder.AppendLine($"                                <h3>");
+                    builder.AppendLine($"                                    {(listaCertas.Exists(l => l.Codigo.Equals(resposta.CodigoResposta)) ? "Certa🥳" : "Errada😒")}");
+                    builder.AppendLine($"                                </h3>");
+                    builder.AppendLine($"                            </td>");
+                    builder.AppendLine($"                        </tr>");
+                }
             });
 
             builder.AppendLine($"                    </tbody>");
