@@ -56,7 +56,7 @@ namespace Application.Implementation.Services
             return await _repository.GetRespostaCorreta(questao);
         }
 
-        public string CriaDocumentoDetalhado(IEnumerable<Questoes> questoes, Usuarios user, List<Prova> provas)
+        public string CriaDocumentoDetalhado(IEnumerable<Questoes> questoes, Usuarios user, List<Prova> provas, List<RespostasUsuarios> respostasUsuarios)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -227,7 +227,7 @@ namespace Application.Implementation.Services
                 builder.AppendLine($"                            </td>");
                 builder.AppendLine($"                            <td> ");
                 builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {(questao.RespostasQuestoes.ToList().Exists(r => r.Certa.Equals("1")) ? "Certa🥳" : "Errada😒")}");
+                builder.AppendLine($"                                    {(respostasUsuarios.Exists(r => questao.RespostasQuestoes.ToList().Exists(q => q.Codigo.Equals(r.CodigoResposta) && q.Certa.Equals("1"))) ? "Certa🥳" : "Errada😒")}");
                 builder.AppendLine($"                                </h3>");
                 builder.AppendLine($"                            </td>");
                 builder.AppendLine($"                        </tr>");

@@ -270,8 +270,9 @@ namespace APISunSale.Controllers
                 user = await _userService.GetById(codigoUsuario.Value);
                 var questoes = await _questoesService.GetQuestoesRespondidas(user.Id);
                 var provas = await _provaService.GetAll();
+                var respostasUsuarios = await _respostaUsuarioService.GetByUser(user.Id);
 
-                var result = _service.CriaDocumentoDetalhado(questoes, user, provas.ToList());
+                var result = _service.CriaDocumentoDetalhado(questoes, user, provas.ToList(), respostasUsuarios.ToList());
                 return new ResponseBase<string>()
                 {
                     Message = "Listed",
