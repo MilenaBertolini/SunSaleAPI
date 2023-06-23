@@ -118,6 +118,7 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getByVersao")]
+        [AllowAnonymous]
         public async Task<ResponseBase<MainViewModel>> GetByVersao(string versao)
         {
             try
