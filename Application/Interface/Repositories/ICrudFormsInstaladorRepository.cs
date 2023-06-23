@@ -8,5 +8,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
 
         Task<string> GetLastVerion();
+        Task<Main> GetByVersao(string versao);
     }
 }

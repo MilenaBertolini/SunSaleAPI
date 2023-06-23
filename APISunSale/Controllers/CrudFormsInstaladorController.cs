@@ -117,6 +117,34 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpGet("getByVersao")]
+        public async Task<ResponseBase<MainViewModel>> GetByVersao(string versao)
+        {
+            try
+            {
+                var result = await _service.GetByVersao(versao);
+                var response = _mapper.Map<MainViewModel>(result);
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = response != null ? 1 : 0
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         [HttpPost]
         public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main)
         {

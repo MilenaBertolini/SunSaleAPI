@@ -75,6 +75,15 @@ namespace Application.Implementation.Repositories
             return query;
         }
 
+        public async Task<Main> GetByVersao(string versao)
+        {
+            var query = GetQueryable().Where(p => p.Versao.Equals(versao));
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await query.SingleOrDefaultAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

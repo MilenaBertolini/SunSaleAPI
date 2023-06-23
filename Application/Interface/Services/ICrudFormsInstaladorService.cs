@@ -12,5 +12,7 @@ namespace Application.Interface.Services
         Task<bool> DeleteById(int id);
         Task<string> GetLastVerion();
 
+        Task<Main> GetByVersao(string versao);
+
     }
 }

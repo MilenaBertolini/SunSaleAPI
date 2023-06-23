@@ -45,6 +45,11 @@ namespace Application.Implementation.Services
             return await _repository.GetById(id);
         }
 
+        public async Task<Main> GetByVersao(string versao)
+        {
+            return await _repository.GetByVersao(versao);
+        }
+
         public Task<Main> Update(Main entity)
         {
             return _repository.Update(entity);
