@@ -192,12 +192,6 @@ namespace APISunSale.Controllers
         {
             try
             {
-                if (!main.UsuarioPai.HasValue)
-                {
-                    var user = await _utils.GetUserCrudFormsFromContextAsync();
-                    main.UsuarioPai = user.Codigo;
-                }
-
                 if (await _service.ExistsEmail(main.Email))
                 {
                     return new ResponseBase<MainViewModel>()
