@@ -126,5 +126,6 @@
     <Build Include="Tables\RecuperaSenha.sql" />
     <Build Include="Tables\Logger.sql" />
     <Build Include="Tables\Simulados.sql" />
+    <Build Include="Tables\LicencasSunSalePro.sql" />
   </ItemGroup>
 </Project>

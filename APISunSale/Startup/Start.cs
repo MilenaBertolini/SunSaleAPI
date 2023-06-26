@@ -46,6 +46,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IEstagioService, EstagioService>();
             _app.Services.AddScoped<ISimuladoService, SimuladosService>();
             _app.Services.AddScoped<IUsuariosCrudFormsService, UsuariosCrudFormsService>();
+            _app.Services.AddScoped<ILicencasSunSaleProService, LicencasSunSaleProService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -68,6 +69,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<ILoggerRepository, LoggerRepository>();
             _app.Services.AddScoped<ISimuladosRepository, SimuladoRepository>();
             _app.Services.AddScoped<IUsuariosCrudFormsRepository, UsuariosCrudFormsRepository>();
+            _app.Services.AddScoped<ILicencasSunSaleProRepository, LicencasSunSaleProRepository>();
 
             Mapping();
 
@@ -157,6 +159,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<UsuariosCrudFormsViewModel, UsuariosCrudForms>();
                 cfg.CreateMap<UsuariosCrudForms, UsuariosCrudFormsViewModel>();
+
+                cfg.CreateMap<LicencasSunSaleProViewModel, LicencasSunSalePro>();
+                cfg.CreateMap<LicencasSunSalePro, LicencasSunSaleProViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

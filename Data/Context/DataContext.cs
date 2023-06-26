@@ -43,5 +43,6 @@ namespace Data.Context
         public DbSet<Logger> Logger { get; set; }
         public DbSet<Simulados> Simulados { get; set; }
         public DbSet<UsuariosCrudForms> UsuariosCrudForms { get; set; }
+        public DbSet<LicencasSunSalePro> LicencasSunSalePro { get; set; }
     }
 }
