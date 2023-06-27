@@ -1,31 +1,36 @@
-﻿using AutoMapper;
+﻿using Application.Interface.Services;
+using AutoMapper;
 using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.LicencasSunSaleProViewModel;
-using MainEntity = Domain.Entities.LicencasSunSalePro;
-using Service = Application.Interface.Services.ILicencasSunSaleProService;
+using MainViewModel = Domain.ViewModel.ComentariosQuestoesViewModel;
+using MainEntity = Domain.Entities.ComentariosQuestoes;
+using Service = Application.Interface.Services.IComentariosQuestoesService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using APISunSale.Utils;
+using UserService = Application.Interface.Services.IUsuariosService;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class LicencasSunSaleProController
+    public class ComentariosQuestoesController
     {
-        private readonly ILogger<LicencasSunSaleProController> _logger;
+        private readonly ILogger<ComentariosQuestoesController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
+        private readonly MainUtils _utils;
 
-        public LicencasSunSaleProController(ILogger<LicencasSunSaleProController> logger, Service service, IMapper mapper, LoggerService loggerService)
+        public ComentariosQuestoesController(ILogger<ComentariosQuestoesController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
+            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
@@ -84,15 +89,14 @@ namespace APISunSale.Controllers
             }
         }
 
-        [HttpGet("getByLicenca")]
-        [AllowAnonymous]
-        public async Task<ResponseBase<MainViewModel>> GetByLicenca(string licenca)
+        [HttpGet("getByQuestao")]
+        public async Task<ResponseBase<List<MainViewModel>>> GetByQuestao(int questao)
         {
             try
             {
-                var result = await _service.GetByLicenca(licenca);
-                var response = _mapper.Map<MainViewModel>(result);
-                return new ResponseBase<MainViewModel>()
+                var result = await _service.GetByQuestao(questao);
+                var response = _mapper.Map<List<MainViewModel>>(result);
+                return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "Search success",
                     Success = true,
@@ -105,7 +109,7 @@ namespace APISunSale.Controllers
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
                 await _loggerService.AddException(ex);
 
-                return new ResponseBase<MainViewModel>()
+                return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = ex.Message,
                     Success = false
@@ -118,6 +122,10 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+                main.CodigoUsuario = user.Id;
+                main.IsActive = "1";
+
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {

@@ -127,5 +127,6 @@
     <Build Include="Tables\Logger.sql" />
     <Build Include="Tables\Simulados.sql" />
     <Build Include="Tables\LicencasSunSalePro.sql" />
+    <Build Include="Tables\ComentariosQuestoes.sql" />
   </ItemGroup>
 </Project>

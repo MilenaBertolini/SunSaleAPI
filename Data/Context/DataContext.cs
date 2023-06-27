@@ -44,5 +44,6 @@ namespace Data.Context
         public DbSet<Simulados> Simulados { get; set; }
         public DbSet<UsuariosCrudForms> UsuariosCrudForms { get; set; }
         public DbSet<LicencasSunSalePro> LicencasSunSalePro { get; set; }
+        public DbSet<ComentariosQuestoes> ComentariosQuestoes { get; set; }
     }
 }
