@@ -67,7 +67,7 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(query, page, quantity);
         }
 
-        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao)
+        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao, int user)
         {
             var query = (from c in _dataContext.ComentariosQuestoes
                          join u in _dataContext.Usuarios on c.CodigoUsuario equals u.Id
@@ -81,7 +81,8 @@ namespace Application.Implementation.Repositories
                              Comentario = c.Comentario,
                              Created = c.Created,
                              NomeUsuario = u.Nome,
-                         });
+                             CanEdit = u.Id.Equals(user)
+                         }).OrderByDescending(c => c.Created);
 
             return await query.ToListAsync();
         }

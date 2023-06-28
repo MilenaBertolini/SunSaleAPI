@@ -42,9 +42,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAllPagged(page, quantity);
         }
 
-        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao)
+        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao, int user)
         {
-            return await _repository.GetByQuestao(questao);
+            return await _repository.GetByQuestao(questao, user);
         }
 
         public async Task<Main> GetById(int id)

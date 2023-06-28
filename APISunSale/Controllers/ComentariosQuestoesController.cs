@@ -95,7 +95,9 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetByQuestao(questao);
+                var user = await _utils.GetUserFromContextAsync();
+                var result = await _service.GetByQuestao(questao, user.Id);
+
                 return new ResponseBase<List<ComentariosViewModel>>()
                 {
                     Message = "Search success",

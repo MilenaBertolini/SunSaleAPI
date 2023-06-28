@@ -8,6 +8,7 @@
 
         public string Comentario { get; set; }
         public string NomeUsuario { get; set; }
+        public bool CanEdit { get; set; }
         public DateTime Created { get; set; }
     }
 }
