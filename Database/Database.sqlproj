@@ -128,5 +128,6 @@
     <Build Include="Tables\Simulados.sql" />
     <Build Include="Tables\LicencasSunSalePro.sql" />
     <Build Include="Tables\ComentariosQuestoes.sql" />
+    <Build Include="consultas.sql" />
   </ItemGroup>
 </Project>
