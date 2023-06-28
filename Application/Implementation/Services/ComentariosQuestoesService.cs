@@ -19,6 +19,7 @@ namespace Application.Implementation.Services
         public async Task<Main> Add(Main entity)
         {
             entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+            entity.Comentario = entity.Comentario.Replace(Environment.NewLine, "<br/>");
             entity.Created = DateTime.Now;
             entity.Updated = DateTime.Now;
 
