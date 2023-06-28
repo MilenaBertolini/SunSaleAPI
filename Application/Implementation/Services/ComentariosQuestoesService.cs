@@ -2,6 +2,7 @@
 using IService = Application.Interface.Services.IComentariosQuestoesService;
 using IRepository = Application.Interface.Repositories.IComentariosQuestoesRepository;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
+using Application.Model;
 
 namespace Application.Implementation.Services
 {
@@ -41,7 +42,7 @@ namespace Application.Implementation.Services
             return await _repository.GetAllPagged(page, quantity);
         }
 
-        public async Task<IEnumerable<Main>> GetByQuestao(int questao)
+        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao)
         {
             return await _repository.GetByQuestao(questao);
         }

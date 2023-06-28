@@ -1,4 +1,5 @@
-﻿using Main = Domain.Entities.ComentariosQuestoes;
+﻿using Application.Model;
+using Main = Domain.Entities.ComentariosQuestoes;
 
 namespace Application.Interface.Services
 {
@@ -10,6 +11,6 @@ namespace Application.Interface.Services
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
-        Task<IEnumerable<Main>> GetByQuestao(int questao);
+        Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao);
     }
 }

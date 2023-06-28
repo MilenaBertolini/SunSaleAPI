@@ -2,6 +2,7 @@
 using Main = Domain.Entities.ComentariosQuestoes;
 using IRepository = Application.Interface.Repositories.IComentariosQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
+using Application.Model;
 
 namespace Application.Implementation.Repositories
 {
@@ -66,12 +67,23 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(query, page, quantity);
         }
 
-        public async Task<IEnumerable<Main>> GetByQuestao(int questao)
+        public async Task<IEnumerable<ComentariosViewModel>> GetByQuestao(int questao)
         {
-            var query = base.GetQueryable().Where(q => q.CodigoQuestao.Equals(questao));
-            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+            var query = (from c in _dataContext.ComentariosQuestoes
+                         join u in _dataContext.Usuarios on c.CodigoUsuario equals u.Id
+                         where c.CodigoQuestao.Equals(questao)
 
-            return await base.GetAllAsync(query, orderBy:"codigo:desc");
+                         select new ComentariosViewModel()
+                         {
+                             Codigo = c.Codigo,
+                             CodigoQuestao = c.CodigoQuestao,
+                             CodigoUsuario = c.CodigoUsuario,
+                             Comentario = c.Comentario,
+                             Created = c.Created,
+                             NomeUsuario = u.Nome,
+                         });
+
+            return await query.ToListAsync();
         }
 
         public void Dispose()

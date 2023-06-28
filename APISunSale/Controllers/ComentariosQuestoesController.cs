@@ -10,6 +10,7 @@ using Service = Application.Interface.Services.IComentariosQuestoesService;
 using LoggerService = Application.Interface.Services.ILoggerService;
 using APISunSale.Utils;
 using UserService = Application.Interface.Services.IUsuariosService;
+using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -90,18 +91,17 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getByQuestao")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetByQuestao(int questao)
+        public async Task<ResponseBase<List<ComentariosViewModel>>> GetByQuestao(int questao)
         {
             try
             {
                 var result = await _service.GetByQuestao(questao);
-                var response = _mapper.Map<List<MainViewModel>>(result);
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<List<ComentariosViewModel>>()
                 {
                     Message = "Search success",
                     Success = true,
-                    Object = response,
-                    Quantity = response != null ? 1 : 0
+                    Object = result?.ToList(),
+                    Quantity = result?.ToList() != null ? result.ToList().Count() : 0
                 };
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace APISunSale.Controllers
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
                 await _loggerService.AddException(ex);
 
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<List<ComentariosViewModel>>()
                 {
                     Message = ex.Message,
                     Success = false
