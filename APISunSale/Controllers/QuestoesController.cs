@@ -12,6 +12,8 @@ using APISunSale.Utils;
 using Domain.ViewModel;
 using static Data.Helper.EnumeratorsTypes;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using System.Data;
+using System.Linq.Expressions;
 
 namespace APISunSale.Controllers
 {
@@ -375,5 +377,241 @@ namespace APISunSale.Controllers
                 };
             }
         }
+        /*
+
+        [HttpGet("criaQuestao")]
+        public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+                List<MainViewModel> list = new List<MainViewModel>();
+                List<string> linhas = new List<string>();
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a unidade básica da vida?");
+                linhas.Add("a) Átomo.");
+                linhas.Add("X) b) Célula.");
+                linhas.Add("c) Molécula.");
+                linhas.Add("d) Organismo.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a função do sistema respiratório?");
+                linhas.Add("a) Realizar a digestão dos alimentos.");
+                linhas.Add("X) b) Permitir a troca gasosa entre o organismo e o ambiente.");
+                linhas.Add("c) Transportar oxigênio e nutrientes pelo corpo.");
+                linhas.Add("d) Controlar o funcionamento do corpo.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é uma reação química?");
+                linhas.Add("a) A transformação de um sólido em líquido.");
+                linhas.Add("X) b) A transformação de substâncias em outras substâncias diferentes.");
+                linhas.Add("c) A produção de luz e calor.");
+                linhas.Add("d) A formação de moléculas complexas.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a camada mais externa da Terra?");
+                linhas.Add("a) Núcleo interno.");
+                linhas.Add("b) Núcleo externo.");
+                linhas.Add("c) Manto.");
+                linhas.Add("X) d) Crosta.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é um ecossistema?");
+                linhas.Add("a) A cadeia alimentar de um organismo.");
+                linhas.Add("X) b) Um conjunto de seres vivos e o ambiente em que vivem.");
+                linhas.Add("c) A transformação de energia em matéria.");
+                linhas.Add("d) A reprodução de organismos.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é a fotossíntese?");
+                linhas.Add("X) a) Processo em que as plantas convertem luz solar em energia química.");
+                linhas.Add("b) Processo de respiração das plantas.");
+                linhas.Add("c) Processo de digestão das plantas.");
+                linhas.Add("d) Processo de reprodução das plantas.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a principal função do sistema nervoso?");
+                linhas.Add("a) Transportar oxigênio e nutrientes pelo corpo.");
+                linhas.Add("b) Realizar a respiração celular.");
+                linhas.Add("X) c) Controlar as funções do corpo e a interação com o ambiente.");
+                linhas.Add("d) Produzir hormônios.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é a genética?");
+                linhas.Add("a) O estudo dos animais.");
+                linhas.Add("X) b) O estudo dos genes e da hereditariedade.");
+                linhas.Add("c) O estudo das rochas e minerais.");
+                linhas.Add("d) O estudo das reações químicas.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a função do sistema circulatório?");
+                linhas.Add("a) Realizar a fotossíntese.");
+                linhas.Add("b) Controlar as funções do corpo.");
+                linhas.Add("c) Permitir a troca gasosa.");
+                linhas.Add("X) d) Transportar oxigênio e nutrientes pelo corpo.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que são células-tronco?");
+                linhas.Add("a) Células especializadas para a reprodução.");
+                linhas.Add("b) Células que formam os tecidos.");
+                linhas.Add("c) Células que realizam a fotossíntese.");
+                linhas.Add("X) d) Células com capacidade de se diferenciar em diferentes tipos de células.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é a evolução biológica?");
+                linhas.Add("X) a) O processo pelo qual os seres vivos mudam ao longo do tempo.");
+                linhas.Add("b) O processo de reprodução dos seres vivos.");
+                linhas.Add("c) O processo de formação das células.");
+                linhas.Add("d) O processo de interação entre os seres vivos.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é um ácido?");
+                linhas.Add("a) Uma substância com pH neutro.");
+                linhas.Add("X) b) Uma substância que libera íonsH+ quando dissolvida em água.");
+                linhas.Add("c) Uma substância que libera íons OH- quando dissolvida em água.");
+                linhas.Add("d) Uma substância que não reage com outras substâncias.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é o órgão responsável pela produção de insulina no corpo humano?");
+                linhas.Add("a) Pâncreas.");
+                linhas.Add("b) Fígado.");
+                linhas.Add("X) c) Glândula adrenal.");
+                linhas.Add("d) Tireoide.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é a gravidade?");
+                linhas.Add("a) A força que faz os objetos flutuarem.");
+                linhas.Add("X) b) A força que atrai os objetos em direção ao centro da Terra.");
+                linhas.Add("c) A força que mantém os objetos em movimento.");
+                linhas.Add("d) A força que repele os objetos uns dos outros.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é uma cadeia alimentar?");
+                linhas.Add("a) O ciclo de vida de um organismo.");
+                linhas.Add("X) b) A sequência de transferência de energia entre os seres vivos em um ecossistema.");
+                linhas.Add("c) A formação de novos indivíduos por reprodução.");
+                linhas.Add("d) O processo de respiração das plantas.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>Qual é a principal função do sistema endócrino?");
+                linhas.Add("a) Controlar as funções do corpo e a interação com o ambiente.");
+                linhas.Add("b) Transportar oxigênio e nutrientes pelo corpo.");
+                linhas.Add("c) Realizar a troca gasosa.");
+                linhas.Add("X) d) Produzir e liberar hormônios no organismo.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é a matéria?");
+                linhas.Add("X) a) Tudo o que possui massa e ocupa espaço.");
+                linhas.Add("b) Uma forma de energia.");
+                linhas.Add("c) A capacidade de fazer trabalho.");
+                linhas.Add("d) A quantidade de matéria em um objeto.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é um vetor?");
+                linhas.Add("a) Uma quantidade que possui apenas magnitude.");
+                linhas.Add("X) b) Uma quantidade que possui magnitude e direção.");
+                linhas.Add("c) Uma quantidade que possui apenas direção.");
+                linhas.Add("d) Uma quantidade que não pode ser medida.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é um eclipse lunar?");
+                linhas.Add("a) Quando a Lua se alinha entre a Terra e o Sol.");
+                linhas.Add("X) b) Quando a Terra se posiciona entre o Sol e a Lua, impedindo a luz solar de alcançar a Lua.");
+                linhas.Add("c) Quando a Lua fica completamente iluminada pelo Sol.");
+                linhas.Add("d) Quando a Lua fica totalmente escura.");
+                linhas.Add("<b>Questão {NUMQ}</b><br><br>O que é um ecossistema aquático?");
+                linhas.Add("a) Um ecossistema formado por seres vivos terrestres.");
+                linhas.Add("b) Um ecossistema formado por seres vivos marinhos.");
+                linhas.Add("X) c) Um ecossistema formado por seres vivos de água doce.");
+                linhas.Add("d) Um ecossistema formado por seres vivos subterrâneos.");
+
+                Random randon = new Random();
+
+                for (int i = 0, cont = 1; i < linhas.Count(); i+=5, cont++)
+                {
+                    MainViewModel view = new MainViewModel();
+                    view.Ativo = "1";
+                    view.CodigoProva = 80;
+                    view.NumeroQuestao = cont.ToString();
+                    view.Materia = "Ciências";
+                    view.ObservacaoQuestao = string.Empty;
+                    view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
+                    view.CampoQuestao = linhas[i].Replace("{NUMQ}", cont.ToString("00")).Replace("Questao", "Questão");
+                    
+                    for (int j = i+1; j < i+5; j++)
+                    {
+                        RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
+                        resposta.Certa = linhas[j].Contains("X)") ? "1" : "0";
+                        resposta.TextoResposta = linhas[j].Replace("X)", "").Trim();
+
+                        view.RespostasQuestoes.Add(resposta);
+                    }
+
+                    await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
+
+                    list.Add(view);
+                }
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = list,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("criaQuestao")]
+        public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+                List<MainViewModel> list = new List<MainViewModel>();
+
+                Random randon = new Random();
+
+                for (int i = 3; i <= 50; i++)
+                {
+                    MainViewModel view = new MainViewModel();
+                    view.Ativo = "1";
+                    view.CodigoProva = 72;
+                    view.NumeroQuestao = i.ToString();
+                    view.Materia = "Matemática";
+                    view.ObservacaoQuestao = string.Empty;
+                    view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
+
+                    int a = randon.Next(5);
+
+                    while (a == 0) a = randon.Next(5);
+
+                    int b = randon.Next(10);
+
+                    while (b == 0) b = randon.Next(10);
+
+                    int x = randon.Next(10);
+
+                    int resultado = i % 2 == 0 ? a * x + b : a * x - b;
+                    view.CampoQuestao = $"<b>Questão {i.ToString("00")}</b><br><br>Qual o resultado da equação <b>{(a > 1 ? a + "" : " ")}x {(i % 2 == 0 ? '+' : '-')} {b} = {resultado}</b>?";
+
+                    int op = randon.Next(5);
+                    while (op == 0) op = randon.Next(5);
+
+                    for (int j = 1; j <= 5; j++)
+                    {
+                        RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
+                        if (j == op)
+                        {
+                            resposta.Certa = "1";
+                            resposta.TextoResposta = x.ToString();
+                        }
+                        else
+                        {
+                            resposta.Certa = "0";
+                            resposta.TextoResposta = (x + j).ToString();
+                        }
+                        view.RespostasQuestoes.Add(resposta);
+                    }
+
+                    await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
+
+                    list.Add(view);
+                }
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = list,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }*/
     }
 }

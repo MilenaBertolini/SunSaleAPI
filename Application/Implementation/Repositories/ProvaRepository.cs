@@ -87,8 +87,8 @@ namespace Application.Implementation.Repositories
                 query = query.Where(q => q.NomeProva.ToUpper().Contains(prova.ToUpper()));
             }
 
-            var response = await base.GetAllPagedAsync(query, page, quantity);
             var qt = await base.GetAllPagedTotalAsync(query);
+            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: "NomeProva:ASC");
 
             return Tuple.Create(response, qt);
         }
