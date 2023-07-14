@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using System.Text;
 using System.Text.Unicode;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace APISunSale.Utils
 {
@@ -54,8 +55,9 @@ namespace APISunSale.Utils
             return sb.ToString();
         }
 
-        public static string CriaEmailRecupereSenha(string guid)
+        public static string CriaEmailRecupereSenha(string guid, TipoSistema tipo)
         {
+            string url = tipo == TipoSistema.QuestoesAqui ? "https://www.questoesaqui.com" : "https://www.crudforms.com";
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("<!DOCTYPE html>");
@@ -63,13 +65,13 @@ namespace APISunSale.Utils
             sb.AppendLine("<head>");
             sb.AppendLine("    <meta charset=\"UTF-8\">");
             sb.AppendLine("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-            sb.AppendLine("    <title>Recuperação de senha</title>");
+            sb.AppendLine($"    <title>Recuperação de senha - {(tipo == TipoSistema.QuestoesAqui ? "Questões Aqui" : "CrudForms")}</title>");
             sb.AppendLine("</head>");
             sb.AppendLine("<body style=\"font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;\">");
             sb.AppendLine("    <h1>Recuperação de senha</h1>");
             sb.AppendLine("    <p>Olá,</p>");
             sb.AppendLine("    <p>Recebemos uma solicitação para recuperar a senha da sua conta. Para definir uma nova senha, clique no botão abaixo:</p>");
-            sb.AppendLine($"    <p style=\"text-align: center;\"><a href=\"https://www.questoesaqui.com/resetpass/{guid}\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;\">Recuperar senha</a></p>");
+            sb.AppendLine($"    <p style=\"text-align: center;\"><a href=\"{url}/resetpass/{guid}\" style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;\">Recuperar senha</a></p>");
             sb.AppendLine("    <p>Se você não solicitou a recuperação de senha, basta ignorar este e-mail.</p>");
             sb.AppendLine("    <p>Obrigado,</p>");
             sb.AppendLine("    <p>A equipe de suporte.</p>");
@@ -79,7 +81,7 @@ namespace APISunSale.Utils
             return sb.ToString();
         }
 
-        public static string ConfirmaAlteracaoPass(string userName)
+        public static string ConfirmaAlteracaoPass(string userName, TipoSistema tipo)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -98,7 +100,7 @@ namespace APISunSale.Utils
             sb.AppendLine("				<p>Este e-mail é para confirmar que a senha de sua conta foi alterada com sucesso.</p>");
             sb.AppendLine("				<p>Se você não realizou esta alteração, por favor entre em contato conosco imediatamente.</p>");
             sb.AppendLine("				<p>Atenciosamente,</p>");
-            sb.AppendLine("				<p>SunSale System - Questoes Aqui</p>");
+            sb.AppendLine($"				<p>SunSale System - {(tipo == TipoSistema.QuestoesAqui ? "Questoes Aqui" : "CrudForms")}</p>");
             sb.AppendLine("			</td>");
             sb.AppendLine("		</tr>");
             sb.AppendLine("		<tr>");

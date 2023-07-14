@@ -27,5 +27,11 @@ namespace Data.Helper
             WARNING = 1,
             ERROR = 2,
         }
+
+        public enum TipoSistema
+        {
+            QuestoesAqui = 0,
+            CrudForms = 1
+        }
     }
 }

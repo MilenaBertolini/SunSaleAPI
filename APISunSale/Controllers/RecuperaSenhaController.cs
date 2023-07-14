@@ -8,10 +8,12 @@ using MainViewModel = Domain.ViewModel.RecuperaSenhaViewModel;
 using MainEntity = Domain.Entities.RecuperaSenha;
 using Service = Application.Interface.Services.IRecuperaSenhaService;
 using UserService = Application.Interface.Services.IUsuariosService;
+using UserCrudFormsService = Application.Interface.Services.IUsuariosCrudFormsService;
 using EmailService = Application.Interface.Services.IEmailService;
 using Domain.ViewModel;
 using Domain.Entities;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace APISunSale.Controllers
 {
@@ -23,11 +25,12 @@ namespace APISunSale.Controllers
         private readonly ILogger<RecuperaSenhaController> _logger;
         private readonly Service _service;
         private readonly UserService _userService;
+        private readonly UserCrudFormsService _userCrudFormsService;
         private readonly EmailService _emailService;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
 
-        public RecuperaSenhaController(ILogger<RecuperaSenhaController> logger, Service service, IMapper mapper, UserService userService, EmailService emailService, LoggerService loggerService)
+        public RecuperaSenhaController(ILogger<RecuperaSenhaController> logger, Service service, IMapper mapper, UserService userService, EmailService emailService, LoggerService loggerService, UserCrudFormsService userCrudFormsService)
         {
             _logger = logger;
             _service = service;
@@ -35,6 +38,7 @@ namespace APISunSale.Controllers
             _userService = userService;
             _emailService = emailService;
             _loggerService = loggerService;
+            _userCrudFormsService = userCrudFormsService;
         }
 
         [HttpGet("pagged")]
@@ -177,11 +181,11 @@ namespace APISunSale.Controllers
 
         [AllowAnonymous]
         [HttpPost("recovery-pass")]
-        public async Task<ResponseBase<bool>> RecoveryPass(string email)
+        public async Task<ResponseBase<bool>> RecoveryPass(string email, TipoSistema tipo)
         {
             try
             {
-                var user = await _userService.GetByEmail(email);
+                object user = tipo == TipoSistema.QuestoesAqui ? await _userService.GetByEmail(email) : await _userCrudFormsService.GetByEmail(email);
                 if(user == null)
                 {
                     return new ResponseBase<bool>()
@@ -204,10 +208,10 @@ namespace APISunSale.Controllers
 
                 var mail = new EmailViewModel()
                 {
-                    Assunto = "Recuperação de senha",
-                    Destinatario = user.Email,
+                    Assunto = "Recuperação de senha - " + (tipo == TipoSistema.QuestoesAqui ? "Questões Aqui" : "Crud Forms"),
+                    Destinatario = email,
                     Status = "0",
-                    Texto = Utils.CrieEmail.CriaEmailRecupereSenha(result.Guid)
+                    Texto = Utils.CrieEmail.CriaEmailRecupereSenha(result.Guid, tipo)
                 };
 
                 await _emailService.Add(_mapper.Map<Email>(mail));
@@ -236,7 +240,7 @@ namespace APISunSale.Controllers
 
         [AllowAnonymous]
         [HttpPost("reset-pass")]
-        public async Task<ResponseBase<bool>> ResetPass(string guid, string pass)
+        public async Task<ResponseBase<bool>> ResetPass(string guid, string pass, TipoSistema tipo)
         {
             try
             {
@@ -265,17 +269,30 @@ namespace APISunSale.Controllers
                 result.Validated = "1";
                 result = await _service.Update(result);
 
-                var user = await _userService.GetByEmail(result.EmailUser);
-                user.Pass = pass;
-                user = await _userService.Update(user);
+                string nomeUsuario = string.Empty;
+                if(tipo == TipoSistema.CrudForms)
+                {
+                    var user2 = await _userCrudFormsService.GetByEmail(result.EmailUser);
+                    nomeUsuario = user2.Nome;
+                    user2.Senha = pass;
+                    user2 = await _userCrudFormsService.Update(user2);
+                }
+                else
+                {
+                    var user = await _userService.GetByEmail(result.EmailUser);
+                    nomeUsuario = user.Nome;
+                    user.Pass = pass;
+                    user = await _userService.Update(user);
+                }
 
                 var mail = new EmailViewModel()
                 {
                     Assunto = "Recuperação de senha",
-                    Destinatario = user.Email,
+                    Destinatario = result.EmailUser,
                     Status = "0",
-                    Texto = Utils.CrieEmail.ConfirmaAlteracaoPass(user.Nome)
+                    Texto = Utils.CrieEmail.ConfirmaAlteracaoPass(nomeUsuario, tipo)
                 };
+                await _emailService.Add(_mapper.Map<Email>(mail));
 
                 return new ResponseBase<bool>()
                 {
