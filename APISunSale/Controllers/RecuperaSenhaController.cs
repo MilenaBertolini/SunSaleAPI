@@ -14,6 +14,7 @@ using Domain.ViewModel;
 using Domain.Entities;
 using LoggerService = Application.Interface.Services.ILoggerService;
 using static Data.Helper.EnumeratorsTypes;
+using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -185,8 +186,21 @@ namespace APISunSale.Controllers
         {
             try
             {
-                object user = tipo == TipoSistema.QuestoesAqui ? await _userService.GetByEmail(email) : await _userCrudFormsService.GetByEmail(email);
-                if(user == null)
+                bool exists = false;
+                if(tipo == TipoSistema.QuestoesAqui)
+                {
+                    var user = await _userService.GetByEmail(email);
+                    exists = user != null;
+                    email = user != null ? user.Email : string.Empty;
+                }
+                else
+                {
+                    var user2 = await _userCrudFormsService.GetByEmail(email);
+                    exists = user2 != null;
+                    email = user2 != null ? user2.Email : string.Empty;
+                }
+
+                if (!exists)
                 {
                     return new ResponseBase<bool>()
                     {
