@@ -238,7 +238,7 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.GetSimulados();
-                List<string> response = _mapper.Map<List<string>>(result.Select(r => r.Banca)).Distinct().ToList();
+                List<string> response = _mapper.Map<List<string>>(result.Select(r => r.Banca)).Distinct().OrderBy(c => c).ToList();
 
                 return new ResponseBase<List<string>>()
                 {
