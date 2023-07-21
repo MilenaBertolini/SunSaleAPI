@@ -275,7 +275,7 @@ namespace APISunSale.Controllers
                     Codigo = r.Codigo, 
                     Nome = r.NomeProva 
                 } 
-                )).Distinct().ToList();
+                )).Distinct().OrderBy(t => t.Nome).ToList();
 
                 return new ResponseBase<List<PorvasReturn>>()
                 {
