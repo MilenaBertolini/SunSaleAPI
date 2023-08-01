@@ -32,13 +32,50 @@ namespace APISunSale.Controllers
             _utils = new MainUtils(httpContextAccessor, userService);
         }
 
+        [HttpGet("getAll")]
+        [AllowAnonymous]
+        public async Task<ResponseBase<List<MainViewModel>>> GetAll()
+        {
+            try
+            {
+                var result = await _service.GetAll();
+                var response = _mapper.Map<List<MainViewModel>>(result).OrderBy(r => r.Descricao).ToList();
+                
+                response.Add(new MainViewModel()
+                {
+                    Codigo = -1,
+                    Descricao = "Todas as provas",
+                    IsActive = "1"
+                });
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         [HttpGet("pagged")]
         public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
         {
             try
             {
                 var result = await _service.GetAllPagged(page, quantity);
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var response = _mapper.Map<List<MainViewModel>>(result).OrderBy(r => r.Descricao).ToList();
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",

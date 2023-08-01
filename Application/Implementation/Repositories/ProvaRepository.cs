@@ -68,11 +68,11 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string prova, bool admin)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string tipo, string prova, bool admin)
         {
             var query = !admin ? (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
-                         where q.Ativo.Equals("1")
+                         where q.Ativo.Equals("1") 
 
                          select p).Distinct()
                          :
@@ -85,6 +85,11 @@ namespace Application.Implementation.Repositories
             if (!string.IsNullOrEmpty(prova))
             {
                 query = query.Where(q => q.NomeProva.ToUpper().Contains(prova.ToUpper()));
+            }
+
+            if (!string.IsNullOrEmpty(tipo))
+            {
+                query = query.Where(q => q.TipoProvaAssociado.Where(t => t.TipoProva.Descricao.Equals(tipo)).Count() > 0);
             }
 
             var qt = await base.GetAllPagedTotalAsync(query);
