@@ -8,7 +8,7 @@ namespace Application.Implementation.Repositories
 {
     public class ProvaRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "TipoProvaAssociado;TipoProvaAssociado.TipoProva";
 
         public ProvaRepository(DataContext dataContext) : base(dataContext)
         {

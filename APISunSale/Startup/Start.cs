@@ -48,6 +48,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IUsuariosCrudFormsService, UsuariosCrudFormsService>();
             _app.Services.AddScoped<ILicencasSunSaleProService, LicencasSunSaleProService>();
             _app.Services.AddScoped<IComentariosQuestoesService, ComentariosQuestoesService>();
+            _app.Services.AddScoped<ITipoProvaService, TipoProvaService>();
+            _app.Services.AddScoped<ITipoProvaAssociadoService, TipoProvaAssociadoService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -72,6 +74,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IUsuariosCrudFormsRepository, UsuariosCrudFormsRepository>();
             _app.Services.AddScoped<ILicencasSunSaleProRepository, LicencasSunSaleProRepository>();
             _app.Services.AddScoped<IComentariosQuestoesRepository, ComentariosQuestoesRepository>();
+            _app.Services.AddScoped<ITipoProvaRepository, TipoProvaRepository>();
+            _app.Services.AddScoped<ITipoProvaAssociadoRepository, TipoProvaAssociadoRepository>();
 
             Mapping();
 
@@ -167,6 +171,12 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<ComentariosQuestoesViewModel, ComentariosQuestoes>();
                 cfg.CreateMap<ComentariosQuestoes, ComentariosQuestoesViewModel>();
+
+                cfg.CreateMap<TipoProvaViewModel, TipoProva>();
+                cfg.CreateMap<TipoProva, TipoProvaViewModel>();
+
+                cfg.CreateMap<TipoProvaAssociadoViewModel, TipoProvaAssociado>();
+                cfg.CreateMap<TipoProvaAssociado, TipoProvaAssociadoViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

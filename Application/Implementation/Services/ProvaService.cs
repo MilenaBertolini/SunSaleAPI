@@ -2,8 +2,9 @@
 using IService = Application.Interface.Services.IProvaService;
 using IRepository = Application.Interface.Repositories.IProvaRepository;
 using IServiceAcao = Application.Interface.Services.IAcaoUsuarioService;
+using IServiceTipoProvaAssociado = Application.Interface.Services.ITipoProvaAssociadoService;
 using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableRepository;
-using AutoMapper.Internal.Mappers;
+using Domain.Entities;
 
 namespace Application.Implementation.Services
 {
@@ -12,12 +13,14 @@ namespace Application.Implementation.Services
         private readonly IRepository _repository;
         private readonly IServiceAcao _serviceAcao;
         private readonly IRepositoryCodes _repositoryCodes;
+        private readonly IServiceTipoProvaAssociado _serviceTipoProvaAssociado;
 
-        public ProvaService(IRepository repository, IRepositoryCodes repositoryCodes, IServiceAcao serviceAcao)
+        public ProvaService(IRepository repository, IRepositoryCodes repositoryCodes, IServiceAcao serviceAcao, IServiceTipoProvaAssociado serviceTipoProvaAssociado)
         {
             _repository = repository;
             _repositoryCodes = repositoryCodes;
             _serviceAcao = serviceAcao;
+            _serviceTipoProvaAssociado = serviceTipoProvaAssociado;
         }
 
         public async Task<Main> Add(Main entity, int codigoUsuario)
@@ -30,9 +33,21 @@ namespace Application.Implementation.Services
             entity.UpdatedBy = codigoUsuario;
             entity.UpdatedOn = DateTime.Now;
 
-            var result = await _repository.Add(entity);
+            var tipos = new List<TipoProvaAssociado>();
+            foreach(var t in entity.TipoProvaAssociado.ToList())
+            {
+                t.CodigoProva = entity.Codigo;
+                t.Codigo = await _repositoryCodes.GetNextCodigo(typeof(TipoProvaAssociado).Name);
+                tipos.Add(t);
+            };
 
-            await _serviceAcao.Add(new Domain.Entities.AcaoUsuario()
+            entity.TipoProvaAssociado.Clear();
+            tipos.ForEach(t => entity.TipoProvaAssociado.Add(t));
+
+
+            var result = await _repository.Add(entity);
+            
+            await _serviceAcao.Add(new AcaoUsuario()
             {
                 Acao = $"Inserir Prova {result.Codigo} - {result.NomeProva}",
                 CodigoUsuario = codigoUsuario
@@ -66,12 +81,26 @@ namespace Application.Implementation.Services
             return await _repository.GetById(id);
         }
 
-        public Task<Main> Update(Main entity, int user)
+        public async Task<Main> Update(Main entity, int user)
         {
             entity.UpdatedBy = user;
             entity.UpdatedOn = DateTime.Now;
 
-            return _repository.Update(entity);
+            var retorno = await _repository.Update(entity);
+
+            var tipos = await _serviceTipoProvaAssociado.GetAllByProva(entity.Codigo);
+
+            foreach(var t in tipos)
+            {
+                await _serviceTipoProvaAssociado.DeleteById(t.Codigo);
+            }
+
+            foreach(var t in entity.TipoProvaAssociado)
+            {
+                await _serviceTipoProvaAssociado.Add(t);
+            }
+
+            return retorno;
         }
 
         public void Dispose()

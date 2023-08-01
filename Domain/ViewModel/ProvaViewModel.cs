@@ -41,5 +41,8 @@ namespace Domain.ViewModel
 
         public int? QuantidadeQuestoesTotal { get; set; }
         public int? QuantidadeQuestoesResolvidas { get; set; }
+
+        public virtual ICollection<TipoProvaAssociadoViewModel> TipoProvaAssociado { get; set; }
+
     }
 }

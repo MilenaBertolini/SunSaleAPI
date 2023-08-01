@@ -21,6 +21,10 @@ namespace Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TipoProvaAssociado>()
+            .HasOne(tpa => tpa.TipoProva)
+            .WithMany(tp => tp.TipoProvaAssociados)
+            .HasForeignKey(tpa => tpa.CodigoTipo);
         }
 
         public DbSet<AcaoUsuario> AcaoUsuario { get; set; }
@@ -45,5 +49,7 @@ namespace Data.Context
         public DbSet<UsuariosCrudForms> UsuariosCrudForms { get; set; }
         public DbSet<LicencasSunSalePro> LicencasSunSalePro { get; set; }
         public DbSet<ComentariosQuestoes> ComentariosQuestoes { get; set; }
+        public DbSet<TipoProva> TipoProva { get; set; }
+        public DbSet<TipoProvaAssociado> TipoProvaAssociado { get; set; }
     }
 }

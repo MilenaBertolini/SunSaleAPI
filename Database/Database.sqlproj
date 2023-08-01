@@ -129,5 +129,7 @@
     <Build Include="Tables\LicencasSunSalePro.sql" />
     <Build Include="Tables\ComentariosQuestoes.sql" />
     <Build Include="consultas.sql" />
+    <Build Include="Tables\TipoProva.sql" />
+    <Build Include="Tables\TipoProvaAssociado.sql" />
   </ItemGroup>
 </Project>

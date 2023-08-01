@@ -37,5 +37,8 @@ namespace Domain.Entities
         public int UpdatedBy { get; set; }
 
         public int CreatedBy { get; set; }
+
+        [ForeignKey("CodigoProva")]
+        public virtual ICollection<TipoProvaAssociado> TipoProvaAssociado { get; set; }
     }
 }
