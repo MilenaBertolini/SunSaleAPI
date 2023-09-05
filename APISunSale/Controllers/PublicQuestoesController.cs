@@ -9,6 +9,8 @@ using Service = Application.Interface.Services.IQuestoesService;
 using ServiceProva = Application.Interface.Services.IProvaService;
 using ServiceRespostas = Application.Interface.Services.IRespostasQuestoesService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using Domain.ViewModel;
+using System.Collections.Generic;
 
 namespace APISunSale.Controllers
 {
@@ -158,11 +160,11 @@ namespace APISunSale.Controllers
                 }
 
                 return new OkObjectResult( 
-                    new ResponseBase<List<Questoes>>()
+                    new ResponseBase<List<QuestoesViewModel>>()
                     {
                         Message = result.ToList().Count > 0 ? "List created" : "No returns by the given filter",
                         Success = true,
-                        Object = result.ToList(),
+                        Object = _mapper.Map<List<QuestoesViewModel>>(result),
                         Quantity = result.ToList().Count
                     }
                 );
