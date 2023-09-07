@@ -74,6 +74,14 @@ namespace Application.Implementation.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<Main> GetByCodigoUsuario(int usuario)
+        {
+            var query = GetQueryable().Where(p => p.CodigoUsuario.Equals(usuario));
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await query.FirstOrDefaultAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

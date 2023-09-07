@@ -8,5 +8,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
 
         Task<Main> GetByGuid(string guid);
+        Task<Main> GetByCodigoUsuario(int usuario);
     }
 }

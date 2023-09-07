@@ -53,6 +53,11 @@ namespace Application.Implementation.Services
             return await _repository.GetByGuid(guid);
         }
 
+        public async Task<Main> GetByCodigoUsuario(int usuario)
+        {
+            return await _repository.GetByCodigoUsuario(usuario);
+        }
+
         public Task<Main> Update(Main entity)
         {
             entity.Updated = DateTime.Now;

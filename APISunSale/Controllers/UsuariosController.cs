@@ -418,6 +418,55 @@ namespace APISunSale.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("reenviaEmailConfirmacao")]
+        [Authorize]
+        public async Task<ResponseBase<Object>> ReenviaEmailConfirmacao(string mail)
+        {
+            try
+            {
+                var user = await _service.GetByEmail(mail);
+
+                if(user.IsVerified == "1")
+                {
+                    return new ResponseBase<Object>()
+                    {
+                        Message = "Usuário já autenticado!",
+                        Success = false
+                    };
+                }
+
+                var verificacao = await _serviceValidacao.GetByCodigoUsuario(user.Id);
+
+                var email = new EmailViewModel()
+                {
+                    Assunto = "Bem vindo ao QuestoesAqui",
+                    Destinatario = user.Email,
+                    Status = "0",
+                    Texto = Utils.CrieEmail.CriaEmailBoasVindas(user, verificacao.GuidText)
+                };
+
+                await _emailService.Add(_mapper.Map<Email>(email));
+
+                return new ResponseBase<Object>()
+                {
+                    Message = "Validated",
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<Object>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [AllowAnonymous]
         [HttpGet("liberauser")]
         [Authorize]
         public async Task<ResponseBase<Object>> LiberaUsuario(string guid)
