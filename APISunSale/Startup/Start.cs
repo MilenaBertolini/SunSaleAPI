@@ -50,6 +50,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IComentariosQuestoesService, ComentariosQuestoesService>();
             _app.Services.AddScoped<ITipoProvaService, TipoProvaService>();
             _app.Services.AddScoped<ITipoProvaAssociadoService, TipoProvaAssociadoService>();
+            _app.Services.AddScoped<IVerificacaoUsuarioService, VerificacaoUsuarioService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -76,6 +77,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IComentariosQuestoesRepository, ComentariosQuestoesRepository>();
             _app.Services.AddScoped<ITipoProvaRepository, TipoProvaRepository>();
             _app.Services.AddScoped<ITipoProvaAssociadoRepository, TipoProvaAssociadoRepository>();
+            _app.Services.AddScoped<IVerificacaoUsuarioRepository, VerificacaoUsuarioRepository>();
 
             Mapping();
 
@@ -177,6 +179,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<TipoProvaAssociadoViewModel, TipoProvaAssociado>();
                 cfg.CreateMap<TipoProvaAssociado, TipoProvaAssociadoViewModel>();
+
+                cfg.CreateMap<VerificacaoUsuarioViewModel, VerificacaoUsuario>();
+                cfg.CreateMap<VerificacaoUsuario, VerificacaoUsuarioViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

@@ -19,6 +19,7 @@ namespace Application.Implementation.Services
         public async Task<Main> Add(Main entity)
         {
             entity.Id = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+            entity.IsVerified = "0";
 
             if (entity.Id == -1) throw new Exception("Impossible to create a new Id");
 

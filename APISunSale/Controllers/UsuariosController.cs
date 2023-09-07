@@ -7,6 +7,7 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.UsuariosViewModel;
 using MainEntity = Domain.Entities.Usuarios;
 using Service = Application.Interface.Services.IUsuariosService;
+using ServiceValidacao = Application.Interface.Services.IVerificacaoUsuarioService;
 using RespostasService = Application.Interface.Services.IRespostasUsuariosService;
 using EmailService = Application.Interface.Services.IEmailService;
 using APISunSale.Utils;
@@ -23,13 +24,14 @@ namespace APISunSale.Controllers
     {
         private readonly ILogger<UsuariosController> _logger;
         private readonly Service _service;
+        private readonly ServiceValidacao _serviceValidacao;
         private readonly IMapper _mapper;
         private readonly MainUtils _utils;
         private readonly RespostasService _respostasService;
         private readonly EmailService _emailService;
         private readonly LoggerService _loggerService;
 
-        public UsuariosController(ILogger<UsuariosController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, RespostasService respostasService, EmailService emailService, LoggerService loggerService)
+        public UsuariosController(ILogger<UsuariosController> logger, Service service, IMapper mapper, IHttpContextAccessor httpContextAccessor, RespostasService respostasService, EmailService emailService, LoggerService loggerService, ServiceValidacao serviceValidacao)
         {
             _logger = logger;
             _service = service;
@@ -38,6 +40,7 @@ namespace APISunSale.Controllers
             _respostasService = respostasService;
             _emailService = emailService;
             _loggerService = loggerService;
+            _serviceValidacao = serviceValidacao;
         }
 
         [HttpGet]
@@ -183,12 +186,17 @@ namespace APISunSale.Controllers
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
 
+                var validacao = await _serviceValidacao.Add(new VerificacaoUsuario()
+                {
+                    CodigoUsuario = result.Id
+                });
+
                 var email = new EmailViewModel()
                 {
                     Assunto = "Bem vindo ao QuestoesAqui",
                     Destinatario = main.Email,
                     Status = "0",
-                    Texto = Utils.CrieEmail.CriaEmailBoasVindas(result)
+                    Texto = Utils.CrieEmail.CriaEmailBoasVindas(result, validacao.GuidText)
                 };
 
                 await _emailService.Add(_mapper.Map<Email>(email));
@@ -306,6 +314,16 @@ namespace APISunSale.Controllers
                 main.Pass = newPass;
 
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
+
+                var email = new EmailViewModel()
+                {
+                    Assunto = "Alteração de senha",
+                    Destinatario = main.Email,
+                    Status = "0",
+                    Texto = Utils.CrieEmail.ConfirmaAlteracaoPass(result.Nome, Data.Helper.EnumeratorsTypes.TipoSistema.QuestoesAqui)
+                };
+                await _emailService.Add(_mapper.Map<Email>(email));
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",
@@ -392,6 +410,61 @@ namespace APISunSale.Controllers
                 await _loggerService.AddException(ex);
 
                 return new ResponseBase<PerfilUsuario>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("liberauser")]
+        [Authorize]
+        public async Task<ResponseBase<Object>> LiberaUsuario(string guid)
+        {
+            try
+            {
+                var verificacao = await _serviceValidacao.GetByGuid(guid);
+
+                if(verificacao == null || verificacao?.IsActive != "1")
+                {
+                    return new ResponseBase<Object>()
+                    {
+                        Message = "Not found",
+                        Success = false
+                    };
+                }
+
+                var usuario = await _service.GetById(verificacao.CodigoUsuario);
+
+                usuario.IsVerified = "1";
+
+                await _service.Update(usuario);
+
+                verificacao.IsActive = "0";
+                await _serviceValidacao.Update(verificacao);
+
+                var email = new EmailViewModel()
+                {
+                    Assunto = "Conta validada com sucesso",
+                    Destinatario = usuario.Email,
+                    Status = "0",
+                    Texto = Utils.CrieEmail.CriaEmailUsuarioValidado(usuario)
+                };
+                await _emailService.Add(_mapper.Map<Email>(email));
+
+                return new ResponseBase<Object>()
+                {
+                    Message = "Validated",
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<Object>()
                 {
                     Message = ex.Message,
                     Success = false

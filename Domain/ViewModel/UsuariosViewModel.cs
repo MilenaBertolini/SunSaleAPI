@@ -20,6 +20,8 @@ namespace Domain.ViewModel
 
         public DateTime? DataNascimento { get; set; }
 
-        public string Admin { get; set; }
+        public string? IsVerified { get; set; }
+
+        public string? Admin { get; set; }
     }
 }

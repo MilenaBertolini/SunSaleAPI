@@ -28,8 +28,8 @@ namespace Application.Implementation.Services
                 if (input.turnTransparent.HasValue && input.turnTransparent.Value)
                 {
                     img.ColorFuzz = new Percentage(10);
-                    // -transparent white
                     img.Transparent(MagickColors.White);
+                    img.Format = MagickFormat.Png;
                 }
 
                 if(input.width.HasValue && input.height.HasValue)
@@ -40,7 +40,7 @@ namespace Application.Implementation.Services
                     }
                 }
 
-                output.Arquivo = input.Arquivo.Split(',')[0] + "," + Convert.ToBase64String(img.ToByteArray());
+                output.Arquivo = "data:image/png;base64," + Convert.ToBase64String(img.ToByteArray());
             }
             catch(MagickCorruptImageErrorException ex)
             {

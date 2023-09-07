@@ -19,6 +19,7 @@ namespace Domain.Entities
         public DateTime? DataNascimento { get; set; }
 
         public string Admin { get; set; }
+        public string IsVerified { get; set; }
 
         public DateTime Created { get; set; }
 
