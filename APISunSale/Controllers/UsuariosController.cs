@@ -286,14 +286,24 @@ namespace APISunSale.Controllers
 
         [HttpPut("updateSenha")]
         [Authorize]
-        public async Task<ResponseBase<MainViewModel>> UpdatePass(string pass)
+        public async Task<ResponseBase<MainViewModel>> UpdatePass(string oldPass, string newPass)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
                 var main = await _service.GetById(user.Id);
-                main.Pass = pass;
+
+                if(main.Pass != oldPass)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Senha incorreta",
+                        Success = false,
+                    };
+                }
+
+                main.Pass = newPass;
 
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
