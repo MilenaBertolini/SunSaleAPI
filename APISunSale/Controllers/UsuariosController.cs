@@ -251,6 +251,72 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpPut("updateName")]
+        [Authorize]
+        public async Task<ResponseBase<MainViewModel>> UpdateName(string name)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                var main = await _service.GetById(user.Id);
+                main.Nome = name;
+
+                var result = await _service.Update(_mapper.Map<MainEntity>(main));
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Updated",
+                    Success = true,
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpPut("updateSenha")]
+        [Authorize]
+        public async Task<ResponseBase<MainViewModel>> UpdatePass(string pass)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                var main = await _service.GetById(user.Id);
+                main.Pass = pass;
+
+                var result = await _service.Update(_mapper.Map<MainEntity>(main));
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Updated",
+                    Success = true,
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         [HttpDelete]
         [Authorize]
         public async Task<ResponseBase<bool>> Delete(int id)
