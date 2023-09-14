@@ -40,6 +40,10 @@ namespace Application.Implementation.Services
                 entity.Status = "1";
                 entity.Observacao = "Enviado pelo sendGrid";
             }
+            else
+            {
+                entity.Status = "2";
+            }
 
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
 
