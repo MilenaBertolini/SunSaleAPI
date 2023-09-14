@@ -7,5 +7,6 @@
         public int Porta { get; set; }
         public string EmailCredential { get; set; }
         public string Senha { get; set; }
+        public string SendGridApiKey { get; set; }
     }
 }
