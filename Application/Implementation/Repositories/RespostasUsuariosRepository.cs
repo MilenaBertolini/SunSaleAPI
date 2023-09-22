@@ -118,7 +118,7 @@ namespace Application.Implementation.Repositories
                              RespostaCorreta = re.Certa,
                              NumeroQuestao = q.NumeroQuestao,
                              NomeProva = p.NomeProva,
-                             DataResposta = r.DataResposta,
+                             DataResposta = r.DataResposta.AddHours(-3),
                              CodigoQuestao = q.Codigo
                          }).OrderByDescending(c => c.DataResposta);
 
