@@ -181,7 +181,7 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                                <br/>");
             builder.AppendLine($"                                Quantidade de questões respondidas: {questoes.Count()}");
             builder.AppendLine($"                                <br/>");
-            builder.AppendLine($"                                Quantidade de tentativas respondidas: {respostasUsuarios.Count()}");
+            builder.AppendLine($"                                Quantidade de tentativas: {respostasUsuarios.Count()}");
             builder.AppendLine($"                                <br/>");
             builder.AppendLine($"                                Quantidade de respostas certas: {respostasUsuarios.Where(r => listaCertas.Exists(l => l.Codigo.Equals(r.CodigoResposta))).Count()}");
             builder.AppendLine($"                                <br/>");
@@ -210,10 +210,13 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                            <th width=\"17%\">");
             builder.AppendLine($"                                Número questão");
             builder.AppendLine($"                            </th>");
-            builder.AppendLine($"                            <th width=\"49%\">");
+            builder.AppendLine($"                            <th width=\"17%\">");
+            builder.AppendLine($"                                Data Repposta");
+            builder.AppendLine($"                            </th>");
+            builder.AppendLine($"                            <th width=\"36%\">");
             builder.AppendLine($"                                Matéria");
             builder.AppendLine($"                            </th>");
-            builder.AppendLine($"                            <th width=\"33%\">");
+            builder.AppendLine($"                            <th width=\"17%\">");
             builder.AppendLine($"                                Resultado");
             builder.AppendLine($"                            </th>");
             builder.AppendLine($"                        </tr>");
@@ -233,6 +236,11 @@ namespace Application.Implementation.Services
                     builder.AppendLine($"                            <td> ");
                     builder.AppendLine($"                                <h3>");
                     builder.AppendLine($"                                    {questao?.NumeroQuestao}");
+                    builder.AppendLine($"                                </h3>");
+                    builder.AppendLine($"                            </td>");
+                    builder.AppendLine($"                            <td> ");
+                    builder.AppendLine($"                                <h3>");
+                    builder.AppendLine($"                                    {questao?.DataRegistro.ToString("dd/MM/yyyy - hh:mm:ss")}");
                     builder.AppendLine($"                                </h3>");
                     builder.AppendLine($"                            </td>");
                     builder.AppendLine($"                            <td> ");
