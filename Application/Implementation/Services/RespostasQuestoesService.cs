@@ -211,7 +211,7 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                                Número questão");
             builder.AppendLine($"                            </th>");
             builder.AppendLine($"                            <th width=\"17%\">");
-            builder.AppendLine($"                                Data Repposta");
+            builder.AppendLine($"                                Data Resposta");
             builder.AppendLine($"                            </th>");
             builder.AppendLine($"                            <th width=\"36%\">");
             builder.AppendLine($"                                Matéria");
