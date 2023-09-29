@@ -12,5 +12,7 @@ namespace Application.Interface.Services
         Task<Main> Update(Main entity, int user);
         Task<bool> DeleteById(int id);
 
+        Task<string> CriaDocumentoProva(int codigo);
+
     }
 }

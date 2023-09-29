@@ -11,6 +11,7 @@ using UserService = Application.Interface.Services.IUsuariosService;
 using RespostasUserService = Application.Interface.Services.IRespostasUsuariosService;
 using APISunSale.Utils;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -291,6 +292,43 @@ namespace APISunSale.Controllers
                 await _loggerService.AddException(ex);
 
                 return new ResponseBase<List<PorvasReturn>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("downloadProva")]
+        public async Task<ResponseBase<string>> GetProvaFile(int codigo)
+        {
+            try
+            {
+                var prova = await _service.CriaDocumentoProva(codigo);
+
+                if (prova == null)
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Simulado não encontrado",
+                        Success = false
+                    };
+                }
+
+                return new ResponseBase<string>()
+                {
+                    Message = "Listed",
+                    Success = true,
+                    Object = prova,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<string>()
                 {
                     Message = ex.Message,
                     Success = false
