@@ -206,8 +206,8 @@ namespace Application.Implementation.Services
                                         .questao img{
 									        margin-top: 16px;
 											margin-bottom: 16px;
-											max-width: 50%;
-											max-height: 50%;
+											max-width: 100%;
+											max-height: 100%;
 											object-fit: cover;
 											display: block;
 										}
