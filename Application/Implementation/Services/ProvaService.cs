@@ -262,7 +262,9 @@ namespace Application.Implementation.Services
                 });
 
                 builder.AppendLine($"           <div class=\"questao\">");
-                builder.AppendLine($"               {textoQuestao}");
+                builder.AppendLine($"               <h4>");
+                builder.AppendLine($"                   {textoQuestao}");
+                builder.AppendLine($"               </h4>");
                 builder.AppendLine($"               </br>");
                 builder.AppendLine($"               </br>");
 
