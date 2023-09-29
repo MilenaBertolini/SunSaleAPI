@@ -251,7 +251,7 @@ namespace Application.Implementation.Services
             builder.AppendLine($"            </table>");
             builder.AppendLine($"            <br>");
             builder.AppendLine($"            <div class=\"centerDiv\">");
-            questoes.ToList().ForEach(questao =>
+            questoes?.ToList().ForEach(questao =>
             {
                 string textoQuestao = questao.CampoQuestao;
                 int i = 0;
@@ -268,7 +268,7 @@ namespace Application.Implementation.Services
 
                 List<string> list = new List<string>() { "a", "b", "c", "d", "e", "f", "g"};
                 i = 0;
-                questao.RespostasQuestoes.ToList().ForEach(resposta =>
+                questao.RespostasQuestoes?.ToList().ForEach(resposta =>
                 {
                     builder.AppendLine($"                   <div class=\"resposta\">");
                     builder.AppendLine($"                       <h4>");
