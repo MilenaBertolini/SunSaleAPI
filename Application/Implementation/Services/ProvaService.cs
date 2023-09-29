@@ -287,6 +287,7 @@ namespace Application.Implementation.Services
                     }
                     builder.AppendLine($"                       </h4>");
                     builder.AppendLine($"                   </div>");
+                    i++;
                 });
 
                 builder.AppendLine($"           </div>");
