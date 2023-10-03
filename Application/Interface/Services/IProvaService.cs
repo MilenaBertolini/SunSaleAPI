@@ -14,5 +14,7 @@ namespace Application.Interface.Services
 
         Task<string> CriaDocumentoProva(int codigo);
 
+        Task<string> CriaDocumentoGabarito(int codigo);
+
     }
 }

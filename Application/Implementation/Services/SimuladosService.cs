@@ -5,6 +5,7 @@ using IRepositoryCodes = Application.Interface.Repositories.ICodigosTableReposit
 using System.Text;
 using Domain.Entities;
 using Application.Model;
+using AutoMapper;
 
 namespace Application.Implementation.Services
 {
@@ -12,10 +13,13 @@ namespace Application.Implementation.Services
     {
         private readonly IRepository _repository;
         private readonly IRepositoryCodes _repositoryCodes;
-        public SimuladosService(IRepository repository, IRepositoryCodes repositoryCodes)
+        private readonly IMapper _mapper;
+
+        public SimuladosService(IRepository repository, IRepositoryCodes repositoryCodes, IMapper mapper)
         {
             _repository = repository;
             _repositoryCodes = repositoryCodes;
+            _mapper = mapper;
         }
 
         public async Task<Main> Add(Main entity)
@@ -62,9 +66,6 @@ namespace Application.Implementation.Services
         {
             TimeSpan time = TimeSpan.FromSeconds(simulado.Tempo);
             var materias = questoes.Where(questao => questoesResolvidas.Exists(q => q.certa.Equals("1") && questao.NumeroQuestao.Equals(q.NumeroQuestao))).GroupBy(q => q.Materia).Select(g => new { Value = g.Key, Count = g.Count() }).OrderByDescending(g => g.Count);
-            var materiasErradas = questoes.Where(questao => questoesResolvidas.Exists(q => q.certa.Equals("0") && questao.NumeroQuestao.Equals(q.NumeroQuestao))).GroupBy(q => q.Materia).Select(g => new { Value = g.Key, Count = g.Count() }).OrderByDescending(g => g.Count);
-            string materiaMaisAcertada = materias == null || materias.Count() == 0 ? "" : materias.First().Value + " com " + materias.First().Count + " questões corretas";
-            string materiaMaisErros = materiasErradas == null || materiasErradas.Count() == 0 ? "" : materiasErradas.First().Value + " com " + materiasErradas.First().Count + " questões incorretas";
 
             StringBuilder builder = new StringBuilder();
 
@@ -86,67 +87,82 @@ namespace Application.Implementation.Services
             builder.AppendLine($"    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
             builder.AppendLine($"    <title>Boletinho - {user.Nome}</title>");
             builder.AppendLine($"    <style type=\"text/css\" nonce=\"\">");
-            builder.AppendLine($"        body,");
-            builder.AppendLine("        td {");
-            builder.AppendLine($"            font-size: 13px;");
-            builder.AppendLine($"            line-height: 1.8;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine($"        a:link,");
-            builder.AppendLine("        a:active {");
-            builder.AppendLine($"            color: #1155CC;");
-            builder.AppendLine($"            text-decoration: none");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        a:hover {");
-            builder.AppendLine($"            text-decoration: underline;");
-            builder.AppendLine($"            cursor: pointer");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        a:visited {");
-            builder.AppendLine($"            color: #6611CC");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        img {");
-            builder.AppendLine($"            border: 0px");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        pre {");
-            builder.AppendLine($"            white-space: pre;");
-            builder.AppendLine($"            white-space: -moz-pre-wrap;");
-            builder.AppendLine($"            white-space: -o-pre-wrap;");
-            builder.AppendLine($"            white-space: pre-wrap;");
-            builder.AppendLine($"            word-wrap: break-word;");
-            builder.AppendLine($"            max-width: 800px;");
-            builder.AppendLine($"            overflow: auto;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        .logo {");
-            builder.AppendLine($"            left: -7px;");
-            builder.AppendLine($"            position: relative;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        h3{");
-            builder.AppendLine($"            padding: 5px;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        .centerDiv{");
-            builder.AppendLine($"            width: 100%;");
-            builder.AppendLine($"            display: flex;");
-            builder.AppendLine($"            justify-content: center;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        .resultado{");
-            builder.AppendLine($"            text-align: center;");
-            builder.AppendLine($"            width: 80%;");
-            builder.AppendLine($"            padding: 10px;");
-            builder.AppendLine("        }");
-            builder.AppendLine($"");
-            builder.AppendLine("        .resultado table{");
-            builder.AppendLine($"");
-            builder.AppendLine("        }");
-            builder.AppendLine($"    </style>");
-            builder.AppendLine($"    <style type=\"text/css\"></style>");
+            builder.AppendLine(@"        body,
+                                        td {
+                                            font-size: 13px;
+                                            line-height: 1.8;
+										}
+									
+											a:link,
+										a:active {
+												color: #1155CC;
+												text-decoration: none
+										}
+									
+										a:hover {
+												text-decoration: underline;
+												cursor: pointer
+										}
+									
+										a:visited {
+												color: #6611CC
+										}
+									
+										img {
+												border: 0px
+										}
+									
+										pre {
+												white-space: pre;
+												white-space: -moz-pre-wrap;
+												white-space: -o-pre-wrap;
+												white-space: pre-wrap;
+												word-wrap: break-word;
+												max-width: 800px;
+												overflow: auto;
+										}
+									
+										.logo {
+												left: -7px;
+												position: relative;
+										}
+									
+										h3{
+												padding: 5px;
+										}
+
+                                        .maincontent{
+                                            margin: 32px
+                                        }
+									
+										.centerDiv{
+												width: 100%;
+												display: flex;
+												justify-content: center;
+                                                flex-direction: column;
+										}
+									
+										.resultado{
+												text-align: center;
+												width: 80%;
+												padding: 10px;
+										}
+									
+										.questao{
+									        display: flex;
+                                            flex-direction: column;
+										}
+
+                                        .questao img{
+									        margin-top: 16px;
+											margin-bottom: 16px;
+											max-width: 100%;
+											max-height: 100%;
+											object-fit: cover;
+											display: block;
+										}
+										</style>");
+            builder.AppendLine("<style type=\"text/css\"></style>");
             builder.AppendLine($"</head>");
             builder.AppendLine($"");
             builder.AppendLine($"<body>");
@@ -155,7 +171,7 @@ namespace Application.Implementation.Services
             builder.AppendLine($"            <tbody>");
             builder.AppendLine($"                <tr height=\"14px\">");
             builder.AppendLine($"                    <td width=\"143\"> ");
-            builder.AppendLine($"                            <b>SunSale System</b> ");
+            builder.AppendLine($"                        <img src=\"https://www.sunsalesystem.com.br/img/logo.png\" style=\"width: 10%;\"><b>SunSale System</b> ");
             builder.AppendLine($"                    </td>");
             builder.AppendLine($"                    <td align=\"right\">");
             builder.AppendLine($"                        <font size=\"-1\" color=\"#777\">");
@@ -185,10 +201,6 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                                Quantidade de questões acertadas: {simulado.QuantidadeCertas}");
             builder.AppendLine($"                                <br/>");
             builder.AppendLine($"                                Tempo de duração da prova: {time.Hours}:{time.Minutes}:{time.Seconds}");
-            builder.AppendLine($"                                <br/>");
-            builder.AppendLine($"                                Matéria com mais acertos: {materiaMaisAcertada}");
-            builder.AppendLine($"                                <br/>");
-            builder.AppendLine($"                                Matéria com mais erros: {materiaMaisErros}");
             builder.AppendLine($"                            </h3>");
             builder.AppendLine($"                        </td>");
             builder.AppendLine($"                        <td align=\"right\">");
@@ -203,45 +215,52 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                Questões:");
             builder.AppendLine($"            </h3>");
             builder.AppendLine($"            <div class=\"centerDiv\">");
-            builder.AppendLine($"                <table border=\"0\" class=\"resultado\">");
-            builder.AppendLine($"                    <thead>");
-            builder.AppendLine($"                        <tr>");
-            builder.AppendLine($"                            <th width=\"17%\">");
-            builder.AppendLine($"                                Número questão");
-            builder.AppendLine($"                            </th>");
-            builder.AppendLine($"                            <th width=\"49%\">");
-            builder.AppendLine($"                                Matéria");
-            builder.AppendLine($"                            </th>");
-            builder.AppendLine($"                            <th width=\"33%\">");
-            builder.AppendLine($"                                Resultado");
-            builder.AppendLine($"                            </th>");
-            builder.AppendLine($"                        </tr>");
-            builder.AppendLine($"                    </thead>");
-            builder.AppendLine($"                    <tbody>");
-            questoesResolvidas.ForEach(questao =>
+            questoes?.ToList().ForEach(questao =>
             {
-                var questaoDto = questoes.Where(q => q.NumeroQuestao.Equals(questao.NumeroQuestao)).FirstOrDefault();
-                builder.AppendLine($"                        <tr>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {questao.NumeroQuestao}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {questaoDto?.Materia}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                            <td> ");
-                builder.AppendLine($"                                <h3>");
-                builder.AppendLine($"                                    {(questao.certa.Equals("1") ? "Certa🥳" : "Errada😒")}");
-                builder.AppendLine($"                                </h3>");
-                builder.AppendLine($"                            </td>");
-                builder.AppendLine($"                        </tr>");
+                string textoQuestao = questao.CampoQuestao;
+                int i = 0;
+                questao.AnexosQuestoes?.ToList().ForEach(anexo =>
+                {
+                    textoQuestao = textoQuestao.Replace($"<img src=\"#\" alt=\"Anexo\" id=\"divAnexo0\"/>", $"<img src=\"{_mapper.Map<string>(anexo.Anexo)}\" alt=\"Anexo\" id=\"divAnexo${i}\"/>");
+                    i++;
+                });
+
+                builder.AppendLine($"           <div class=\"questao\">");
+                builder.AppendLine($"               <h4>");
+                builder.AppendLine($"                   <b>{(questoesResolvidas.Where(q => q.NumeroQuestao.Equals(questao.NumeroQuestao)).FirstOrDefault().certa.Equals("1") ? "Você acertou esta questão 🥳" : "Você errou esta questão 😒")}</b><br><br>{textoQuestao}");
+                builder.AppendLine($"               </h4>");
+                builder.AppendLine($"               </br>");
+                builder.AppendLine($"               </br>");
+
+                List<string> list = new List<string>() { "a", "b", "c", "d", "e", "f", "g" };
+                i = 0;
+                questao.RespostasQuestoes?.ToList().ForEach(resposta =>
+                {
+                    builder.AppendLine($"                   <div class=\"resposta\">");
+                    builder.AppendLine($"                       <h4>");
+                    builder.AppendLine($"                           ({list[i]}) [ {(resposta.Certa.Equals("1") ? "X" : " ")} ] ");
+
+                    if (resposta.AnexoResposta?.Count > 0)
+                    {
+                        resposta.AnexoResposta?.ToList().ForEach(anexo =>
+                        {
+                            builder.AppendLine($"                       <img src=\"{_mapper.Map<string>(anexo.Anexo)}\"/>");
+                        });
+                    }
+                    else
+                    {
+                        builder.AppendLine($"               {resposta.TextoResposta}");
+                    }
+                    builder.AppendLine($"                       </h4>");
+                    builder.AppendLine($"                   </div>");
+                    i++;
+                });
+
+                builder.AppendLine($"           </div>");
+                builder.AppendLine($"            <hr>");
+                builder.AppendLine($"            <br>");
+                builder.AppendLine($"            <br>");
             });
-            
-            builder.AppendLine($"                    </tbody>");
-            builder.AppendLine($"                </table>");
             builder.AppendLine($"            </div>");
             builder.AppendLine($"            <br>");
             builder.AppendLine($"            <br>");
