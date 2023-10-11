@@ -60,6 +60,11 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.GetAll();
+                result = result.Select(u => new MainEntity()
+                {
+                    Id = u.Id,
+                    Nome = u.Nome,
+                });
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {
@@ -183,6 +188,7 @@ namespace APISunSale.Controllers
                         Success = false
                     };
                 }
+                main.Admin = "0";
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
 
