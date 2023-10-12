@@ -8,6 +8,8 @@ using MainViewModel = Domain.ViewModel.AnexosQuestoesViewModel;
 using MainEntity = Domain.Entities.AnexosQuestoes;
 using Service = Application.Interface.Services.IAnexosQuestoesService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using UserService = Application.Interface.Services.IUsuariosService;
+using APISunSale.Utils;
 
 namespace APISunSale.Controllers
 {
@@ -20,13 +22,15 @@ namespace APISunSale.Controllers
         private readonly Service _service;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
+        private readonly MainUtils _utils;
 
-        public AnexosQuestoesController(ILogger<AnexosQuestoesController> logger, Service service, IMapper mapper, LoggerService loggerService)
+        public AnexosQuestoesController(ILogger<AnexosQuestoesController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
+            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
@@ -90,6 +94,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -117,6 +132,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -144,6 +170,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<bool>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.DeleteById(id);
                 return new ResponseBase<bool>()
                 {

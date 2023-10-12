@@ -131,6 +131,16 @@ namespace APISunSale.Controllers
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var body = _mapper.Map<MainEntity>(main);
                 body.CreatedBy = user.Id;
                 body.IsActive = "1";
@@ -162,6 +172,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -189,6 +210,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<bool>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.DeleteById(id);
                 return new ResponseBase<bool>()
                 {
