@@ -229,7 +229,6 @@ namespace APISunSale.Controllers
                     };
                 }
 
-                var user = await _utils.GetUserFromContextAsync();
                 var result = await _service.Update(_mapper.Map<MainEntity>(main), user.Id);
                 return new ResponseBase<MainViewModel>()
                 {
