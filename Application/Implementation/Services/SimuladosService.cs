@@ -215,7 +215,7 @@ namespace Application.Implementation.Services
             builder.AppendLine($"                Questões:");
             builder.AppendLine($"            </h3>");
             builder.AppendLine($"            <div class=\"centerDiv\">");
-            questoes?.ToList().ForEach(questao =>
+            questoes?.Where(q => questoesResolvidas.Exists(r => r.NumeroQuestao.Equals(q.NumeroQuestao.ToString()))).ToList().ForEach(questao =>
             {
                 string textoQuestao = questao.CampoQuestao;
                 int i = 0;
