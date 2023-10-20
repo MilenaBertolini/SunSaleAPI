@@ -24,7 +24,7 @@ namespace Domain.Entities
 
         public int CodigoProva { get; set; }
 
-        public string NumeroQuestao { get; set; }
+        public int NumeroQuestao { get; set; }
 
         public string Ativo { get; set; }
 

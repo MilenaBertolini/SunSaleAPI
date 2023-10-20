@@ -131,7 +131,7 @@ namespace Application.Implementation.Repositories
         public async Task<Main> GetByProva(int prova, int numero)
         {
             var query = numero > 0 ? (from q in _dataContext.Questoes
-                        where q.CodigoProva == prova && q.NumeroQuestao.Equals(numero.ToString())
+                        where q.CodigoProva == prova && q.NumeroQuestao.Equals(numero)
                         select q)
                         :
                         (from q in _dataContext.Questoes
@@ -145,10 +145,24 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
+        public async Task<Main> GetLastByProva(int prova)
+        {
+            var query = (from q in _dataContext.Questoes
+                                      where q.CodigoProva.Equals(prova)
+                                      select q);
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            query = query.OrderByDescending(q => q.NumeroQuestao);
+
+            var response = await query.FirstOrDefaultAsync();
+            return response;
+        }
+
         public async Task<IEnumerable<Main>> GetByProva(int prova)
         {
             var query = (from q in _dataContext.Questoes
-                         where q.CodigoProva == prova
+                         where q.CodigoProva == prova && q.Ativo == "1"
                          select q);
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));

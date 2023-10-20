@@ -134,11 +134,20 @@ namespace APISunSale.Controllers
 
                 if (result == null)
                 {
-                    return new ResponseBase<MainViewModel>()
+                    var last = await _service.GetLastByProva(codigoProva);
+                    while (last.NumeroQuestao > questao && result == null)
                     {
-                        Message = "Not registered",
-                        Success = false
-                    };
+                        result = await _service.GetQuestoesByProva(codigoProva, questao + 1);
+                    }
+
+                    if(result == null)
+                    {
+                        return new ResponseBase<MainViewModel>()
+                        {
+                            Message = "Not registered",
+                            Success = false
+                        };
+                    }
                 }
 
                 var response = _mapper.Map<MainViewModel>(result);
@@ -440,7 +449,7 @@ namespace APISunSale.Controllers
                     MainViewModel view = new MainViewModel();
                     view.Ativo = "1";
                     view.CodigoProva = 120;
-                    view.NumeroQuestao = cont.ToString();
+                    view.NumeroQuestao = cont;
                     view.Materia = materia;
                     view.ObservacaoQuestao = string.Empty;
                     view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();

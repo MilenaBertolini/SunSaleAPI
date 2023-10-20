@@ -227,7 +227,7 @@ namespace Application.Implementation.Services
 
                 builder.AppendLine($"           <div class=\"questao\">");
                 builder.AppendLine($"               <h4>");
-                builder.AppendLine($"                   <b>{(questoesResolvidas.Where(q => q.NumeroQuestao.Equals(questao.NumeroQuestao)).FirstOrDefault().certa.Equals("1") ? "Você acertou esta questão 🥳" : "Você errou esta questão 😒")}</b><br><br>{textoQuestao}");
+                builder.AppendLine($"                   <b>{(questoesResolvidas.Where(q => q.NumeroQuestao.Equals(questao.NumeroQuestao.ToString())).FirstOrDefault().certa.Equals("1") ? "Você acertou esta questão 🥳" : "Você errou esta questão 😒")}</b><br><br>{textoQuestao}");
                 builder.AppendLine($"               </h4>");
                 builder.AppendLine($"               </br>");
                 builder.AppendLine($"               </br>");

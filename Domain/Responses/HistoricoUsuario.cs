@@ -11,7 +11,7 @@ namespace Domain.Responses
     {
         public int Codigo { get; set; }
         public string RespostaCorreta { get; set; }
-        public string NumeroQuestao { get; set; }
+        public int NumeroQuestao { get; set; }
         public string NomeProva { get; set; }
         public DateTime DataResposta { get; set; }
         public int CodigoQuestao { get; set; }

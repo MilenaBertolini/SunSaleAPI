@@ -153,6 +153,12 @@ namespace Application.Implementation.Services
             return response;
         }
 
+        public async Task<Main> GetLastByProva(int prova)
+        {
+            var response = await _repository.GetLastByProva(prova);
+            return response;
+        }
+
         public async Task<IEnumerable<Main>> GetQuestoesByProva(int prova)
         {
             var response = await _repository.GetByProva(prova);

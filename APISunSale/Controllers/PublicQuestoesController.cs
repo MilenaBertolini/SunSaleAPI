@@ -152,7 +152,7 @@ namespace APISunSale.Controllers
                     }
 
                     if (numeroQuestao != null)
-                        result = result.Where(q => int.Parse(q.NumeroQuestao).Equals(numeroQuestao)).ToList();
+                        result = result.Where(q => q.NumeroQuestao.Equals(numeroQuestao)).ToList();
                 }
                 else if(materia != null)
                 {
