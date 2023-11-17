@@ -64,7 +64,7 @@ namespace APISunSale.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddDays(30),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials
