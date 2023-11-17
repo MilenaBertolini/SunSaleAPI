@@ -78,15 +78,26 @@ namespace Application.Implementation.Repositories
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<Main> GetByEmail(string email)
+        public async Task<Main> GetByEmail(string email, bool isVerified = false)
         {
             var query = GetQueryable().Where(p => p.Email.Equals(email) || p.Login.Equals(email));
+
+            if (isVerified)
+            {
+                query = query.Where(p => p.IsVerified == "1");
+            }
+
             return await query?.SingleOrDefaultAsync();
         }
 
-        public async Task<Main> GetByLogin(string login)
+        public async Task<Main> GetByLogin(string login, bool isVerified = false)
         {
             var query = GetQueryable().Where(p => p.Login.Equals(login));
+            if (isVerified)
+            {
+                query = query.Where(p => p.IsVerified == "1");
+            }
+
             return await query?.SingleOrDefaultAsync();
         }
 

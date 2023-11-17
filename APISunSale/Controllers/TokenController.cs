@@ -44,6 +44,12 @@ namespace APISunSale.Controllers
             {
                 return Results.Unauthorized();
             }
+
+            if(userModel.IsVerified != "1")
+            {
+                return Results.StatusCode(300);
+            }
+
             var issuer = _builder.GetValue<string>("Jwt:Issuer");
             var audience = _builder.GetValue<string>("Jwt:Audience");
             var key = Encoding.ASCII.GetBytes(_builder.GetValue<string>("Jwt:Key"));
@@ -58,7 +64,7 @@ namespace APISunSale.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials
@@ -69,9 +75,7 @@ namespace APISunSale.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var stringToken = tokenHandler.WriteToken(token);
 
-            var crudVersao = await _crudService.GetLastVerion();
-
-            return Results.Ok(new { token = stringToken, nome = userModel.Nome, username = userModel.Email, admin = userModel.Admin, Id = userModel.Id, crudVersao = crudVersao});
+            return Results.Ok(new { token = stringToken, nome = userModel.Nome, username = userModel.Email, admin = userModel.Admin, Id = userModel.Id});
         }
 
         [AllowAnonymous]

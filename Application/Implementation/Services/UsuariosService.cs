@@ -18,12 +18,23 @@ namespace Application.Implementation.Services
 
         public async Task<Main> Add(Main entity)
         {
-            entity.Id = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
-            entity.IsVerified = "0";
+            var userExists = await GetByEmail(entity.Email);
 
-            if (entity.Id == -1) throw new Exception("Impossible to create a new Id");
+            if(userExists != null)
+            {
+                userExists.Updated = DateTime.Now;
+                userExists.IsVerified = "0";
+                return await _repository.Update(userExists);
+            }
+            else
+            {
+                entity.Id = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
+                entity.IsVerified = "0";
 
-            return await _repository.Add(entity);
+                if (entity.Id == -1) throw new Exception("Impossible to create a new Id");
+
+                return await _repository.Add(entity);
+            }
         }
 
         public Task<bool> DeleteById(int id)
@@ -61,16 +72,16 @@ namespace Application.Implementation.Services
             return await _repository.GetByEmail(email);
         }
 
-        public async Task<bool> ExistsEmail(string email)
+        public async Task<bool> ExistsEmail(string email, bool isVerified = false)
         {
-            var temp = await _repository.GetByEmail(email);
+            var temp = await _repository.GetByEmail(email, isVerified);
 
             return temp != null;
         }
 
-        public async Task<bool> ExistsLogin(string login)
+        public async Task<bool> ExistsLogin(string login, bool isVerified = false)
         {
-            var temp = await _repository.GetByLogin(login);
+            var temp = await _repository.GetByLogin(login, isVerified);
 
             return temp != null;
         }

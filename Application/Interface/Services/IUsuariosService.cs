@@ -13,8 +13,8 @@ namespace Application.Interface.Services
         Task<bool> DeleteById(int id);
         Task<Main> GetByLogin(string user, string pass);
         Task<Main> GetByEmail(string email);
-        Task<bool> ExistsEmail(string email);
-        Task<bool> ExistsLogin(string login);
+        Task<bool> ExistsEmail(string email, bool isVerified = false);
+        Task<bool> ExistsLogin(string login, bool isVerified = false);
         Task<PerfilUsuario> GetPerfil(int user);
     }
 }

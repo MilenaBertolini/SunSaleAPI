@@ -171,7 +171,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                if (await _service.ExistsEmail(main.Email))
+                if (await _service.ExistsEmail(main.Email, true))
                 {
                     return new ResponseBase<MainViewModel>()
                     {
@@ -180,7 +180,7 @@ namespace APISunSale.Controllers
                     };
                 }
 
-                if (await _service.ExistsLogin(main.Login))
+                if (await _service.ExistsLogin(main.Login, true))
                 {
                     return new ResponseBase<MainViewModel>()
                     {

@@ -9,8 +9,8 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
         Task<Main> VerifyLogin(string user, string pass);
 
-        Task<Main> GetByEmail(string email);
-        Task<Main> GetByLogin(string login);
+        Task<Main> GetByEmail(string email, bool isVerified = false);
+        Task<Main> GetByLogin(string login, bool isVerified = false);
         Task<PerfilUsuario> GetPerfil(int user);
     }
 }
