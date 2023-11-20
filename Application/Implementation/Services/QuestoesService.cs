@@ -48,7 +48,7 @@ namespace Application.Implementation.Services
                 r.ObservacaoResposta = string.Empty;
 
                 List<AnexoResposta> anexosRespostas = new List<AnexoResposta>();
-
+                bool haAnexo = false;
                 foreach(var a in r.AnexoResposta)
                 {
                     if(a.Anexo.Length > 0)
@@ -58,13 +58,17 @@ namespace Application.Implementation.Services
                         a.CodigoQuestao = r.Codigo;
 
                         anexosRespostas.Add(a);
+                        haAnexo = true;
                     }
                 }
 
                 r.AnexoResposta.Clear();
                 anexosRespostas.ForEach(a => r.AnexoResposta.Add(a));
                 
-                respostasQuestoes.Add(r);
+                if(!string.IsNullOrEmpty(r.TextoResposta) || haAnexo)
+                {
+                    respostasQuestoes.Add(r);
+                }
             }
 
             entity.RespostasQuestoes.Clear();
