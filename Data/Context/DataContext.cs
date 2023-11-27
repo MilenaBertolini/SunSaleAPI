@@ -52,5 +52,7 @@ namespace Data.Context
         public DbSet<TipoProva> TipoProva { get; set; }
         public DbSet<TipoProvaAssociado> TipoProvaAssociado { get; set; }
         public DbSet<VerificacaoUsuario> VerificacaoUsuario { get; set; }
+        public DbSet<Alimentos> Alimentos { get; set; }
+        public DbSet<CategoriaAlimentos> CategoriaAlimentos { get; set; }
     }
 }

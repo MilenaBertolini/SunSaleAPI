@@ -132,5 +132,7 @@
     <Build Include="Tables\TipoProva.sql" />
     <Build Include="Tables\TipoProvaAssociado.sql" />
     <Build Include="Tables\VerificacaoUsuario.sql" />
+    <Build Include="Tables\Alimentos.sql" />
+    <Build Include="Tables\CategoriaAlimentos.sql" />
   </ItemGroup>
 </Project>
