@@ -186,12 +186,13 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<VerificacaoUsuarioViewModel, VerificacaoUsuario>();
                 cfg.CreateMap<VerificacaoUsuario, VerificacaoUsuarioViewModel>();
+                
+                cfg.CreateMap<CategoriaAlimentosViewModel, CategoriaAlimentos>();
+                cfg.CreateMap<CategoriaAlimentos, CategoriaAlimentosViewModel>();
 
                 cfg.CreateMap<AlimentosViewModel, Alimentos>();
                 cfg.CreateMap<Alimentos, AlimentosViewModel>();
 
-                cfg.CreateMap<CategoriaAlimentosViewModel, CategoriaAlimentos>();
-                cfg.CreateMap<CategoriaAlimentos, CategoriaAlimentosViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

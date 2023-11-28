@@ -19,6 +19,7 @@ namespace Application.Implementation.Services
         {
             entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
             entity.Created = DateTime.Now;
+            entity.Updated = DateTime.Now;
 
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
 
@@ -38,6 +39,11 @@ namespace Application.Implementation.Services
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
             return await _repository.GetAllPagged(page, quantity);
+        }
+
+        public async Task<IEnumerable<Main>> GetAllByName(string name)
+        {
+            return await _repository.GetAllByName(name);
         }
 
         public async Task<Main> GetById(int id)

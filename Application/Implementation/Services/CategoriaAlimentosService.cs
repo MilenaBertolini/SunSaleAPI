@@ -19,6 +19,7 @@ namespace Application.Implementation.Services
         {
             entity.Codigo = await _repositoryCodes.GetNextCodigo(typeof(Main).Name);
             entity.Created = DateTime.Now;
+            entity.Updated = DateTime.Now;
 
             if (entity.Codigo == -1) throw new Exception("Impossible to create a new Id");
 

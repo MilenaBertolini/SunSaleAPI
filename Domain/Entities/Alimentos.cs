@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -11,16 +12,16 @@ namespace Domain.Entities
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public string Descricao { get; set; }
-        public decimal Umidade { get; set; }
-        public decimal EnergiaKcal { get; set; }
-        public decimal EnergiaKJ { get; set; }
-        public decimal Proteina { get; set; }
-        public string Lipideos { get; set; }
+        public decimal? Umidade { get; set; }
+        public decimal? EnergiaKcal { get; set; }
+        public decimal? EnergiaKg { get; set; }
+        public decimal? Proteina { get; set; }
+        public string Lipidios { get; set; }
         public string Colesterol { get; set; }
-        public decimal Carboidrato { get; set; }
-        public decimal FibraAlimentar { get; set; }
-        public decimal Cinzas { get; set; }
-        public decimal Calcio { get; set; }
+        public decimal? Carboidrato { get; set; }
+        public decimal? FibraAlimentar { get; set; }
+        public decimal? Cinzas { get; set; }
+        public decimal? Calcio { get; set; }
         public string Magnesio { get; set; }
         public string Manganes { get; set; }
         public string Fosforo { get; set; }
@@ -33,9 +34,12 @@ namespace Domain.Entities
         public string RE { get; set; }
         public string RAE { get; set; }
         public string Tiamina { get; set; }
-        public string Piridoxina { get; set; }
+        public string Piridozina { get; set; }
         public string Riboflavina { get; set; }
         public string Niacina { get; set; }
         public string VitaminaC { get; set; }
+
+        [ForeignKey("CategoriaCodigo")]
+        public CategoriaAlimentos CategoriaAlimentos { get; set; }
     }
 }

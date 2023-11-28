@@ -1,5 +1,4 @@
-﻿using Application.Interface.Services;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,9 @@ using System.Reflection;
 using MainViewModel = Domain.ViewModel.AlimentosViewModel;
 using MainEntity = Domain.Entities.Alimentos;
 using Service = Application.Interface.Services.IAlimentosService;
+using ServiceCategoria = Application.Interface.Services.ICategoriaAlimentosService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using Domain.Entities;
 
 namespace APISunSale.Controllers
 {
@@ -18,15 +19,17 @@ namespace APISunSale.Controllers
     {
         private readonly ILogger<AcaoUsuarioController> _logger;
         private readonly Service _service;
+        private readonly ServiceCategoria _serviceCategoria;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
 
-        public AlimentosController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, LoggerService loggerService)
+        public AlimentosController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, LoggerService loggerService, ServiceCategoria serviceCategoria)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
+            _serviceCategoria = serviceCategoria;
         }
 
         [HttpGet("pagged")]
@@ -35,6 +38,35 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.GetAllPagged(page, quantity);
+                var response = _mapper.Map<List<MainViewModel>>(result);
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("byName")]
+        [AllowAnonymous]
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllByName(string name)
+        {
+            try
+            {
+                var result = await _service.GetAllByName(name);
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {

@@ -6,5 +6,6 @@ namespace Application.Interface.Repositories
     {
         Task<IEnumerable<Main>> GetAll();
         Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
+        Task<IEnumerable<Main>> GetAllByName(string name);
     }
 }

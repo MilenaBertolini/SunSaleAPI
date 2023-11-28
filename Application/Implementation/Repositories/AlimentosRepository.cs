@@ -7,7 +7,7 @@ namespace Application.Implementation.Repositories
 {
     public class AlimentosRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "CategoriaAlimentos";
 
         public AlimentosRepository(DataContext dataContext) : base(dataContext)
         {
@@ -64,6 +64,16 @@ namespace Application.Implementation.Repositories
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await base.GetAllPagedAsync(query, page, quantity);
+        }
+
+        public async Task<IEnumerable<Main>> GetAllByName(string name)
+        {
+            var query = base.GetQueryable().Where(a => a.Descricao.ToLower().Contains(name.ToLower()));
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            var result = await query.ToListAsync();
+
+            return result;
         }
 
         public void Dispose()
