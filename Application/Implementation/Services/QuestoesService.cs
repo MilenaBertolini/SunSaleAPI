@@ -139,6 +139,13 @@ namespace Application.Implementation.Services
                 }
             }
 
+            var respostas = await _repositoryRespostas.GetByCodigoQuestao(entity.Codigo);
+
+            foreach (var r in respostas)
+            {
+                await _repositoryRespostas.Delete(r.Codigo);
+            }
+
             List<RespostasQuestoes> respostasQuestoes = new List<RespostasQuestoes>();
             foreach (var r in entity.RespostasQuestoes)
             {
@@ -152,6 +159,7 @@ namespace Application.Implementation.Services
                     }
                 }
 
+                r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(RespostasQuestoes).Name);
                 r.DataRegistro = DateTime.Now;
                 r.CodigoQuestao = entity.Codigo;
                 r.ObservacaoResposta = string.Empty;
@@ -178,6 +186,7 @@ namespace Application.Implementation.Services
                 if (!string.IsNullOrEmpty(r.TextoResposta) || haAnexo)
                 {
                     respostasQuestoes.Add(r);
+                    await _repositoryRespostas.Add(r);
                 }
             }
 
