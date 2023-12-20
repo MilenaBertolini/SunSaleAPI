@@ -41,6 +41,7 @@ namespace Application.Implementation.Services
             entity.CreatedBy = codigoUsuario;
             entity.UpdatedBy = codigoUsuario;
             entity.UpdatedOn = DateTime.Now;
+            entity.IsActive = "1";
 
             var tipos = new List<TipoProvaAssociado>();
             foreach(var t in entity.TipoProvaAssociado.ToList())
@@ -53,16 +54,23 @@ namespace Application.Implementation.Services
             entity.TipoProvaAssociado.Clear();
             tipos.ForEach(t => entity.TipoProvaAssociado.Add(t));
 
-
-            var result = await _repository.Add(entity);
-            
-            await _serviceAcao.Add(new AcaoUsuario()
+            try
             {
-                Acao = $"Inserir Prova {result.Codigo} - {result.NomeProva}",
-                CodigoUsuario = codigoUsuario
-            });
+                var result = await _repository.Add(entity);
 
-            return result;
+                await _serviceAcao.Add(new AcaoUsuario()
+                {
+                    Acao = $"Inserir Prova {result.Codigo} - {result.NomeProva}",
+                    CodigoUsuario = codigoUsuario
+                });
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
         }
 
         public Task<bool> DeleteById(int id)
