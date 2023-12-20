@@ -38,6 +38,7 @@ namespace Domain.ViewModel
         public int UpdatedBy { get; set; }
 
         public int CreatedBy { get; set; }
+        public string? IsActive { get; set; }
 
         public int? QuantidadeQuestoesTotal { get; set; }
         public int? QuantidadeQuestoesResolvidas { get; set; }

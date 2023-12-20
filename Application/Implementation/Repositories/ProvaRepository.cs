@@ -36,7 +36,7 @@ namespace Application.Implementation.Repositories
         {
             var query = (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
-                         where q.Ativo.Equals("1")
+                         where q.Ativo.Equals("1") && p.IsActive.Equals('1')
 
                          select p).Distinct();
 
@@ -72,7 +72,7 @@ namespace Application.Implementation.Repositories
         {
             var query = !admin ? (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
-                         where q.Ativo.Equals("1") 
+                         where q.Ativo.Equals("1") && p.IsActive.Equals('1')
 
                          select p).Distinct()
                          :
