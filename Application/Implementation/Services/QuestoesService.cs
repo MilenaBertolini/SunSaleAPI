@@ -128,7 +128,79 @@ namespace Application.Implementation.Services
         {
             entity.UpdatedOn = DateTime.Now;
             entity.UpdatedBy = user;
-            
+
+            if(entity.AnexosQuestoes.Count > 0)
+            {
+                var listAnexos = await _repositoryAnexos.GetByQuestaoId(entity.Codigo);
+
+                foreach (var item in listAnexos)
+                {
+                    await _repositoryAnexos.Delete(item.Codigo);
+                }
+            }
+
+            List<RespostasQuestoes> respostasQuestoes = new List<RespostasQuestoes>();
+            foreach (var r in entity.RespostasQuestoes)
+            {
+                if (r.AnexoResposta.Count > 0)
+                {
+                    var listAnexos = await _repositoryRespostasAnexos.GetByQuestaoId(r.Codigo);
+
+                    foreach (var item in listAnexos)
+                    {
+                        await _repositoryAnexos.Delete(item.Codigo);
+                    }
+                }
+
+                r.DataRegistro = DateTime.Now;
+                r.CodigoQuestao = entity.Codigo;
+                r.ObservacaoResposta = string.Empty;
+
+                List<AnexoResposta> anexosRespostas = new List<AnexoResposta>();
+                bool haAnexo = false;
+                foreach (var a in r.AnexoResposta)
+                {
+                    if (a.Anexo.Length > 0)
+                    {
+                        a.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexoResposta).Name);
+                        a.DataRegistro = DateTime.Now;
+                        a.CodigoQuestao = r.Codigo;
+
+                        anexosRespostas.Add(a);
+                        await _repositoryRespostasAnexos.Add(a);
+                        haAnexo = true;
+                    }
+                }
+
+                r.AnexoResposta.Clear();
+                anexosRespostas.ForEach(a => r.AnexoResposta.Add(a));
+
+                if (!string.IsNullOrEmpty(r.TextoResposta) || haAnexo)
+                {
+                    respostasQuestoes.Add(r);
+                }
+            }
+
+            entity.RespostasQuestoes.Clear();
+            respostasQuestoes.ForEach(r => entity.RespostasQuestoes.Add(r));
+
+            List<AnexosQuestoes> anexos = new List<AnexosQuestoes>();
+            foreach (var r in entity.AnexosQuestoes)
+            {
+                if (r.Anexo.Length > 0)
+                {
+                    r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(AnexosQuestoes).Name);
+                    r.CodigoQuestao = entity.Codigo;
+                    r.DataRegistro = DateTime.Now;
+
+                    await _repositoryAnexos.Add(r);
+                    anexos.Add(r);
+                }
+            }
+
+            entity.AnexosQuestoes.Clear();
+            anexos.ForEach(a => entity.AnexosQuestoes.Add(a));
+
             var result = await _repository.Update(entity);
 
             await _serviceAcao.Add(new AcaoUsuario()

@@ -14,6 +14,7 @@ using static Data.Helper.EnumeratorsTypes;
 using LoggerService = Application.Interface.Services.ILoggerService;
 using System.Data;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace APISunSale.Controllers
 {
@@ -417,66 +418,109 @@ namespace APISunSale.Controllers
             }
         }
 
+        //[HttpGet("criaQuestao")]
+        //public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
+        //{
+        //    try
+        //    {
+        //        var user = await _utils.GetUserFromContextAsync();
+
+        //        if(user.Admin != "1")
+        //        {
+        //            return new ResponseBase<List<MainViewModel>>()
+        //            {
+        //                Message = "Acesso não autorizado",
+        //                Success = false
+        //            };
+        //        }
+
+        //        List<MainViewModel> list = new List<MainViewModel>();
+        //        List<string> linhas = new List<string>();
+        //        string materia = "DIREITO PREVIDENCIÁRIO";
+        //        linhas.Add("100- Analise as proposições abaixo ( de I a V ) e assinale a alternativa correta, conforme sejam verdadeiras ou falsas:<br><br>I- a contribuição do empregador rural pessoa física, destinada à Seguridade Social, é de 2% da receita bruta proveniente da comercialização da sua produção e de 0,1% da receita bruta proveniente da comercialização da sua produção para financiamento das prestações por acidente do trabalho, havendo, também, para esta pessoa física, a contribuição facultativa do segurado contribuinte individual calculada sobre o salário-de)contribuição.<br>II- a Seguridade Social será financiada somente pelos seus segurados e pelas empresas.<br>III- o empregador doméstico poderá recolher a contribuição do segurado empregado a seu serviço e a parcela a seu cargo relativas à competência novembro até o dia 20 de dezembro, juntamente com a contribuição referente ao 13o salário, utilizando-se de um único documento de arrecadação.<br>IV- o direito de cobrar os créditos da Seguridade Social, constituídos na forma de sua Lei Orgânica, prescreve em 10 anos.<br>V- para ficar isenta das contribuições previdenciárias da empresa, é suficiente que a entidade beneficente de assistência social seja reconhecida como de utilidade pública federal e estadual ou do Distrito Federal ou municipal. ");
+        //        linhas.Add("a) Apenas as proposições I e III são verdadeiras.");
+        //        linhas.Add("b) Apenas as proposições I, II e V são verdadeiras.");
+        //        linhas.Add("c) Apenas as proposições III e IV são verdadeiras. -X");
+        //        linhas.Add("d) Apenas as proposições I, III e IV são verdadeiras.");
+        //        linhas.Add("e) Todas as proposições são verdadeiras.");
+
+
+        //        for (int i = 0, cont = 1; i < linhas.Count(); i+=6, cont++)
+        //        {
+        //            MainViewModel view = new MainViewModel();
+        //            view.Ativo = "1";
+        //            view.CodigoProva = 120;
+        //            view.NumeroQuestao = cont;
+        //            view.Materia = materia;
+        //            view.ObservacaoQuestao = string.Empty;
+        //            view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
+        //            view.CampoQuestao = linhas[i];
+        //            view.DataRegistro = DateTime.Now;
+        //            view.UpdatedOn = DateTime.Now;
+
+        //            for (int j = i+1; j <= i+5; j++)
+        //            {
+        //                RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
+        //                resposta.Certa = linhas[j].Contains(" -X") ? "1" : "0";
+        //                resposta.TextoResposta = linhas[j].Replace(" -X", "").Trim();
+        //                resposta.DataRegistro = DateTime.Now;
+
+        //                view.RespostasQuestoes.Add(resposta);
+        //            }
+
+        //            await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
+
+        //            list.Add(view);
+        //        }
+
+        //        return new ResponseBase<List<MainViewModel>>()
+        //        {
+        //            Message = "Search success",
+        //            Success = true,
+        //            Object = list,
+        //            Quantity = 1
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+        //        await _loggerService.AddException(ex);
+
+        //        return new ResponseBase<List<MainViewModel>>()
+        //        {
+        //            Message = ex.Message,
+        //            Success = false
+        //        };
+        //    }
+        //}
+
         [HttpGet("criaQuestao")]
-        public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
+        public async Task<ResponseBase<MainViewModel>> criaQuestao()
         {
             try
             {
+                string[] texto = File.ReadAllLines("C:/provas/saida/json.json");
+                var mainList = JsonConvert.DeserializeObject<List<MainViewModel>>(texto[0]);
+                
                 var user = await _utils.GetUserFromContextAsync();
 
-                if(user.Admin != "1")
+                if (user.Admin != "1")
                 {
-                    return new ResponseBase<List<MainViewModel>>()
+                    return new ResponseBase<MainViewModel>()
                     {
                         Message = "Acesso não autorizado",
                         Success = false
                     };
                 }
 
-                List<MainViewModel> list = new List<MainViewModel>();
-                List<string> linhas = new List<string>();
-                string materia = "DIREITO PREVIDENCIÁRIO";
-                linhas.Add("100- Analise as proposições abaixo ( de I a V ) e assinale a alternativa correta, conforme sejam verdadeiras ou falsas:<br><br>I- a contribuição do empregador rural pessoa física, destinada à Seguridade Social, é de 2% da receita bruta proveniente da comercialização da sua produção e de 0,1% da receita bruta proveniente da comercialização da sua produção para financiamento das prestações por acidente do trabalho, havendo, também, para esta pessoa física, a contribuição facultativa do segurado contribuinte individual calculada sobre o salário-de)contribuição.<br>II- a Seguridade Social será financiada somente pelos seus segurados e pelas empresas.<br>III- o empregador doméstico poderá recolher a contribuição do segurado empregado a seu serviço e a parcela a seu cargo relativas à competência novembro até o dia 20 de dezembro, juntamente com a contribuição referente ao 13o salário, utilizando-se de um único documento de arrecadação.<br>IV- o direito de cobrar os créditos da Seguridade Social, constituídos na forma de sua Lei Orgânica, prescreve em 10 anos.<br>V- para ficar isenta das contribuições previdenciárias da empresa, é suficiente que a entidade beneficente de assistência social seja reconhecida como de utilidade pública federal e estadual ou do Distrito Federal ou municipal. ");
-                linhas.Add("a) Apenas as proposições I e III são verdadeiras.");
-                linhas.Add("b) Apenas as proposições I, II e V são verdadeiras.");
-                linhas.Add("c) Apenas as proposições III e IV são verdadeiras. -X");
-                linhas.Add("d) Apenas as proposições I, III e IV são verdadeiras.");
-                linhas.Add("e) Todas as proposições são verdadeiras.");
-
-
-                for (int i = 0, cont = 1; i < linhas.Count(); i+=6, cont++)
+                foreach (var main in mainList)
                 {
-                    MainViewModel view = new MainViewModel();
-                    view.Ativo = "1";
-                    view.CodigoProva = 120;
-                    view.NumeroQuestao = cont;
-                    view.Materia = materia;
-                    view.ObservacaoQuestao = string.Empty;
-                    view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
-                    view.CampoQuestao = linhas[i];
-                    view.DataRegistro = DateTime.Now;
-                    view.UpdatedOn = DateTime.Now;
-
-                    for (int j = i+1; j <= i+5; j++)
-                    {
-                        RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
-                        resposta.Certa = linhas[j].Contains(" -X") ? "1" : "0";
-                        resposta.TextoResposta = linhas[j].Replace(" -X", "").Trim();
-                        resposta.DataRegistro = DateTime.Now;
-
-                        view.RespostasQuestoes.Add(resposta);
-                    }
-
-                    await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
-
-                    list.Add(view);
+                    var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
                 }
-
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<MainViewModel>()
                 {
-                    Message = "Search success",
+                    Message = "Created",
                     Success = true,
-                    Object = list,
                     Quantity = 1
                 };
             }
@@ -485,7 +529,7 @@ namespace APISunSale.Controllers
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
                 await _loggerService.AddException(ex);
 
-                return new ResponseBase<List<MainViewModel>>()
+                return new ResponseBase<MainViewModel>()
                 {
                     Message = ex.Message,
                     Success = false

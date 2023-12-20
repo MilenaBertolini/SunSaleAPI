@@ -36,6 +36,15 @@ namespace Application.Implementation.Repositories
             return await GetAllAsync(includes: GetIncludes(includes));
         }
 
+        public async Task<IEnumerable<Main>> GetByQuestaoId(int id)
+        {
+            var query = GetQueryable().Where(p => p.CodigoQuestao == id);
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await query.ToListAsync();
+        }
+
         public async Task<Main> GetById(int id)
         {
             var query = GetQueryable().Where(p => p.Codigo == id);
