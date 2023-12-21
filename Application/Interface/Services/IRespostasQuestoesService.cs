@@ -13,6 +13,6 @@ namespace Application.Interface.Services
         Task<bool> DeleteById(int id);
         Task<Main> GetRespostaCorreta(int questao);
         string CriaDocumentoDetalhado(IEnumerable<Questoes> questoes, Usuarios user, List<Prova> provas, List<RespostasUsuarios> respostasUsuarios);
-
+        Task<IEnumerable<Main>> GetAllByProvaENumero(int codigoProva, int numeroQuestao);
     }
 }

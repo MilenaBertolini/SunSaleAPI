@@ -36,6 +36,17 @@ namespace Application.Implementation.Repositories
             return await GetAllAsync(includes: GetIncludes(includes));
         }
 
+        public async Task<IEnumerable<Main>> GetAllByProvaENumero(int codigoProva, int numeroQuestao)
+        {
+            var query = from r in base._dataContext.RespostasQuestoes
+                        join q in base._dataContext.Questoes on r.CodigoQuestao equals q.Codigo
+                        where q.CodigoProva == codigoProva && q.NumeroQuestao == numeroQuestao
+                        orderby r.Codigo
+                        select r ;
+
+            return await query.ToListAsync();
+        }
+
         public async Task<Main> GetById(int id)
         {
             var query = GetQueryable().Where(p => p.Codigo == id);

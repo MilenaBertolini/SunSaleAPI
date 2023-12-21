@@ -37,6 +37,11 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
+        public async Task<IEnumerable<Main>> GetAllByProvaENumero(int codigoProva, int numeroQuestao)
+        {
+            return await _repository.GetAllByProvaENumero(codigoProva, numeroQuestao);
+        }
+
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
         {
             return await _repository.GetAllPagged(page, quantity);

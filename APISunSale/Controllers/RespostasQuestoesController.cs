@@ -326,5 +326,77 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpPut("update")]
+        public async Task<ResponseBase<List<MainViewModel>>> UpdateCorrectAnswer(int codigoProva, int numeroQuestao, string letra)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<List<MainViewModel>>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
+                var result = await _service.GetAllByProvaENumero(codigoProva, numeroQuestao);
+                int index = -1;
+                switch (letra) 
+                {
+                    case "A":
+                        index = 0;
+                        break;
+                    case "B":
+                        index = 1;
+                        break;
+                    case "C":
+                        index = 2;
+                        break;
+                    case "D":
+                        index = 3;
+                        break;
+                    case "E":
+                        index = 4;
+                        break;
+                }
+
+                int i = 0;
+                foreach(var item in result)
+                {
+                    if(i++ == index)
+                    {
+                        item.Certa = "1";
+                    }
+                    else
+                    {
+                        item.Certa = "2";
+                    }
+                    await _service.Update(item);
+                }
+
+                var response = _mapper.Map<List<MainViewModel>>(result);
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }
