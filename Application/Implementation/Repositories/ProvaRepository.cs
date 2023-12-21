@@ -93,7 +93,7 @@ namespace Application.Implementation.Repositories
             }
 
             var qt = await base.GetAllPagedTotalAsync(query);
-            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: "NomeProva:ASC");
+            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: "NomeProva:Desc");
 
             return Tuple.Create(response, qt);
         }
