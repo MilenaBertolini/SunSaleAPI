@@ -12,6 +12,8 @@ namespace Domain.Entities
         public DateTime Updated { get; set; }
         [NotNull]
         public string IsActive { get; set; }
+        [NotNull]
+        public string Sent { get; set; }
 
         [NotNull]
         public string Meta { get; set; }

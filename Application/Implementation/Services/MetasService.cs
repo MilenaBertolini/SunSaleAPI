@@ -31,6 +31,7 @@ namespace Application.Implementation.Services
             entity.Created = DateTime.Now;
             entity.Updated = DateTime.Now;
             entity.IsActive = "1";
+            entity.Sent = "0";
 
             var retorno =  await _repository.Add(entity);
             await EnviaEmailInicial(retorno);
@@ -54,13 +55,15 @@ namespace Application.Implementation.Services
             try
             {
                 var list = await GetAll();
-                var result = list.Where(m => m.DataObjetivo.Day == DateTime.Now.Day && m.DataObjetivo.Month == DateTime.Now.Month && m.DataObjetivo.Year == DateTime.Now.Year)?.ToList();
+                var result = list.Where(m => m.Sent == "0" && m.DataObjetivo.Day == DateTime.Now.Day && m.DataObjetivo.Month == DateTime.Now.Month && m.DataObjetivo.Year == DateTime.Now.Year)?.ToList();
 
                 if (result == null) return true;
 
                 foreach(var item in result)
                 {
                     await EnviaEmailMetaFinal(item);
+                    item.Sent = "1";
+                    await Update(item);
                 }
 
                 return true;
