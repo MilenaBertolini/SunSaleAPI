@@ -62,6 +62,8 @@ namespace APISunSale.Controllers
         {
             try
             {
+                await _loggerService.AddInfo("RunProcess was called.");
+
                 var result = await _service.ExecuteProcess();
                 return new ResponseBase<bool>()
                 {
