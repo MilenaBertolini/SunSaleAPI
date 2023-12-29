@@ -521,7 +521,7 @@ namespace APISunSale.Controllers
                 {
                     Message = "Created",
                     Success = true,
-                    Quantity = 1
+                    Quantity = mainList.Count
                 };
             }
             catch (Exception ex)

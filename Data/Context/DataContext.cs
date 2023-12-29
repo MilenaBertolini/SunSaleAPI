@@ -54,5 +54,6 @@ namespace Data.Context
         public DbSet<VerificacaoUsuario> VerificacaoUsuario { get; set; }
         public DbSet<Alimentos> Alimentos { get; set; }
         public DbSet<CategoriaAlimentos> CategoriaAlimentos { get; set; }
+        public DbSet<Metas> Metas { get; set; }
     }
 }

@@ -134,5 +134,6 @@
     <Build Include="Tables\VerificacaoUsuario.sql" />
     <Build Include="Tables\Alimentos.sql" />
     <Build Include="Tables\CategoriaAlimentos.sql" />
+    <Build Include="Tables\Metas.sql" />
   </ItemGroup>
 </Project>
