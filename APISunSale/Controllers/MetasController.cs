@@ -57,6 +57,7 @@ namespace APISunSale.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("RunProcess")]
         public async Task<ResponseBase<bool>> RunProcess()
         {
