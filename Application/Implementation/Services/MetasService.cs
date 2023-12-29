@@ -190,7 +190,7 @@ namespace Application.Implementation.Services
 
             await _serviceEmail.Add(_mapper.Map<Email>(new EmailViewModel()
             {
-                Assunto = "Atualização de meta para " + main.DataObjetivo.ToString("dd/MM/yyyy"),
+                Assunto = "Inclusão de meta para " + main.DataObjetivo.ToString("dd/MM/yyyy"),
                 Destinatario = main.Email,
                 Texto = builder.ToString()
             }));
