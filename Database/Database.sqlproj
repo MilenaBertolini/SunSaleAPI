@@ -135,5 +135,7 @@
     <Build Include="Tables\Alimentos.sql" />
     <Build Include="Tables\CategoriaAlimentos.sql" />
     <Build Include="Tables\Metas.sql" />
+    <Build Include="Tables\NotasCorteSisu.sql" />
+    <Build Include="Tables\Pesos.sql" />
   </ItemGroup>
 </Project>

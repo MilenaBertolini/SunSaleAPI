@@ -55,5 +55,7 @@ namespace Data.Context
         public DbSet<Alimentos> Alimentos { get; set; }
         public DbSet<CategoriaAlimentos> CategoriaAlimentos { get; set; }
         public DbSet<Metas> Metas { get; set; }
+        public DbSet<NotasCorteSisu> NotasCorteSisu { get; set; }
+        public DbSet<Pesos> Pesos { get; set; }
     }
 }

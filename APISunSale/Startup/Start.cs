@@ -54,6 +54,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IAlimentosService, AlimentosService>();
             _app.Services.AddScoped<ICategoriaAlimentosService, CategoriaAlimentosService>();
             _app.Services.AddScoped<IMetasService, MetasService>();
+            _app.Services.AddScoped<INotasCorteSisuService, NotasCorteSisuService>();
+            _app.Services.AddScoped<IPesosService, PesosService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -84,6 +86,8 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IAlimentosRepository, AlimentosRepository>();
             _app.Services.AddScoped<ICategoriaAlimentosRepository, CategoriaAlimentosRepository>();
             _app.Services.AddScoped<IMetasRepository, MetasRepository>();
+            _app.Services.AddScoped<INotasCorteSisuRepository, NotasCorteSisuRepository>();
+            _app.Services.AddScoped<IPesosRepository, PesosRepository>();
 
             Mapping();
 
@@ -197,6 +201,12 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<MetasViewModel, Metas>();
                 cfg.CreateMap<Metas, MetasViewModel>();
+
+                cfg.CreateMap<NotasCorteSisuViewModel, NotasCorteSisu>();
+                cfg.CreateMap<NotasCorteSisu, NotasCorteSisuViewModel>();
+
+                cfg.CreateMap<PesosViewModel, Pesos>();
+                cfg.CreateMap<Pesos, PesosViewModel>();
 
             });
             IMapper mapper = config.CreateMapper();
