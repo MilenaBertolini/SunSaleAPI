@@ -4,6 +4,7 @@ using IRepository = Application.Interface.Repositories.IQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
 using static Data.Helper.EnumeratorsTypes;
+using Domain.Entities;
 
 namespace Application.Implementation.Repositories
 {
@@ -186,21 +187,10 @@ namespace Application.Implementation.Repositories
 
         public async Task<int> QuantidadeQuestoes(int prova, int user = -1)
         {
-            var query = user == -1 ?
-                (from q in _dataContext.Questoes
-                 where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
-
-                 select q)
+            var response = user == -1 ?
+                await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where CODIGOPROVA = {0}", prova).FirstOrDefaultAsync()
                 :
-                (from q in _dataContext.Questoes
-                         join r in _dataContext.RespostasQuestoes on q.Codigo equals r.CodigoQuestao
-                         join u in _dataContext.RespostasUsuarios on r.Codigo equals u.CodigoResposta
-                         where q.CodigoProva.Equals(prova) && q.Ativo.Equals("1")
-                         && u.CodigoUsuario.Equals(user) && r.Certa.Equals("1")
-
-                         select q).Distinct();
-
-            var response = await query.CountAsync();
+                await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES q inner join RESPOSTASQUESTOES rq on q.CODIGO = rq.CODIGOQUESTAO inner join RESPOSTASUSUARIOS ru on rq.CODIGO = ru.CODIGORESPOSTA where q.codigoProva = {0} and q.ativo = '1' and CODIGOUSUARIO = {1} and rq.CERTA = '1'", prova, user).FirstOrDefaultAsync();
 
             return response;
         }

@@ -402,5 +402,46 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpPut("updateStatus")]
+        public async Task<ResponseBase<bool>> UpdateStatus(int id, bool active)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<bool>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
+                var result = await _service.UpdateStatus(id, active);
+                await _loggerService.AddInfo($"Atualizando status da prova {id} para {active} pelo usuário {user.Id}");
+
+                return new ResponseBase<bool>()
+                {
+                    Message = "Updated",
+                    Success = true,
+                    Object = result,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<bool>()
+                {
+                    Message = ex.Message,
+                    Success = false,
+                    Object = false
+                };
+            }
+        }
     }
 }

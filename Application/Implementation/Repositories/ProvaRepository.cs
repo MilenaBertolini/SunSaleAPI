@@ -103,6 +103,20 @@ namespace Application.Implementation.Repositories
             return await GetAllAsync(GetQueryable(), orderBy: "DataRegistro:desc");
         }
 
+        public async Task<bool> UpdateStatus(int id, bool active)
+        {
+            var main = await GetById(id);
+
+            if(main != null)
+            {
+                main.IsActive = active ? "1" : "0";
+                await Update(main);
+                return true;
+            }
+
+            return false;
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

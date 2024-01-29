@@ -41,7 +41,7 @@ namespace Application.Implementation.Services
             entity.CreatedBy = codigoUsuario;
             entity.UpdatedBy = codigoUsuario;
             entity.UpdatedOn = DateTime.Now;
-            entity.IsActive = "1";
+            entity.IsActive = "0";
 
             var tipos = new List<TipoProvaAssociado>();
             foreach(var t in entity.TipoProvaAssociado.ToList())
@@ -522,6 +522,11 @@ namespace Application.Implementation.Services
             string retorno = $"data:application/json;base64, {Convert.ToBase64String(Encoding.UTF8.GetBytes(builder.ToString()))}";
 
             return retorno;
+        }
+
+        public async Task<bool> UpdateStatus(int id, bool active)
+        {
+            return await _repository.UpdateStatus(id, active);
         }
         public void Dispose()
         {

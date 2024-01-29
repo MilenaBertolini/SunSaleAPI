@@ -7,5 +7,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetSimulados();
         Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string tipo, string prova, bool admin);
         Task<IEnumerable<Main>> GetAll();
+        Task<bool> UpdateStatus(int id, bool active);
     }
 }
