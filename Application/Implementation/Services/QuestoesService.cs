@@ -47,6 +47,9 @@ namespace Application.Implementation.Services
                 r.CodigoQuestao = entity.Codigo;
                 r.ObservacaoResposta = string.Empty;
 
+                if (string.IsNullOrEmpty(r.Certa))
+                    r.Certa = "0";
+
                 List<AnexoResposta> anexosRespostas = new List<AnexoResposta>();
                 bool haAnexo = false;
                 foreach(var a in r.AnexoResposta)
