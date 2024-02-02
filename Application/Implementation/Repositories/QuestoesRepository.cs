@@ -65,9 +65,11 @@ namespace Application.Implementation.Repositories
         public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject)
         {
             var query = base.GetQueryable().Where(q => q.Ativo.Equals("1"));
+            string orderBy = "DataRegistro:Desc";
             if (codigoProva.HasValue)
             {
                 query = query.Where(q => q.CodigoProva.Equals(codigoProva));
+                orderBy = "Numeroquestao:Asc";
             }
 
             if (!string.IsNullOrEmpty(subject))
@@ -82,7 +84,7 @@ namespace Application.Implementation.Repositories
             var list = GetIncludes(include).ToList();
             list.ForEach(p => query = query.Include(p));
 
-            var response = await base.GetAllPagedAsync(query, page, quantity);
+            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: orderBy);
 
             var qt = await base.GetAllPagedTotalAsync(query);
 

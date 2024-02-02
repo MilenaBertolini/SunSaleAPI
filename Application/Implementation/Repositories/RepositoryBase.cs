@@ -130,8 +130,7 @@ namespace Application.Implementation.Repositories
                 var arrCheck = orderBy.Split(':');
                 fieldOrderBy = arrCheck[0];
             }
-
-            if (!string.IsNullOrEmpty(fullName))
+            else if (!string.IsNullOrEmpty(fullName))
             {
                 Type objectType = FindType(fullName);
 
