@@ -378,22 +378,55 @@ namespace APISunSale.Controllers
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetById(id);
+                var result = await _service.UpdateAtivo(id, false, user.Id);
 
-                if (result == null)
+                var response = _mapper.Map<MainViewModel>(result);
+
+                var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
+                response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("revisar")]
+        public async Task<ResponseBase<MainViewModel>> Revisar(int id)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
                 {
                     return new ResponseBase<MainViewModel>()
                     {
-                        Message = "Not registered",
+                        Message = "No access!",
                         Success = false
                     };
                 }
 
-                result.Ativo = "0";
-                await _service.Update(result, user.Id);
+                var result = await _service.UpdateAtivo(id, true, user.Id);
 
+                await _loggerService.AddInfo($"Questão {id} revisada pelo usuário {user.Id}-{user.Nome}.");
+                
                 var response = _mapper.Map<MainViewModel>(result);
-
                 var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
                 response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
 

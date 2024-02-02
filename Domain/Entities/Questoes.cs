@@ -24,6 +24,9 @@ namespace Domain.Entities
 
         public int CodigoProva { get; set; }
 
+        [ForeignKey("CodigoProva")]
+        public Prova Prova { get; set; }
+
         public int NumeroQuestao { get; set; }
 
         public string Ativo { get; set; }
@@ -39,5 +42,6 @@ namespace Domain.Entities
 
         [ForeignKey("CodigoQuestao")]
         public virtual ICollection<AnexosQuestoes> AnexosQuestoes { get; set; }
+
     }
 }

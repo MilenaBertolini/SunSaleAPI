@@ -12,6 +12,6 @@ namespace Application.Interface.Services
         Task<Main> AddInfo(string info);
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
-
+        Task<int> QuantidadeTotal();
     }
 }

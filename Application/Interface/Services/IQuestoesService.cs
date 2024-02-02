@@ -23,5 +23,6 @@ namespace Application.Interface.Services
         Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario);
 
         Task<Main> GetLastByProva(int prova);
+        Task<Main> UpdateAtivo(int id, bool ativo, int user);
     }
 }

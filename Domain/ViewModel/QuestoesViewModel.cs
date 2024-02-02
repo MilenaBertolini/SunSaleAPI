@@ -35,5 +35,6 @@ namespace Domain.ViewModel
         public virtual ICollection<AnexosQuestoesViewModel> AnexosQuestoes { get; set; }
 
         public virtual ICollection<RespostasUsuariosViewModel> RespostasUsuarios { get; set; }
+        public ProvaViewModel prova { get; set; }
     }
 }

@@ -420,7 +420,7 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.UpdateStatus(id, active);
-                await _loggerService.AddInfo($"Atualizando status da prova {id} para {active} pelo usuário {user.Id}");
+                await _loggerService.AddInfo($"Atualizando status da prova {id} para {active} pelo usuário {user.Id}-{user.Nome}");
 
                 return new ResponseBase<bool>()
                 {

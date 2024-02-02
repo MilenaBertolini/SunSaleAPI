@@ -91,6 +91,10 @@ namespace Application.Implementation.Services
             return await _repository.GetPerfil(user);
         }
 
+        public async Task<int> QuantidadeTotal()
+        {
+            return await _repository.QuantidadeTotal();
+        }
 
         public void Dispose()
         {

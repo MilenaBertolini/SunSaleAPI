@@ -12,5 +12,7 @@ namespace Application.Interface.Repositories
         Task<Main> GetByEmail(string email, bool isVerified = false);
         Task<Main> GetByLogin(string login, bool isVerified = false);
         Task<PerfilUsuario> GetPerfil(int user);
+        Task<int> QuantidadeTotal();
+
     }
 }

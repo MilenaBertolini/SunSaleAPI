@@ -225,6 +225,11 @@ namespace Application.Implementation.Services
             return result;
         }
 
+        public async Task<Main> UpdateAtivo(int id, bool ativo, int user)
+        {
+            return await _repository.UpdateAtivo(id, ativo, user);
+        }
+
         public Task<IEnumerable<string>> GetMaterias(int? prova)
         {
             return _repository.GetMaterias(prova == null ? -1 : prova.Value);

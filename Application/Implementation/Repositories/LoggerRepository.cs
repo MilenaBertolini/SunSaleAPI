@@ -63,7 +63,14 @@ namespace Application.Implementation.Repositories
             var query = base.GetQueryable();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "Id:Desc");
+        }
+
+        public async Task<int> QuantidadeTotal()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from Logger").FirstOrDefaultAsync();
+
+            return response;
         }
 
         public void Dispose()

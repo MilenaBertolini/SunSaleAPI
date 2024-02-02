@@ -10,7 +10,7 @@ namespace Application.Implementation.Repositories
 {
     public class QuestoesRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "RespostasQuestoes;RespostasQuestoes.AnexoResposta;AnexosQuestoes";
+        private static readonly string includes = "RespostasQuestoes;RespostasQuestoes.AnexoResposta;AnexosQuestoes;Prova";
 
         public QuestoesRepository(DataContext dataContext) : base(dataContext)
         {
@@ -106,6 +106,21 @@ namespace Application.Implementation.Repositories
             var response = query.AsEnumerable();
 
             return response;
+        }
+
+        public async Task<Main> UpdateAtivo(int id, bool ativo, int user)
+        {
+            var sql = string.Format("update questoes set ativo = '{0}', UpdatedOn = '{1}', UpdatedBy = {2} where codigo = {3}", (ativo ? '1' : '0'), DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), user, id);
+            try
+            {
+                await _dataContext.Database.ExecuteSqlRawAsync(sql);
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            return await GetById(id);
         }
 
         public async Task<IEnumerable<Test>> GetTests(int id = -1)

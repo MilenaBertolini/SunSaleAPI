@@ -69,7 +69,7 @@ namespace Application.Implementation.Repositories
             var query = base.GetQueryable();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "Created:desc");
         }
 
         public async Task<Main> VerifyLogin(string user, string pass)
@@ -123,6 +123,13 @@ namespace Application.Implementation.Repositories
                          });
 
             var response = await query.FirstOrDefaultAsync();
+            return response;
+        }
+
+        public async Task<int> QuantidadeTotal()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from Usuarios").FirstOrDefaultAsync();
+
             return response;
         }
 

@@ -16,5 +16,6 @@ namespace Application.Interface.Services
         Task<bool> ExistsEmail(string email, bool isVerified = false);
         Task<bool> ExistsLogin(string login, bool isVerified = false);
         Task<PerfilUsuario> GetPerfil(int user);
+        Task<int> QuantidadeTotal();
     }
 }

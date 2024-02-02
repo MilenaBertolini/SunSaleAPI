@@ -84,6 +84,10 @@ namespace Application.Implementation.Services
             return _repository.Update(entity);
         }
 
+        public async Task<int> QuantidadeTotal()
+        {
+            return await _repository.QuantidadeTotal();
+        }
         public void Dispose()
         {
             this._repository.Dispose();

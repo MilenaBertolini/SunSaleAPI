@@ -18,5 +18,6 @@ namespace Application.Interface.Repositories
         Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca);
         Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario);
         Task<Main> GetLastByProva(int prova);
+        Task<Main> UpdateAtivo(int id, bool ativo, int user);
     }
 }
