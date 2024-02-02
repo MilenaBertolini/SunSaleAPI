@@ -29,6 +29,8 @@ namespace Application.Implementation.Repositories
             main.QuantidadeQuestoesSolicitadasRevisao = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where ativo = '0'").FirstOrDefaultAsync();
             main.QuantidadeProvasAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '1'").FirstOrDefaultAsync();
             main.QuantidadeProvasDesativasAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '0'").FirstOrDefaultAsync();
+            main.QuantidadeRespostasTabuadaDivertida = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida").FirstOrDefaultAsync();
+            main.QuantidadeRespostasTabuadaDivertidaUltimas24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida where Created >= GETDATE()-1").FirstOrDefaultAsync();
 
             main.UsuariosDates = await _dataContext.Database.SqlQueryRaw<AdminUsuariosDate>("SELECT  CONVERT(date, Created) AS Date, COUNT(*) AS Count FROM USUARIOS WHERE Created >= DATEADD(day, -30, GETDATE()) GROUP BY CONVERT(date, Created) ORDER BY CONVERT(date, Created) DESC").ToListAsync();
 
@@ -39,6 +41,17 @@ namespace Application.Implementation.Repositories
         {
             var query = (from q in _dataContext.Questoes
                          where q.Ativo != "1" orderby q.DataRegistro
+                         select q);
+            var response = await query.ToListPagedAsync(page, quantity);
+
+            return response;
+        }
+
+        public async Task<IEnumerable<Prova>> BuscaProvasSolicitadasRevisao(int page, int quantity)
+        {
+            var query = (from q in _dataContext.Prova
+                         where q.IsActive != "1"
+                         orderby q.DataRegistro
                          select q);
             var response = await query.ToListPagedAsync(page, quantity);
 

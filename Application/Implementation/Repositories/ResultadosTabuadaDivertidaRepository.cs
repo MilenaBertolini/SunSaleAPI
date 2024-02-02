@@ -66,7 +66,7 @@ namespace Application.Implementation.Repositories
             var query = base.GetQueryable();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "Created:Desc");
         }
 
         public async Task<List<RankingTabuadaDivertida>> GetRankingTabuada()
@@ -92,6 +92,13 @@ namespace Application.Implementation.Repositories
             }).ToList();
 
             return ranking;
+        }
+
+        public async Task<int> QuantidadeTotal()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida").FirstOrDefaultAsync();
+
+            return response;
         }
 
         public void Dispose()

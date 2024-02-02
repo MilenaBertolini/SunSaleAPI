@@ -12,6 +12,6 @@ namespace Application.Interface.Services
         Task<Main> Update(Main entity);
         Task<bool> DeleteById(int id);
         Task<List<RankingTabuadaDivertida>> GetRankingTabuada();
-
+        Task<int> QuantidadeTotal();
     }
 }

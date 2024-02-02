@@ -36,12 +36,15 @@ namespace APISunSale.Controllers
             {
                 var result = await _service.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<MainViewModel>>(result);
+                var total = await _service.QuantidadeTotal();
+
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = response?.Count
+                    Quantity = response?.Count,
+                    Total = total
                 };
             }
             catch (Exception ex)

@@ -12,7 +12,8 @@
         public int QuantidadeQuestoesSolicitadasRevisao { get; set; }
         public int QuantidadeProvasAtivas { get; set; }
         public int QuantidadeProvasDesativasAtivas { get; set; }
-
+        public int QuantidadeRespostasTabuadaDivertida { get; set; }
+        public int QuantidadeRespostasTabuadaDivertidaUltimas24Horas { get; set; }
         public IEnumerable<AdminUsuariosDate> UsuariosDates { get; set; }
     }
 }
