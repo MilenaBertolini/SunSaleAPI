@@ -62,7 +62,7 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva)
         {
             var query = base.GetQueryable().Where(q => q.Ativo.Equals("1"));
             string orderBy = "DataRegistro:Desc";
@@ -83,6 +83,30 @@ namespace Application.Implementation.Repositories
 
             var list = GetIncludes(include).ToList();
             list.ForEach(p => query = query.Include(p));
+
+            if (!string.IsNullOrEmpty(bancas))
+            {
+                var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => bancasList.Contains(q.Prova.Banca));
+                orderBy = "Numeroquestao:Asc";
+            }
+
+            if (!string.IsNullOrEmpty(provas))
+            {
+                var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => provasList.Contains(q.Prova.NomeProva));
+                orderBy = "Numeroquestao:Asc";
+            }
+
+            if (!string.IsNullOrEmpty(materias))
+            {
+                var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => materiasList.Contains(q.Materia));
+                orderBy = "Numeroquestao:Asc";
+            }
 
             var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: orderBy);
 
@@ -216,7 +240,7 @@ namespace Application.Implementation.Repositories
         {
             var query = (from q in _dataContext.Questoes
                          where q.Ativo.Equals("1")
-                         select q.Materia).Distinct();
+                         select q.Materia).Distinct().OrderBy(q => q);
 
             return query.AsEnumerable();
         }
@@ -285,6 +309,22 @@ namespace Application.Implementation.Repositories
             query = query.OrderByDescending(q => q.DataRegistro);
 
             return await query.ToListAsync();
+        }
+
+        public async Task<Main> GetQuestoesByAvaliacao(int codigoAvaliacao, int numeroQuestao)
+        {
+            var query = GetQueryable();
+            query = (from q in _dataContext.Questoes
+                        join p in _dataContext.QuestoesAvaliacao on q.Codigo equals p.IdQuestao
+                     where p.IdAvaliacao == codigoAvaliacao
+
+                        select q).OrderBy(q => numeroQuestao);
+
+            query = query.Skip(numeroQuestao);
+
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
+
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

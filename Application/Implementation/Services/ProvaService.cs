@@ -528,6 +528,22 @@ namespace Application.Implementation.Services
         {
             return await _repository.UpdateStatus(id, active);
         }
+
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias)
+        {
+            return await _repository.GetBancas(provas, materias);
+        }
+
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias)
+        {
+            return await _repository.GetProvas(bancas, materias);
+        }
+
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas)
+        {
+            return await _repository.GetMaterias(bancas, provas);
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();

@@ -137,5 +137,9 @@
     <Build Include="Tables\Metas.sql" />
     <Build Include="Tables\NotasCorteSisu.sql" />
     <Build Include="Tables\Pesos.sql" />
+    <Build Include="Tables\TipoPerfil.sql" />
+    <Build Include="Tables\Avaliacao.sql" />
+    <Build Include="Tables\QuestoesAvaliacao.sql" />
+    <Build Include="Tables\RespostasAvaliacoes.sql" />
   </ItemGroup>
 </Project>

@@ -169,10 +169,27 @@ namespace APISunSale.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main)
+        public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main, int perfil)
         {
             try
             {
+                if(perfil == 1)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Can't create with this perfil!",
+                        Success = false
+                    };
+                }
+                else if (perfil != 0 && perfil != 2)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Perfil doesn't exists!",
+                        Success = false
+                    };
+                }
+
                 if (await _service.ExistsEmail(main.Email, true))
                 {
                     return new ResponseBase<MainViewModel>()
@@ -190,7 +207,7 @@ namespace APISunSale.Controllers
                         Success = false
                     };
                 }
-                main.Admin = "0";
+                main.Admin = perfil.ToString();
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
 
@@ -332,6 +349,83 @@ namespace APISunSale.Controllers
                 };
                 await _emailService.Add(_mapper.Map<Email>(email));
 
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Updated",
+                    Success = true,
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpPut("updateInstituicao")]
+        [Authorize]
+        public async Task<ResponseBase<MainViewModel>> UpdateInstituicao(string instituicao)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                var main = await _service.GetById(user.Id);
+                main.Instituicao = instituicao;
+
+                var result = await _service.Update(_mapper.Map<MainEntity>(main));
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Updated",
+                    Success = true,
+                    Object = _mapper.Map<MainViewModel>(result),
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpPut("updatePerfil")]
+        [Authorize]
+        public async Task<ResponseBase<MainViewModel>> UpdatePerfil(int perfil)
+        {
+            try
+            {
+                if(perfil == 1)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Perfil can't be 1!",
+                        Success = true,
+                        Object = null,
+                        Quantity = 1
+                    };
+                }
+
+                var user = await _utils.GetUserFromContextAsync();
+
+                var main = await _service.GetById(user.Id);
+                main.Admin= perfil.ToString();
+
+                var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",

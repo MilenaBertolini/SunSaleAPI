@@ -57,5 +57,9 @@ namespace Data.Context
         public DbSet<Metas> Metas { get; set; }
         public DbSet<NotasCorteSisu> NotasCorteSisu { get; set; }
         public DbSet<Pesos> Pesos { get; set; }
+        public DbSet<TipoPerfil> TipoPerfil { get; set; }
+        public DbSet<Avaliacao> Avaliacao { get; set; }
+        public DbSet<QuestoesAvaliacao> QuestoesAvaliacao { get; set; }
+        public DbSet<RespostasAvaliacoes> RespostasAvaliacoes { get; set; }
     }
 }

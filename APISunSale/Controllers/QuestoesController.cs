@@ -41,13 +41,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, int? codigoProva, string? subject)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, string? subject, string? bancas, string? provas, string? materias, int? codigoProva)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, codigoProva, subject);
+                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, subject, bancas, provas, materias, codigoProva);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
                 var temp = _mapper.Map<IList<RespostasUsuariosViewModel>>(await _respostasUserService.GetByUserQuestao(user.Id));
@@ -451,6 +451,46 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpGet("getByAvaliacao")]
+        public async Task<ResponseBase<MainViewModel>> GetByAvaliacao(int avaliacao, int? numeroQuestao)
+        {
+            try
+            {
+                var result = await _service.GetQuestoesByAvaliacao(avaliacao, numeroQuestao);
+
+                if (result == null)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not registered",
+                        Success = false
+                    };
+                }
+
+                var user = await _utils.GetUserFromContextAsync();
+                var response = _mapper.Map<MainViewModel>(result);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
         //[HttpGet("criaQuestao")]
         //public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
         //{
@@ -458,7 +498,7 @@ namespace APISunSale.Controllers
         //    {
         //        var user = await _utils.GetUserFromContextAsync();
 
-        //        if(user.Admin != "1")
+        //        if (user.Admin != "1")
         //        {
         //            return new ResponseBase<List<MainViewModel>>()
         //            {
@@ -469,20 +509,74 @@ namespace APISunSale.Controllers
 
         //        List<MainViewModel> list = new List<MainViewModel>();
         //        List<string> linhas = new List<string>();
-        //        string materia = "DIREITO PREVIDENCIÁRIO";
-        //        linhas.Add("100- Analise as proposições abaixo ( de I a V ) e assinale a alternativa correta, conforme sejam verdadeiras ou falsas:<br><br>I- a contribuição do empregador rural pessoa física, destinada à Seguridade Social, é de 2% da receita bruta proveniente da comercialização da sua produção e de 0,1% da receita bruta proveniente da comercialização da sua produção para financiamento das prestações por acidente do trabalho, havendo, também, para esta pessoa física, a contribuição facultativa do segurado contribuinte individual calculada sobre o salário-de)contribuição.<br>II- a Seguridade Social será financiada somente pelos seus segurados e pelas empresas.<br>III- o empregador doméstico poderá recolher a contribuição do segurado empregado a seu serviço e a parcela a seu cargo relativas à competência novembro até o dia 20 de dezembro, juntamente com a contribuição referente ao 13o salário, utilizando-se de um único documento de arrecadação.<br>IV- o direito de cobrar os créditos da Seguridade Social, constituídos na forma de sua Lei Orgânica, prescreve em 10 anos.<br>V- para ficar isenta das contribuições previdenciárias da empresa, é suficiente que a entidade beneficente de assistência social seja reconhecida como de utilidade pública federal e estadual ou do Distrito Federal ou municipal. ");
-        //        linhas.Add("a) Apenas as proposições I e III são verdadeiras.");
-        //        linhas.Add("b) Apenas as proposições I, II e V são verdadeiras.");
-        //        linhas.Add("c) Apenas as proposições III e IV são verdadeiras. -X");
-        //        linhas.Add("d) Apenas as proposições I, III e IV são verdadeiras.");
-        //        linhas.Add("e) Todas as proposições são verdadeiras.");
+        //        string materia = "HISTÓRIA";
+        //        linhas.Add("1. Qual era caracterizada pelo surgimento dos primeiros seres humanos e ausência de registros escritos?");
+        //        linhas.Add("   - [ ] A) Antiguidade");
+        //        linhas.Add("   - [ ] B) Idade Média");
+        //        linhas.Add("   - [ ] C) Pré-história");
+        //        linhas.Add("   - [ ] D) Idade Contemporânea");
+        //        linhas.Add("   - [x] E) Nenhuma das alternativas anteriores");
+        //        linhas.Add("2. Quais civilizações são incluídas na Antiguidade?");
+        //        linhas.Add("   - [ ] A) Egípcia e Grega");
+        //        linhas.Add("   - [x] B) Grega e Romana");
+        //        linhas.Add("   - [ ] C) Romana e Viking");
+        //        linhas.Add("   - [ ] D) Egípcia e Mesopotâmica");
+        //        linhas.Add("   - [ ] E) Persa e Suméria");
+        //        linhas.Add("3. Qual período é marcado pela ascensão do cristianismo e desenvolvimento do feudalismo?");
+        //        linhas.Add("   - [ ] A) Pré-história");
+        //        linhas.Add("   - [x] B) Idade Média");
+        //        linhas.Add("   - [ ] C) Antiguidade");
+        //        linhas.Add("   - [ ] D) Idade Moderna");
+        //        linhas.Add("   - [ ] E) Idade Contemporânea");
+        //        linhas.Add("4. Qual movimento artístico teve como características a perfeição estética e harmonia?");
+        //        linhas.Add("   - [ ] A) Barroco");
+        //        linhas.Add("   - [ ] B) Impressionismo");
+        //        linhas.Add("   - [x] C) Renascimento");
+        //        linhas.Add("   - [ ] D) Realismo");
+        //        linhas.Add("   - [ ] E) Cubismo");
+        //        linhas.Add("5. Qual período viu o surgimento da ópera e a disseminação da imprensa?");
+        //        linhas.Add("   - [ ] A) Pré-história");
+        //        linhas.Add("   - [ ] B) Antiguidade");
+        //        linhas.Add("   - [ ] C) Idade Média");
+        //        linhas.Add("   - [ ] D) Idade Moderna");
+        //        linhas.Add("   - [x] E) Idade Contemporânea");
+        //        linhas.Add("6. Qual movimento artístico é conhecido por sua ênfase no realismo e grandiosidade?");
+        //        linhas.Add("   - [ ] A) Renascimento");
+        //        linhas.Add("   - [x] B) Arte Romana");
+        //        linhas.Add("   - [ ] C) Barroco");
+        //        linhas.Add("   - [ ] D) Impressionismo");
+        //        linhas.Add("   - [ ] E) Cubismo");
+        //        linhas.Add("7. Onde foram encontradas as pinturas rupestres, principal forma de expressão artística na Pré-história?");
+        //        linhas.Add("   - [ ] A) Grécia");
+        //        linhas.Add("   - [ ] B) Egito");
+        //        linhas.Add("   - [x] C) Cavernas");
+        //        linhas.Add("   - [ ] D) Mesopotâmia");
+        //        linhas.Add("   - [ ] E) Roma");
+        //        linhas.Add("8. Quais eventos marcaram a Idade Contemporânea?");
+        //        linhas.Add("   - [ ] A) Renascimento e Reforma Protestante");
+        //        linhas.Add("   - [ ] B) Revoluções Francesa e Industrial");
+        //        linhas.Add("   - [ ] C) Império Romano e expansão marítima europeia");
+        //        linhas.Add("   - [x] D) Guerras Mundiais e Guerra Fria");
+        //        linhas.Add("   - [ ] E) Iluminismo e Revolução Industrial");
+        //        linhas.Add("9. Qual é o principal estilo arquitetônico associado à Idade Média?");
+        //        linhas.Add("   - [ ] A) Neoclássico");
+        //        linhas.Add("   - [x] B) Gótico");
+        //        linhas.Add("   - [ ] C) Renascentista");
+        //        linhas.Add("   - [ ] D) Barroco");
+        //        linhas.Add("   - [ ] E) Românico");
+        //        linhas.Add("10. Quais são algumas das formas de arte que experimentaram mudanças significativas na Idade Contemporânea?");
+        //        linhas.Add("   - [x] A) Música, cinema, literatura");
+        //        linhas.Add("   - [ ] B) Escultura, pintura, teatro");
+        //        linhas.Add("   - [ ] C) Dança, arquitetura, fotografia");
+        //        linhas.Add("   - [ ] D) Cerâmica, poesia, gravura");
+        //        linhas.Add("   - [ ] E) Teatro, dança, arquitetura");
 
 
-        //        for (int i = 0, cont = 1; i < linhas.Count(); i+=6, cont++)
+        //        for (int i = 0, cont = 1; i < linhas.Count(); i += 6, cont++)
         //        {
         //            MainViewModel view = new MainViewModel();
         //            view.Ativo = "1";
-        //            view.CodigoProva = 120;
+        //            view.CodigoProva = 155;
         //            view.NumeroQuestao = cont;
         //            view.Materia = materia;
         //            view.ObservacaoQuestao = string.Empty;
@@ -491,11 +585,11 @@ namespace APISunSale.Controllers
         //            view.DataRegistro = DateTime.Now;
         //            view.UpdatedOn = DateTime.Now;
 
-        //            for (int j = i+1; j <= i+5; j++)
+        //            for (int j = i + 1; j <= i + 5; j++)
         //            {
         //                RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
-        //                resposta.Certa = linhas[j].Contains(" -X") ? "1" : "0";
-        //                resposta.TextoResposta = linhas[j].Replace(" -X", "").Trim();
+        //                resposta.Certa = linhas[j].Contains("   - [x] ") ? "1" : "0";
+        //                resposta.TextoResposta = linhas[j].Replace("   - [x] ", "").Replace("   - [ ] ", "").Trim();
         //                resposta.DataRegistro = DateTime.Now;
 
         //                view.RespostasQuestoes.Add(resposta);
@@ -527,48 +621,49 @@ namespace APISunSale.Controllers
         //    }
         //}
 
-        [HttpGet("criaQuestao")]
-        public async Task<ResponseBase<MainViewModel>> criaQuestao()
-        {
-            try
-            {
-                string[] texto = File.ReadAllLines("C:/provas/saida/json.json");
-                var mainList = JsonConvert.DeserializeObject<List<MainViewModel>>(texto[0]);
-                
-                var user = await _utils.GetUserFromContextAsync();
+        //[HttpGet("criaQuestao")]
+        //public async Task<ResponseBase<MainViewModel>> criaQuestao()
+        //{
+        //    try
+        //    {
+        //        string[] texto = File.ReadAllLines("C:/provas/saida/json.json");
+        //        var mainList = JsonConvert.DeserializeObject<List<MainViewModel>>(texto[0]);
 
-                if (user.Admin != "1")
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Acesso não autorizado",
-                        Success = false
-                    };
-                }
+        //        var user = await _utils.GetUserFromContextAsync();
 
-                foreach (var main in mainList)
-                {
-                    var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
-                }
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = "Created",
-                    Success = true,
-                    Quantity = mainList.Count
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
+        //        if (user.Admin != "1")
+        //        {
+        //            return new ResponseBase<MainViewModel>()
+        //            {
+        //                Message = "Acesso não autorizado",
+        //                Success = false
+        //            };
+        //        }
 
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }
-        }
+        //        foreach (var main in mainList)
+        //        {
+        //            var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
+        //        }
+        //        return new ResponseBase<MainViewModel>()
+        //        {
+        //            Message = "Created",
+        //            Success = true,
+        //            Quantity = mainList.Count
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+        //        await _loggerService.AddException(ex);
+
+        //        return new ResponseBase<MainViewModel>()
+        //        {
+        //            Message = ex.Message,
+        //            Success = false
+        //        };
+        //    }
+        //}
+
         /*
 
         [HttpGet("criaQuestao")]

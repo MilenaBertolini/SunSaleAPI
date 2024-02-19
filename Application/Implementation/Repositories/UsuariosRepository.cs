@@ -9,7 +9,7 @@ namespace Application.Implementation.Repositories
 {
     public class UsuariosRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "TipoPerfil";
 
         public UsuariosRepository(DataContext dataContext) : base(dataContext)
         {
@@ -104,6 +104,7 @@ namespace Application.Implementation.Repositories
         public async Task<PerfilUsuario> GetPerfil(int user)
         {
             var query = (from u in _dataContext.Usuarios
+                         join t in _dataContext.TipoPerfil on u.Admin equals t.Id
                          where u.Id.Equals(user)
 
                          select new PerfilUsuario
@@ -118,7 +119,13 @@ namespace Application.Implementation.Repositories
                                  Id = u.Id,
                                  Login = u.Login,
                                  Nome = u.Nome,
-                                 Pass = u.Pass
+                                 Pass = u.Pass,
+                                 Instituicao = u.Instituicao,
+                                 TipoPerfil = new Domain.ViewModel.TipoPerfilViewModel()
+                                 {
+                                     Id = t.Id,
+                                     Descricao = t.Descricao
+                                 }
                              }
                          });
 

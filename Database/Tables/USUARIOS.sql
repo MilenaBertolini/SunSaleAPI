@@ -8,6 +8,7 @@
 	[Admin] [char](1) NULL,
 	[Created] [datetime] NULL,
 	[Updated] [datetime] NULL,
+	[INSTITUICAO] [nvarchar](255),
 PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC

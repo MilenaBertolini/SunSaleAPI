@@ -7,7 +7,7 @@ namespace Application.Interface.Services
     public interface IQuestoesService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject);
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity, int user);
         Task<Main> Update(Main entity, int user);
@@ -24,5 +24,6 @@ namespace Application.Interface.Services
 
         Task<Main> GetLastByProva(int prova);
         Task<Main> UpdateAtivo(int id, bool ativo, int user);
+        Task<Main> GetQuestoesByAvaliacao(int codigoAvaliacao, int? numeroQuestao);
     }
 }

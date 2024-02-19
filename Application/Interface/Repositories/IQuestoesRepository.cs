@@ -7,7 +7,7 @@ namespace Application.Interface.Repositories
     public interface IQuestoesRepository : IRepositoryBase<Main>
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject);
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva);
         Task<IEnumerable<string>> GetMaterias(int prova = -1);
         Task<IEnumerable<Test>> GetTests(int id = -1);
         Task<Main> GetByProva(int prova, int numero);
@@ -19,5 +19,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario);
         Task<Main> GetLastByProva(int prova);
         Task<Main> UpdateAtivo(int id, bool ativo, int user);
+        Task<Main> GetQuestoesByAvaliacao(int codigoAvaliacao, int numeroQuestao);
     }
 }

@@ -23,5 +23,8 @@ namespace Domain.ViewModel
         public string? IsVerified { get; set; }
 
         public string? Admin { get; set; }
+        public string? Instituicao { get; set; }
+
+        public TipoPerfilViewModel? TipoPerfil { get; set; }
     }
 }

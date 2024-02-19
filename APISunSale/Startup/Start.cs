@@ -57,6 +57,10 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<INotasCorteSisuService, NotasCorteSisuService>();
             _app.Services.AddScoped<IPesosService, PesosService>();
             _app.Services.AddScoped<IAdminService, AdminService>();
+            _app.Services.AddScoped<ITipoPerfilService, TipoPerfilService>();
+            _app.Services.AddScoped<IAvaliacaoService, AvaliacaoService>();
+            _app.Services.AddScoped<IQuestoesAvaliacaoService, QuestoesAvaliacaoService>();
+            _app.Services.AddScoped<IRespostasAvaliacoesService, RespostasAvaliacoesService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -90,6 +94,10 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<INotasCorteSisuRepository, NotasCorteSisuRepository>();
             _app.Services.AddScoped<IPesosRepository, PesosRepository>();
             _app.Services.AddScoped<IAdminRepository, AdminRepository>();
+            _app.Services.AddScoped<ITipoPerfilRepository, TipoPerfilRepository>();
+            _app.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
+            _app.Services.AddScoped<IQuestoesAvaliacaoRepository, QuestoesAvaliacaoRepository>();
+            _app.Services.AddScoped<IRespostasAvaliacoesRepository, RespostasAvaliacoesRepository>();
 
             Mapping();
 
@@ -216,6 +224,20 @@ namespace APISunSale.Startup
                 cfg.CreateMap<AdminUsuariosDateViewModel, AdminUsuariosDate>();
                 cfg.CreateMap<AdminUsuariosDate, AdminUsuariosDateViewModel>();
 
+                cfg.CreateMap<TipoPerfilViewModel, TipoPerfil>();
+                cfg.CreateMap<TipoPerfil, TipoPerfilViewModel>();
+
+                cfg.CreateMap<AvaliacaoViewModel, Avaliacao>();
+                cfg.CreateMap<Avaliacao, AvaliacaoViewModel>();
+
+                cfg.CreateMap<QuestoesAvaliacaoViewModel, QuestoesAvaliacao>();
+                cfg.CreateMap<QuestoesAvaliacao, QuestoesAvaliacaoViewModel>();
+
+                cfg.CreateMap<UsuariosResumedViewModel, Usuarios>();
+                cfg.CreateMap<Usuarios, UsuariosResumedViewModel>();
+
+                cfg.CreateMap<RespostasAvaliacoesViewModel, RespostasAvaliacoes>();
+                cfg.CreateMap<RespostasAvaliacoes, RespostasAvaliacoesViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);

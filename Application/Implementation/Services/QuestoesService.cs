@@ -117,9 +117,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, int? codigoProva, string? subject)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva)
         {
-            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, codigoProva, subject);
+            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, subject, bancas, provas, materias, codigoProva);
         }
 
         public async Task<Main> GetById(int id)
@@ -282,6 +282,11 @@ namespace Application.Implementation.Services
         public async Task<IEnumerable<Main>> GetQuestoesRespondidas(int usuario)
         {
             return await _repository.GetQuestoesRespondidas(usuario);
+        }
+
+        public async Task<Main> GetQuestoesByAvaliacao(int codigoAvaliacao, int? numeroQuestao)
+        {
+            return await _repository.GetQuestoesByAvaliacao(codigoAvaliacao, numeroQuestao.HasValue ? numeroQuestao.Value : 0);
         }
 
         public void Dispose()

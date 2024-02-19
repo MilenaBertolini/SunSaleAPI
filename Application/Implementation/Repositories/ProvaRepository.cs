@@ -117,6 +117,51 @@ namespace Application.Implementation.Repositories
             return false;
         }
 
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias)
+        {
+            var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1") 
+                         && (provasList.Contains(p.NomeProva) || provas == "")
+                         && (materiasList.Contains(q.Materia) || materias == "")
+                         select p.Banca).Distinct();
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias)
+        {
+            var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+                         && (bancasList.Contains(p.Banca) || bancas == "")
+                         && (materiasList.Contains(q.Materia) || materias == "")
+                         select p.NomeProva).Distinct();
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas)
+        {
+            var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+                         && (bancasList.Contains(p.Banca) || bancas == "")
+                         && (provasList.Contains(p.NomeProva) || provas == "")
+                         select q.Materia).Distinct();
+
+            return await query.ToListAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

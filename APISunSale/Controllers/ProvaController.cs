@@ -264,12 +264,72 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [Route("GetAllBancas")]
-        public async Task<ResponseBase<List<string>>> GetAllBancas()
+        public async Task<ResponseBase<List<string>>> GetAllBancas(string provas="", string materias="")
         {
             try
             {
-                var result = await _service.GetSimulados();
-                List<string> response = _mapper.Map<List<string>>(result.Select(r => r.Banca)).Distinct().OrderBy(c => c).ToList();
+                var result = await _service.GetBancas(provas, materias);
+                List<string> response = _mapper.Map<List<string>>(result);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllProvasName")]
+        public async Task<ResponseBase<List<string>>> GetAllProvasName(string bancas = "", string materias = "")
+        {
+            try
+            {
+                var result = await _service.GetProvas(bancas, materias);
+                List<string> response = _mapper.Map<List<string>>(result);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllMaterias")]
+        public async Task<ResponseBase<List<string>>> GetAllMaterias(string bancas = "", string provas = "")
+        {
+            try
+            {
+                var result = await _service.GetMaterias(bancas, provas);
+                List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
                 {
