@@ -289,6 +289,11 @@ namespace Application.Implementation.Services
             return await _repository.GetQuestoesByAvaliacao(codigoAvaliacao, numeroQuestao.HasValue ? numeroQuestao.Value : 0);
         }
 
+        public async Task<Main> UpdateAssunto(int id, string assunto, int user)
+        {
+            return await _repository.UpdateAssunto(id, assunto, user);
+        }
+
         public void Dispose()
         {
             this._repository.Dispose();

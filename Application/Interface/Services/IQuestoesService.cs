@@ -25,5 +25,6 @@ namespace Application.Interface.Services
         Task<Main> GetLastByProva(int prova);
         Task<Main> UpdateAtivo(int id, bool ativo, int user);
         Task<Main> GetQuestoesByAvaliacao(int codigoAvaliacao, int? numeroQuestao);
+        Task<Main> UpdateAssunto(int id, string assunto, int user);
     }
 }

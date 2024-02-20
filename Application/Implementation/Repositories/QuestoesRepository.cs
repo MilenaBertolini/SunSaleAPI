@@ -71,11 +71,6 @@ namespace Application.Implementation.Repositories
                 orderBy = "Numeroquestao:Asc";
             }
 
-            if (!string.IsNullOrEmpty(subject))
-            {
-                query = query.Where(q => q.Materia.ToUpper().Contains(subject.ToUpper()));
-            }
-
             string include = includes;
             if (!includeAnexos)
                 include = include.Replace(";RespostasQuestoes.AnexoResposta;AnexosQuestoes", "");
@@ -104,6 +99,14 @@ namespace Application.Implementation.Repositories
                 var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                 query = query.Where(q => materiasList.Contains(q.Materia));
+                orderBy = "Numeroquestao:Asc";
+            }
+
+            if (!string.IsNullOrEmpty(subject))
+            {
+                var assuntosList = subject.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => assuntosList.Contains(q.Assunto));
                 orderBy = "Numeroquestao:Asc";
             }
 
@@ -333,6 +336,21 @@ namespace Application.Implementation.Repositories
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Main> UpdateAssunto(int id, string assunto, int user)
+        {
+            var sql = string.Format("update questoes set assunto = '{0}', UpdatedOn = '{1}', UpdatedBy = {2} where codigo = {3}", assunto, DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), user, id);
+            try
+            {
+                await _dataContext.Database.ExecuteSqlRawAsync(sql);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return await GetById(id);
         }
     }
 }

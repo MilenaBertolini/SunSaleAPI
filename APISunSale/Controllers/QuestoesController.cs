@@ -15,6 +15,7 @@ using LoggerService = Application.Interface.Services.ILoggerService;
 using System.Data;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -41,13 +42,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, string? subject, string? bancas, string? provas, string? materias, int? codigoProva)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, string? assuntos, string? bancas, string? provas, string? materias, int? codigoProva)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, subject, bancas, provas, materias, codigoProva);
+                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, assuntos, bancas, provas, materias, codigoProva);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
                 var temp = _mapper.Map<IList<RespostasUsuariosViewModel>>(await _respostasUserService.GetByUserQuestao(user.Id));
@@ -469,6 +470,51 @@ namespace APISunSale.Controllers
 
                 var user = await _utils.GetUserFromContextAsync();
                 var response = _mapper.Map<MainViewModel>(result);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpPut("updateAssunto")]
+        public async Task<ResponseBase<MainViewModel>> UpdateAssunto(UpdateAssuntoQuestao assuntoQuestao)
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1" && user.Admin != "2")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "No access!",
+                        Success = false
+                    };
+                }
+
+                var result = await _service.UpdateAssunto(assuntoQuestao.CodigoQuestao, assuntoQuestao.Assunto, user.Id);
+
+                await _loggerService.AddInfo($"Assunto da questão {assuntoQuestao.CodigoQuestao} alterado pelo usuário {user.Id}-{user.Nome}.");
+
+                var response = _mapper.Map<MainViewModel>(result);
+                var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
+                response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
 
                 return new ResponseBase<MainViewModel>()
                 {

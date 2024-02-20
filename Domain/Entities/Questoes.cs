@@ -37,6 +37,8 @@ namespace Domain.Entities
 
         public int CreatedBy { get; set; }
 
+        public string? Assunto { get; set; }
+
         [ForeignKey("CodigoQuestao")]
         public virtual ICollection<RespostasQuestoes> RespostasQuestoes { get; set; }
 

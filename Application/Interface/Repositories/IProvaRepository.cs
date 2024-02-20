@@ -8,8 +8,9 @@ namespace Application.Interface.Repositories
         Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string tipo, string prova, bool admin);
         Task<IEnumerable<Main>> GetAll();
         Task<bool> UpdateStatus(int id, bool active);
-        Task<IEnumerable<string>> GetBancas(string provas, string materias);
-        Task<IEnumerable<string>> GetProvas(string bancas, string materias);
-        Task<IEnumerable<string>> GetMaterias(string bancas, string provas);
+        Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos);
+        Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos);
+        Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos);
+        Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias);
     }
 }

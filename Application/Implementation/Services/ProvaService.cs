@@ -529,21 +529,25 @@ namespace Application.Implementation.Services
             return await _repository.UpdateStatus(id, active);
         }
 
-        public async Task<IEnumerable<string>> GetBancas(string provas, string materias)
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos)
         {
-            return await _repository.GetBancas(provas, materias);
+            return await _repository.GetBancas(provas, materias, assuntos);
         }
 
-        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias)
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos)
         {
-            return await _repository.GetProvas(bancas, materias);
+            return await _repository.GetProvas(bancas, materias, assuntos);
         }
 
-        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas)
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos)
         {
-            return await _repository.GetMaterias(bancas, provas);
+            return await _repository.GetMaterias(bancas, provas, assuntos);
         }
 
+        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias)
+        {
+            return await _repository.GetAssuntos(bancas, provas, materias);
+        }
         public void Dispose()
         {
             this._repository.Dispose();

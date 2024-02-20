@@ -10,6 +10,7 @@
     [UpdatedBy]         INT,
     [UpdatedOn]         DATETIME,
     [CreatedBy]         INT,
+    [Assunto] VARCHAR(255) NULL, 
     PRIMARY KEY CLUSTERED ([CODIGO] ASC)
 );
 

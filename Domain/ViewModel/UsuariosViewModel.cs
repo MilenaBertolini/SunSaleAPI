@@ -26,5 +26,9 @@ namespace Domain.ViewModel
         public string? Instituicao { get; set; }
 
         public TipoPerfilViewModel? TipoPerfil { get; set; }
+
+        public DateTime? Created { get; set; }
+
+        public DateTime? Updated { get; set; }
     }
 }

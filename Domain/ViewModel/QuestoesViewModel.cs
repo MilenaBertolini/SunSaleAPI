@@ -14,7 +14,7 @@ namespace Domain.ViewModel
 
         public string CampoQuestao { get; set; }
 
-        public string ObservacaoQuestao { get; set; }
+        public string? ObservacaoQuestao { get; set; }
 
         public string Materia { get; set; }
 
@@ -22,13 +22,14 @@ namespace Domain.ViewModel
 
         public int NumeroQuestao { get; set; }
 
-        public string Ativo { get; set; }
+        public string? Ativo { get; set; }
 
-        public DateTime UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
-        public int UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
+        public string? Assunto { get; set; }
 
         public virtual ICollection<RespostasQuestoesViewModel> RespostasQuestoes { get; set; }
 
