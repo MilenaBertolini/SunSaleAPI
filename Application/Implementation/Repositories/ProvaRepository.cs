@@ -131,7 +131,7 @@ namespace Application.Implementation.Repositories
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
                          select p.Banca).Distinct();
 
-            return await query.ToListAsync();
+            return await query.ToListAsync().OrderBy(q => q); ;
         }
 
         public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos)
@@ -146,7 +146,7 @@ namespace Application.Implementation.Repositories
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
-                         select p.NomeProva).Distinct();
+                         select p.NomeProva).Distinct().OrderBy(q => q); ;
 
             return await query.ToListAsync();
         }
@@ -163,7 +163,7 @@ namespace Application.Implementation.Repositories
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
-                         select q.Materia).Distinct();
+                         select q.Materia).Distinct().OrderBy(q => q); ;
 
             return await query.ToListAsync();
         }
@@ -180,7 +180,7 @@ namespace Application.Implementation.Repositories
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
-                         select q.Assunto).Distinct();
+                         select q.Assunto).Distinct().OrderBy(q => q);
 
             return await query.ToListAsync();
         }
