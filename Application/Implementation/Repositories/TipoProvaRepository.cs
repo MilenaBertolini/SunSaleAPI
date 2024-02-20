@@ -33,7 +33,14 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<Main>> GetAll()
         {
-            return await GetAllAsync(includes: GetIncludes(includes));
+            var query = (from t in _dataContext.TipoProva
+                         join tp in _dataContext.TipoProvaAssociado on t.Codigo equals tp.CodigoTipo
+                         join p in _dataContext.Prova on tp.CodigoProva equals p.Codigo
+                         where p.IsActive.Equals("1")
+
+                         select t).Distinct();
+
+            return await query.ToListAsync();
         }
 
         public async Task<Main> GetById(int id)

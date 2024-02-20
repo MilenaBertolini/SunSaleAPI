@@ -62,7 +62,7 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, string chave, int user)
         {
-            var query = base.GetQueryable().Where(a => a.IsPublic.Equals("1"));
+            var query = base.GetQueryable().Where(a => a.IsPublic.Equals("1") && a.IsActive.Equals("1"));
 
             if(user != -1)
             {

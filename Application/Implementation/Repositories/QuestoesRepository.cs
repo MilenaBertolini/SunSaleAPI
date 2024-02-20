@@ -4,7 +4,6 @@ using IRepository = Application.Interface.Repositories.IQuestoesRepository;
 using Microsoft.EntityFrameworkCore;
 using Application.Model;
 using static Data.Helper.EnumeratorsTypes;
-using Domain.Entities;
 
 namespace Application.Implementation.Repositories
 {
@@ -123,10 +122,10 @@ namespace Application.Implementation.Repositories
         public async Task<IEnumerable<string>> GetMaterias(int prova = -1)
         {
             var query = (from q in _dataContext.Questoes
-                         where 
-                         q.CodigoProva == prova
-                         ||
-                         prova == -1
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1") &&
+                         (q.CodigoProva == prova || prova == -1)
+
                         select q.Materia).Distinct();
 
             var response = query.AsEnumerable();
@@ -239,7 +238,9 @@ namespace Application.Implementation.Repositories
         public async Task<IEnumerable<string>> GetAllMateris()
         {
             var query = (from q in _dataContext.Questoes
-                         where q.Ativo.Equals("1")
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
                          select q.Materia).Distinct().OrderBy(q => q);
 
             return query.AsEnumerable();
@@ -247,12 +248,18 @@ namespace Application.Implementation.Repositories
 
         public async Task<Main> GetQuestoesAleatoria(TipoQuestoes tipo, string? subject, string? banca)
         {
-            var query = GetQueryable();
-            if(tipo == TipoQuestoes.ENEM)
+            var query = (from q in _dataContext.Questoes
+                         join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
+                         select q);
+
+            if (tipo == TipoQuestoes.ENEM)
             {
                 query = (from q in _dataContext.Questoes
                          join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
-                         where p.NomeProva.ToUpper().Contains("ENEM")
+                         where p.NomeProva.ToUpper().Contains("ENEM") 
+                         && q.Ativo.Equals("1") && p.IsActive.Equals("1")
 
                          select q);
 
@@ -262,6 +269,7 @@ namespace Application.Implementation.Repositories
                 query = (from q in _dataContext.Questoes
                          join p in _dataContext.Prova on q.CodigoProva equals p.Codigo
                          where p.NomeProva.ToUpper().Contains("IFTM")
+                         && q.Ativo.Equals("1") && p.IsActive.Equals("1")
 
                          select q);
 
@@ -281,7 +289,7 @@ namespace Application.Implementation.Repositories
 
                 int random = new Random().Next(array.Length);
 
-                var queryProva = (from p in _dataContext.Prova where p.Banca.ToUpper().Contains(array[random]) select p);
+                var queryProva = (from p in _dataContext.Prova where p.Banca.ToUpper().Contains(array[random]) && p.IsActive.Equals("1") select p);
                 var prova = queryProva.FirstOrDefault();
 
                 if(prova != null)
