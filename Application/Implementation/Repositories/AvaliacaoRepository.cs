@@ -76,7 +76,7 @@ namespace Application.Implementation.Repositories
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "CreatedBy:Desc");
+            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "CreatedOn:Desc");
         }
 
         public async Task<IEnumerable<Main>> GetByUserId(int id)
