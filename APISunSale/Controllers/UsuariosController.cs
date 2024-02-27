@@ -528,6 +528,15 @@ namespace APISunSale.Controllers
             {
                 var user = await _service.GetByEmail(mail);
 
+                if(user == null)
+                {
+                    return new ResponseBase<Object>()
+                    {
+                        Message = "Usuário não cadastrado!",
+                        Success = false
+                    };
+                }
+
                 if(user.IsVerified == "1")
                 {
                     return new ResponseBase<Object>()

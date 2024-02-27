@@ -537,137 +537,137 @@ namespace APISunSale.Controllers
             }
         }
 
-        //[HttpGet("criaQuestao")]
-        //public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
-        //{
-        //    try
-        //    {
-        //        var user = await _utils.GetUserFromContextAsync();
+        [HttpGet("criaQuestao")]
+        public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
 
-        //        if (user.Admin != "1")
-        //        {
-        //            return new ResponseBase<List<MainViewModel>>()
-        //            {
-        //                Message = "Acesso não autorizado",
-        //                Success = false
-        //            };
-        //        }
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<List<MainViewModel>>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
 
-        //        List<MainViewModel> list = new List<MainViewModel>();
-        //        List<string> linhas = new List<string>();
-        //        string materia = "MATEMÁTICA";
-        //        string assunto = "Frações";
+                List<MainViewModel> list = new List<MainViewModel>();
+                List<string> linhas = new List<string>();
+                string materia = "BIOLOGIA";
+                string assunto = "Introdução à Biologioa";
 
-        //        linhas.Add("1. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">6</div></div><div class=\"operator\">-</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">6</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">12</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">7</div><div class=\"denominator\">12</div></div>");
-        //        linhas.Add("2. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">5</div></div><div class=\"operator\">+</div><div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">4</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">4</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">6</div></div>");
-        //        linhas.Add("3. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div><div class=\"operator\">-</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">4</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">4</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">7</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">14</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div>");
-        //        linhas.Add("4. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">4</div><div class=\"denominator\">9</div></div><div class=\"operator\">+</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">6</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">18</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">9</div></div>");
-        //        linhas.Add("5. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">6</div></div><div class=\"operator\">-</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">6</div></div>");
-        //        linhas.Add("6. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">5</div></div><div class=\"operator\">+</div><div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">7</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">14</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">12</div></div>");
-        //        linhas.Add("7. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">4</div><div class=\"denominator\">5</div></div><div class=\"operator\">-</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">4</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">20</div></div>");
-        //        linhas.Add("   b) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   X c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">4</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">8</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">10</div></div>");
-        //        linhas.Add("8. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div><div class=\"operator\">+</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">6</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("   X b) <div class=\"fraction\"><div class=\"numerator\">5</div><div class=\"denominator\">14</div></div>");
-        //        linhas.Add("   c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("9. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">5</div></div><div class=\"operator\">-</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">3</div></div></div>");
-        //        linhas.Add("   a) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">10</div></div>");
-        //        linhas.Add("   X b) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">2</div></div>");
-        //        linhas.Add("   c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   d) <div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("   e) <div class=\"fraction\"><div class=\"numerator\">2</div><div class=\"denominator\">3</div></div>");
-        //        linhas.Add("10. Qual é o resultado de:<br><div class=\"conta\"><div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div><div class=\"operator\">+</div><div class=\"fraction\"><div class=\"numerator\">1</div><div class=\"denominator\">5</div></div></div>");
-        //        linhas.Add("    a) <div class=\"fraction\"><div class=\"numerator\">9</div><div class=\"denominator\">20</div></div>");
-        //        linhas.Add("    X b) <div class=\"fraction\"><div class=\"numerator\">4</div><div class=\"denominator\">5</div></div>");
-        //        linhas.Add("    c) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">7</div></div>");
-        //        linhas.Add("    d) <div class=\"fraction\"><div class=\"numerator\">7</div><div class=\"denominator\">12</div></div>");
-        //        linhas.Add("    e) <div class=\"fraction\"><div class=\"numerator\">3</div><div class=\"denominator\">5</div></div>");
+                linhas.Add("O que é a principal função da membrana celular?");
+                linhas.Add("a) Armazenar energia");
+                linhas.Add("Xb) Regular a entrada e saída de substâncias na célula");
+                linhas.Add("c) Produzir proteínas");
+                linhas.Add("d) Realizar a fotossíntese");
+                linhas.Add("e) Transportar oxigênio");
+                linhas.Add("Qual é a função do retículo endoplasmático rugoso?");
+                linhas.Add("a) Síntese de lipídios");
+                linhas.Add("b) Produção de ATP");
+                linhas.Add("c) Armazenamento de água");
+                linhas.Add("Xd) Síntese de proteínas");
+                linhas.Add("e) Digestão celular");
+                linhas.Add("O que são os lisossomos?");
+                linhas.Add("a) Organelas responsáveis pela fotossíntese");
+                linhas.Add("b) Estruturas que produzem energia");
+                linhas.Add("c) Vesículas que armazenam água");
+                linhas.Add("Xd) Organelas digestivas");
+                linhas.Add("e) Estruturas envolvidas na síntese de lipídios");
+                linhas.Add("Qual é a principal função do núcleo da célula?");
+                linhas.Add("   a) Produção de ATP");
+                linhas.Add("   b) Armazenamento de glicose");
+                linhas.Add("   Xc) Controle das atividades celulares e armazenamento do material genético");
+                linhas.Add("   d) Síntese de proteínas");
+                linhas.Add("   e) Transporte de substâncias");
+                linhas.Add("O que é o complexo de Golgi?");
+                linhas.Add("   a) Organela responsável pela fotossíntese");
+                linhas.Add("   b) Estrutura envolvida na respiração celular");
+                linhas.Add("   c) Organela que produz ATP");
+                linhas.Add("   Xd) Responsável pela secreção celular e modificação de proteínas");
+                linhas.Add("   e) Estrutura que armazena água");
+                linhas.Add("Qual é a função das mitocôndrias?");
+                linhas.Add("   a) Síntese de proteínas");
+                linhas.Add("   Xb) Produção de ATP (energia)");
+                linhas.Add("   c) Armazenamento de água");
+                linhas.Add("   d) Digestão celular");
+                linhas.Add("   e) Respiração celular");
+                linhas.Add("O que são os ribossomos?");
+                linhas.Add("   a) Vesículas que armazenam enzimas");
+                linhas.Add("   b) Estruturas responsáveis pela fotossíntese");
+                linhas.Add("   Xc) Organelas responsáveis pela síntese de proteínas");
+                linhas.Add("   d) Componentes do citoesqueleto");
+                linhas.Add("   e) Estruturas que armazenam glicose");
+                linhas.Add("Qual é a principal função do citoesqueleto?");
+                linhas.Add("   a) Produção de energia");
+                linhas.Add("   b) Armazenamento de substâncias");
+                linhas.Add("   Xc) Sustentação e movimentação celular");
+                linhas.Add("   d) Digestão de nutrientes");
+                linhas.Add("   e) Secreção celular");
+                linhas.Add("O que é o vacúolo?");
+                linhas.Add("   Xa) Estrutura que armazena água, íons e nutrientes");
+                linhas.Add("   b) Organela responsável pela respiração celular");
+                linhas.Add("   c) Vesícula que produz ATP");
+                linhas.Add("   d) Estrutura envolvida na fotossíntese");
+                linhas.Add("   e) Componente do citoesqueleto");
+                linhas.Add("Qual é a função dos centríolos?");
+                linhas.Add("    a) Síntese de proteínas");
+                linhas.Add("    b) Produção de ATP");
+                linhas.Add("    Xc) Divisão celular e formação do fuso mitótico");
+                linhas.Add("    d) Armazenamento de água");
+                linhas.Add("    e) Respiração celular");
 
-        //        for (int i = 0, cont = 1; i < linhas.Count(); i += 6, cont++)
-        //        {
-        //            MainViewModel view = new MainViewModel();
-        //            view.Ativo = "1";
-        //            view.CodigoProva = 155;
-        //            view.NumeroQuestao = cont + 10;
-        //            view.Materia = materia;
-        //            view.Assunto = assunto;
-        //            view.ObservacaoQuestao = string.Empty;
-        //            view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
-        //            view.CampoQuestao = linhas[i];
-        //            view.DataRegistro = DateTime.Now;
-        //            view.UpdatedOn = DateTime.Now;
+                for (int i = 0, cont = 1; i < linhas.Count(); i += 6, cont++)
+                {
+                    MainViewModel view = new MainViewModel();
+                    view.Ativo = "1";
+                    view.CodigoProva = 157;
+                    view.NumeroQuestao = cont + 10;
+                    view.Materia = materia;
+                    view.Assunto = assunto;
+                    view.ObservacaoQuestao = string.Empty;
+                    view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
+                    view.CampoQuestao = $"<b>Questão {view.NumeroQuestao}</b><br><br>{linhas[i]}";
+                    view.DataRegistro = DateTime.Now;
+                    view.UpdatedOn = DateTime.Now;
 
-        //            for (int j = i + 1; j <= i + 5; j++)
-        //            {
-        //                RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
-        //                resposta.Certa = linhas[j].Contains("X ") ? "1" : "0";
-        //                resposta.TextoResposta = linhas[j].Replace("X ", "").Trim();
-        //                resposta.DataRegistro = DateTime.Now;
+                    for (int j = i + 1; j <= i + 5; j++)
+                    {
+                        RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
+                        resposta.Certa = linhas[j].Contains("X") ? "1" : "0";
+                        resposta.TextoResposta = linhas[j].Replace("X", "").Trim();
+                        resposta.DataRegistro = DateTime.Now;
 
-        //                view.RespostasQuestoes.Add(resposta);
-        //            }
+                        view.RespostasQuestoes.Add(resposta);
+                    }
 
-        //            await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
+                    await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
 
-        //            list.Add(view);
-        //        }
+                    list.Add(view);
+                }
 
-        //        return new ResponseBase<List<MainViewModel>>()
-        //        {
-        //            Message = "Search success",
-        //            Success = true,
-        //            Object = list,
-        //            Quantity = 1
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-        //        await _loggerService.AddException(ex);
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = "Search success",
+                    Success = true,
+                    Object = list,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
 
-        //        return new ResponseBase<List<MainViewModel>>()
-        //        {
-        //            Message = ex.Message,
-        //            Success = false
-        //        };
-        //    }
-        //}
+                return new ResponseBase<List<MainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
 
         //[HttpGet("criaQuestao")]
         //public async Task<ResponseBase<MainViewModel>> criaQuestao()
