@@ -117,58 +117,92 @@ namespace Application.Implementation.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos)
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos)
         {
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var assuntosList = assuntos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             var query = (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
+                         join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
+
                          where q.Ativo.Equals("1") && p.IsActive.Equals("1") 
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
+                         && (tipos.Contains(tt.Descricao) || tipos == "")
                          select p.Banca).Distinct().OrderBy(q => q);
 
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos)
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var assuntosList = assuntos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             var query = (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
+                         join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
                          where q.Ativo.Equals("1") && p.IsActive.Equals("1")
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
+                         && (tipos.Contains(tt.Descricao) || tipos == "")
                          select p.NomeProva).Distinct().OrderBy(q => q);
 
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos)
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var assuntosList = assuntos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             var query = (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
+                         join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
                          where q.Ativo.Equals("1") && p.IsActive.Equals("1")
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
+                         && (tipos.Contains(tt.Descricao) || tipos == "")
                          select q.Materia).Distinct().OrderBy(q => q);
 
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias)
+        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos)
+        {
+            var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var query = (from p in _dataContext.Prova
+                         join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
+                         join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
+                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+                         && (bancasList.Contains(p.Banca) || bancas == "")
+                         && (provasList.Contains(p.NomeProva) || provas == "")
+                         && (materiasList.Contains(q.Materia) || materias == "")
+                         && (tipos.Contains(tt.Descricao) || tipos == "")
+                         select q.Assunto).Distinct().OrderBy(q => q);
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -176,11 +210,13 @@ namespace Application.Implementation.Repositories
 
             var query = (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
+                         join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
+                         join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
                          where q.Ativo.Equals("1") && p.IsActive.Equals("1")
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
-                         select q.Assunto).Distinct().OrderBy(q => q);
+                         select tt.Descricao).Distinct().OrderBy(q => q);
 
             return await query.ToListAsync();
         }

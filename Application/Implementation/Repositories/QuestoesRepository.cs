@@ -9,7 +9,7 @@ namespace Application.Implementation.Repositories
 {
     public class QuestoesRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "RespostasQuestoes;RespostasQuestoes.AnexoResposta;AnexosQuestoes;Prova";
+        private static readonly string includes = "RespostasQuestoes;RespostasQuestoes.AnexoResposta;AnexosQuestoes;Prova;Prova.TipoProvaAssociado;Prova.TipoProvaAssociado.TipoProva";
 
         public QuestoesRepository(DataContext dataContext) : base(dataContext)
         {
@@ -61,7 +61,7 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva)
         {
             var query = base.GetQueryable().Where(q => q.Ativo.Equals("1"));
             string orderBy = "DataRegistro:Desc";
@@ -107,6 +107,14 @@ namespace Application.Implementation.Repositories
                 var assuntosList = subject.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
                 query = query.Where(q => assuntosList.Contains(q.Assunto));
+                orderBy = "Numeroquestao:Asc";
+            }
+
+            if (!string.IsNullOrEmpty(tipos))
+            {
+                var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => q.Prova.TipoProvaAssociado.Any(t => tiposList.Contains(t.TipoProva.Descricao)));
                 orderBy = "Numeroquestao:Asc";
             }
 

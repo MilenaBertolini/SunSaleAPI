@@ -34,11 +34,11 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? chave, int user = -1)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? chave, string? subject, string? bancas, string? provas, string? materias, string? professores, int user = -1)
         {
             try
             {
-                var result = await _service.GetAllPagged(page, quantity, chave, user);
+                var result = await _service.GetAllPagged(page, quantity, chave, user, subject, bancas, provas, materias, professores);
                 var response = _mapper.Map<List<MainViewModel>>(result);
 
                 response.ForEach(item =>
@@ -311,6 +311,36 @@ namespace APISunSale.Controllers
                     Message = ex.Message,
                     Success = false,
                     Object = false
+                };
+            }
+        }
+
+        [HttpGet("getProfessores")]
+        public async Task<ResponseBase<List<string>>> GetAllProfessores()
+        {
+            try
+            {
+                var result = await _service.GetAllProfessores();
+                var response = _mapper.Map<List<string>>(result);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count,
+                    Total = await _service.QuantidadeTotal()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }

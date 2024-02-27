@@ -117,9 +117,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, int? codigoProva)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva)
         {
-            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, subject, bancas, provas, materias, codigoProva);
+            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, subject, bancas, provas, materias, tipos, codigoProva);
         }
 
         public async Task<Main> GetById(int id)

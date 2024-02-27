@@ -61,9 +61,9 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, string chave, int user)
+        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, string chave, int user, string subject, string bancas, string provas, string materias, string professores)
         {
-            var list = await _repository.GetAllPagged(page, quantity, chave, user);
+            var list = await _repository.GetAllPagged(page, quantity, chave, user, subject, bancas, provas, materias, professores);
 
             return list;
         }
@@ -101,6 +101,11 @@ namespace Application.Implementation.Services
         public async Task<int> QuantidadeTotal()
         {
             return await _repository.QuantidadeTotal();
+        }
+
+        public async Task<IEnumerable<string>> GetAllProfessores()
+        {
+            return await _repository.GetAllProfessores();
         }
 
         public void Dispose()

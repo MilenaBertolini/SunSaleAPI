@@ -17,9 +17,10 @@ namespace Application.Interface.Services
         Task<string> CriaDocumentoGabarito(int codigo);
         Task<bool> UpdateStatus(int id, bool active);
 
-        Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos);
-        Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos);
-        Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos);
-        Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias);
+        Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos);
+        Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos);
+        Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos);
+        Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos);
+        Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias);
     }
 }

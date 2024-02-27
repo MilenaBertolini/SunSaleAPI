@@ -264,11 +264,11 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [Route("GetAllBancas")]
-        public async Task<ResponseBase<List<string>>> GetAllBancas(string provas="", string materias="", string assuntos = "")
+        public async Task<ResponseBase<List<string>>> GetAllBancas(string provas="", string materias="", string assuntos = "", string tipos = "")
         {
             try
             {
-                var result = await _service.GetBancas(provas, materias, assuntos);
+                var result = await _service.GetBancas(provas, materias, assuntos, tipos);
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -294,11 +294,11 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [Route("GetAllProvasName")]
-        public async Task<ResponseBase<List<string>>> GetAllProvasName(string bancas = "", string materias = "", string assuntos = "")
+        public async Task<ResponseBase<List<string>>> GetAllProvasName(string bancas = "", string materias = "", string assuntos = "", string tipos = "")
         {
             try
             {
-                var result = await _service.GetProvas(bancas, materias, assuntos);
+                var result = await _service.GetProvas(bancas, materias, assuntos, tipos);
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -324,11 +324,11 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [Route("GetAllMaterias")]
-        public async Task<ResponseBase<List<string>>> GetAllMaterias(string bancas = "", string provas = "", string assuntos = "")
+        public async Task<ResponseBase<List<string>>> GetAllMaterias(string bancas = "", string provas = "", string assuntos = "", string tipos = "")
         {
             try
             {
-                var result = await _service.GetMaterias(bancas, provas, assuntos);
+                var result = await _service.GetMaterias(bancas, provas, assuntos, tipos);
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -354,11 +354,41 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [Route("GetAllAssuntos")]
-        public async Task<ResponseBase<List<string>>> GetAllAssuntos(string bancas = "", string provas = "", string materias = "")
+        public async Task<ResponseBase<List<string>>> GetAllAssuntos(string bancas = "", string provas = "", string materias = "", string tipos = "")
         {
             try
             {
-                var result = await _service.GetAssuntos(bancas, provas, materias);
+                var result = await _service.GetAssuntos(bancas, provas, materias, tipos);
+                List<string> response = _mapper.Map<List<string>>(result);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<string>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllTipos")]
+        public async Task<ResponseBase<List<string>>> GetAllTipos(string bancas = "", string provas = "", string materias = "")
+        {
+            try
+            {
+                var result = await _service.GetTipos(bancas, provas, materias);
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
