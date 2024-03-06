@@ -61,7 +61,7 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva, TipoQuestoes? tipo, bool? randon)
         {
             var query = base.GetQueryable().Where(q => q.Ativo.Equals("1"));
             string orderBy = "DataRegistro:Desc";
@@ -118,11 +118,32 @@ namespace Application.Implementation.Repositories
                 orderBy = "Numeroquestao:Asc";
             }
 
-            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: orderBy);
+            if(tipo == TipoQuestoes.ENEM)
+            {
+                query = query.Where(q => q.Prova.NomeProva.ToUpper().Contains("ENEM"));
+            }
 
-            var qt = await base.GetAllPagedTotalAsync(query);
+            if (tipo == TipoQuestoes.IFTM)
+            {
+                query = query.Where(q => q.Prova.NomeProva.ToUpper().Contains("IFTM"));
+            }
 
-            return Tuple.Create(response, qt);
+            if (randon.HasValue && randon.Value)
+            {
+                int index = new Random().Next(query.Count());
+                var item = await query.Skip(index).FirstOrDefaultAsync();
+                List<Main> response = new List<Main>() { item };
+
+                return Tuple.Create((IEnumerable<Main>)response, 1);
+            }
+            else
+            {
+                var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: orderBy);
+
+                var qt = await base.GetAllPagedTotalAsync(query);
+
+                return Tuple.Create(response, qt);
+            }
         }
 
         public void Dispose()

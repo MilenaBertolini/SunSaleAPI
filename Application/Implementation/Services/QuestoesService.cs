@@ -117,9 +117,22 @@ namespace Application.Implementation.Services
             return await _repository.GetAll();
         }
 
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, int user, bool includeAnexos, string subject, string bancas, string provas, string materias, string tipos, int? codigoProva, TipoQuestoes? tipo, bool? randon, int? id, int? avaliacao)
         {
-            return await _repository.GetAllPagged(page, quantity, user, includeAnexos, subject, bancas, provas, materias, tipos, codigoProva);
+            if (id.HasValue)
+            {
+                List<Main> response = new List<Main>() { await GetById(id.Value) };
+                return Tuple.Create((IEnumerable<Main>)response, response.Count);
+            }
+            else if (avaliacao.HasValue)
+            {
+                List<Main> response = new List<Main>() { await _repository.GetQuestoesByAvaliacao(avaliacao.Value, page) };
+                return Tuple.Create((IEnumerable<Main>)response, response.Count);
+            }
+            else
+            {
+                return await _repository.GetAllPagged(page, quantity, user, includeAnexos, subject, bancas, provas, materias, tipos, codigoProva, tipo, randon);
+            }
         }
 
         public async Task<Main> GetById(int id)

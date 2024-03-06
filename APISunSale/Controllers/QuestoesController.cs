@@ -42,14 +42,15 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, string? assuntos, string? bancas, string? provas, string? materias, int? codigoProva, string? tipos)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, bool anexos, string? assuntos, string? bancas, string? provas, string? materias, int? codigoProva, string? tipos, TipoQuestoes? tipo, bool? randon, int? id, int? avaliacao)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, assuntos, bancas, provas, materias, tipos, codigoProva);
+                var result = await _service.GetAllPagged(page, quantity, user.Id, anexos, assuntos, bancas, provas, materias, tipos, codigoProva, tipo, randon, id, avaliacao);
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
+                response.RemoveAll(r => r == null);
 
                 var temp = _mapper.Map<IList<RespostasUsuariosViewModel>>(await _respostasUserService.GetByUserQuestao(user.Id));
                 foreach(var item in response)
@@ -555,93 +556,64 @@ namespace APISunSale.Controllers
 
                 List<MainViewModel> list = new List<MainViewModel>();
                 List<string> linhas = new List<string>();
-                string materia = "BIOLOGIA";
-                string assunto = "Introdução à Biologioa";
+                string materia = "Matemática";
+                string assunto = "Potencialização e Raízes";
+                string texto = "Qual o resultado da equação";
 
-                linhas.Add("O que é a principal função da membrana celular?");
-                linhas.Add("a) Armazenar energia");
-                linhas.Add("Xb) Regular a entrada e saída de substâncias na célula");
-                linhas.Add("c) Produzir proteínas");
-                linhas.Add("d) Realizar a fotossíntese");
-                linhas.Add("e) Transportar oxigênio");
-                linhas.Add("Qual é a função do retículo endoplasmático rugoso?");
-                linhas.Add("a) Síntese de lipídios");
-                linhas.Add("b) Produção de ATP");
-                linhas.Add("c) Armazenamento de água");
-                linhas.Add("Xd) Síntese de proteínas");
-                linhas.Add("e) Digestão celular");
-                linhas.Add("O que são os lisossomos?");
-                linhas.Add("a) Organelas responsáveis pela fotossíntese");
-                linhas.Add("b) Estruturas que produzem energia");
-                linhas.Add("c) Vesículas que armazenam água");
-                linhas.Add("Xd) Organelas digestivas");
-                linhas.Add("e) Estruturas envolvidas na síntese de lipídios");
-                linhas.Add("Qual é a principal função do núcleo da célula?");
-                linhas.Add("   a) Produção de ATP");
-                linhas.Add("   b) Armazenamento de glicose");
-                linhas.Add("   Xc) Controle das atividades celulares e armazenamento do material genético");
-                linhas.Add("   d) Síntese de proteínas");
-                linhas.Add("   e) Transporte de substâncias");
-                linhas.Add("O que é o complexo de Golgi?");
-                linhas.Add("   a) Organela responsável pela fotossíntese");
-                linhas.Add("   b) Estrutura envolvida na respiração celular");
-                linhas.Add("   c) Organela que produz ATP");
-                linhas.Add("   Xd) Responsável pela secreção celular e modificação de proteínas");
-                linhas.Add("   e) Estrutura que armazena água");
-                linhas.Add("Qual é a função das mitocôndrias?");
-                linhas.Add("   a) Síntese de proteínas");
-                linhas.Add("   Xb) Produção de ATP (energia)");
-                linhas.Add("   c) Armazenamento de água");
-                linhas.Add("   d) Digestão celular");
-                linhas.Add("   e) Respiração celular");
-                linhas.Add("O que são os ribossomos?");
-                linhas.Add("   a) Vesículas que armazenam enzimas");
-                linhas.Add("   b) Estruturas responsáveis pela fotossíntese");
-                linhas.Add("   Xc) Organelas responsáveis pela síntese de proteínas");
-                linhas.Add("   d) Componentes do citoesqueleto");
-                linhas.Add("   e) Estruturas que armazenam glicose");
-                linhas.Add("Qual é a principal função do citoesqueleto?");
-                linhas.Add("   a) Produção de energia");
-                linhas.Add("   b) Armazenamento de substâncias");
-                linhas.Add("   Xc) Sustentação e movimentação celular");
-                linhas.Add("   d) Digestão de nutrientes");
-                linhas.Add("   e) Secreção celular");
-                linhas.Add("O que é o vacúolo?");
-                linhas.Add("   Xa) Estrutura que armazena água, íons e nutrientes");
-                linhas.Add("   b) Organela responsável pela respiração celular");
-                linhas.Add("   c) Vesícula que produz ATP");
-                linhas.Add("   d) Estrutura envolvida na fotossíntese");
-                linhas.Add("   e) Componente do citoesqueleto");
-                linhas.Add("Qual é a função dos centríolos?");
-                linhas.Add("    a) Síntese de proteínas");
-                linhas.Add("    b) Produção de ATP");
-                linhas.Add("    Xc) Divisão celular e formação do fuso mitótico");
-                linhas.Add("    d) Armazenamento de água");
-                linhas.Add("    e) Respiração celular");
-
-                for (int i = 0, cont = 1; i < linhas.Count(); i += 6, cont++)
+                for (int i = 0, cont = 1; i < 100; i ++, cont++)
                 {
+                    string equacao = "";
+                    List<string> ops = new List<string>();
+
+                    Random randon = new Random();
+                    int a = randon.Next(20);
+
+                    while (a == 0) a = randon.Next(20);
+
+                    if(randon.Next(10) % 2 == 0)
+                    {
+                        equacao = $"<span>&#8730;</span>{(a * a)}";
+                        ops.Add((a).ToString());
+                        ops.Add(((a) + 1).ToString());
+                        ops.Add(((a) - 1).ToString());
+                        ops.Add(((a) + 3).ToString());
+                        ops.Add(((a) - 4).ToString());
+                    }
+                    else
+                    {
+                        equacao = $"{a}²";
+                        ops.Add((a*a).ToString());
+                        ops.Add(((a * a) + 5).ToString());
+                        ops.Add(((a * a) - 5).ToString());
+                        ops.Add(((a * a) + 15).ToString());
+                        ops.Add(((a * a) - 15).ToString());
+                    }
+
                     MainViewModel view = new MainViewModel();
                     view.Ativo = "1";
-                    view.CodigoProva = 157;
-                    view.NumeroQuestao = cont + 10;
+                    view.CodigoProva = 160;
+                    view.NumeroQuestao = cont;
                     view.Materia = materia;
                     view.Assunto = assunto;
                     view.ObservacaoQuestao = string.Empty;
                     view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
-                    view.CampoQuestao = $"<b>Questão {view.NumeroQuestao}</b><br><br>{linhas[i]}";
+                    view.CampoQuestao = $"<b>Questão {view.NumeroQuestao}</b><br><br>{texto}:{equacao}";
                     view.DataRegistro = DateTime.Now;
                     view.UpdatedOn = DateTime.Now;
 
-                    for (int j = i + 1; j <= i + 5; j++)
+                    string correta = ops[0];
+                    ops = Shuffle(ops);
+
+                    foreach(string r in ops)
                     {
                         RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
-                        resposta.Certa = linhas[j].Contains("X") ? "1" : "0";
-                        resposta.TextoResposta = linhas[j].Replace("X", "").Trim();
+                        resposta.Certa = correta == r ? "1" : "0";
+                        resposta.TextoResposta = r;
                         resposta.DataRegistro = DateTime.Now;
 
                         view.RespostasQuestoes.Add(resposta);
                     }
+                    
 
                     await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
 
@@ -667,6 +639,22 @@ namespace APISunSale.Controllers
                     Success = false
                 };
             }
+        }
+
+        static List<string> Shuffle(List<string> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                string value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+
+            return list;
         }
 
         //[HttpGet("criaQuestao")]
