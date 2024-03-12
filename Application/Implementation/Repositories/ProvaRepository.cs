@@ -68,7 +68,7 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string tipo, string prova, bool admin)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string bancas, string provas, string tipos, bool admin)
         {
             var query = !admin ? (from p in _dataContext.Prova
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
@@ -82,14 +82,25 @@ namespace Application.Implementation.Repositories
 
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            if (!string.IsNullOrEmpty(prova))
+            if (!string.IsNullOrEmpty(bancas))
             {
-                query = query.Where(q => q.NomeProva.ToUpper().Contains(prova.ToUpper()));
+                var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => bancasList.Contains(q.Banca));
             }
 
-            if (!string.IsNullOrEmpty(tipo))
+            if (!string.IsNullOrEmpty(provas))
             {
-                query = query.Where(q => q.TipoProvaAssociado.Where(t => t.TipoProva.Descricao.Equals(tipo)).Count() > 0);
+                var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => provasList.Contains(q.NomeProva));
+            }
+
+            if (!string.IsNullOrEmpty(tipos))
+            {
+                var tiposList = tipos.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(q => q.TipoProvaAssociado.Any(t => tiposList.Contains(t.TipoProva.Descricao)));
             }
 
             var qt = await base.GetAllPagedTotalAsync(query);

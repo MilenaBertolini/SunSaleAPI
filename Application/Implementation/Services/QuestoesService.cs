@@ -40,7 +40,7 @@ namespace Application.Implementation.Services
             entity.UpdatedBy = user;
 
             List<RespostasQuestoes> respostasQuestoes = new List<RespostasQuestoes>();
-            foreach(var r in entity.RespostasQuestoes)
+            foreach (var r in entity.RespostasQuestoes)
             {
                 r.Codigo = await _repositoryCodes.GetNextCodigo(typeof(RespostasQuestoes).Name);
                 r.DataRegistro = DateTime.Now;

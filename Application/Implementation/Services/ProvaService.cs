@@ -83,9 +83,9 @@ namespace Application.Implementation.Services
             return await _repository.GetSimulados();
         }
 
-        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string tipo, string prova, bool admin)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string bancas, string provas, string tipos, bool admin)
         {
-            return await _repository.GetAllPagged(page, quantity, tipo, prova, admin);
+            return await _repository.GetAllPagged(page, quantity, bancas, provas, tipos, admin);
         }
 
         public async Task<IEnumerable<Main>> GetAll()

@@ -11,7 +11,6 @@ using UserService = Application.Interface.Services.IUsuariosService;
 using RespostasUserService = Application.Interface.Services.IRespostasUsuariosService;
 using APISunSale.Utils;
 using LoggerService = Application.Interface.Services.ILoggerService;
-using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -68,13 +67,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? tipo, string? prova)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? bancas, string? provas, string? tipos)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, tipo, prova, user.Admin.Equals("1"));
+                var result = await _service.GetAllPagged(page, quantity, bancas, provas, tipos, user.Admin.Equals("1"));
                 var response = _mapper.Map<List<MainViewModel>>(result.Item1);
 
                 foreach (var item in response)
