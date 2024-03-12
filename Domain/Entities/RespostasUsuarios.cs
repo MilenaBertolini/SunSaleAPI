@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Entities
@@ -17,5 +18,14 @@ namespace Domain.Entities
         public int CodigoQuestao { get; set; }
 
         public DateTime DataResposta { get; set; }
+
+        [ForeignKey("CodigoUsuario")]
+        public Usuarios Usuario { get; set; }
+
+        [ForeignKey("CodigoResposta")]
+        public RespostasQuestoes Resposta { get; set; }
+
+        [ForeignKey("CodigoQuestao")]
+        public Questoes Questao { get; set; }
     }
 }

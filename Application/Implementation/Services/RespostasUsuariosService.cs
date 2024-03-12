@@ -86,6 +86,10 @@ namespace Application.Implementation.Services
             return await _repository.GetRanking();
         }
 
+        public async Task<int> QuantidadeTotal()
+        {
+            return await _repository.QuantidadeTotal();
+        }
         public void Dispose()
         {
             this._repository.Dispose();

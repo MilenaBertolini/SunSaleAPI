@@ -15,5 +15,6 @@ namespace Application.Interface.Repositories
         Task<int> GetQuantidadeQuestoesTentadas(int user);
 
         Task<IEnumerable<Ranking>> GetRanking();
+        Task<int> QuantidadeTotal();
     }
 }

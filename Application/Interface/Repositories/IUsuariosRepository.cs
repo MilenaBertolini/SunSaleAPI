@@ -6,7 +6,7 @@ namespace Application.Interface.Repositories
     public interface IUsuariosRepository : IRepositoryBase<Main>
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string email);
         Task<Main> VerifyLogin(string user, string pass);
 
         Task<Main> GetByEmail(string email, bool isVerified = false);

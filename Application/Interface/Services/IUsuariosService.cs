@@ -6,7 +6,6 @@ namespace Application.Interface.Services
     public interface IUsuariosService : IDisposable
     {
         Task<IEnumerable<Main>> GetAll();
-        Task<IEnumerable<Main>> GetAllPagged(int page, int quantity);
         Task<Main> GetById(int id);
         Task<Main> Add(Main entity);
         Task<Main> Update(Main entity);
@@ -17,5 +16,6 @@ namespace Application.Interface.Services
         Task<bool> ExistsLogin(string login, bool isVerified = false);
         Task<PerfilUsuario> GetPerfil(int user);
         Task<int> QuantidadeTotal();
+        Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string email);
     }
 }

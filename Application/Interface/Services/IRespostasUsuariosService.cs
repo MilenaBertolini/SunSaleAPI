@@ -18,5 +18,6 @@ namespace Application.Interface.Services
         Task<int> GetQuantidadeQuestoesCertas(int user);
         Task<int> GetQuantidadeQuestoesTentadas(int user);
         Task<IEnumerable<Ranking>> GetRanking();
+        Task<int> QuantidadeTotal();
     }
 }

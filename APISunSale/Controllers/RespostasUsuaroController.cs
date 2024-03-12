@@ -47,7 +47,8 @@ namespace APISunSale.Controllers
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = response?.Count
+                    Quantity = response?.Count,
+                    Total = await _service.QuantidadeTotal()
                 };
             }
             catch (Exception ex)

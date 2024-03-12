@@ -19,5 +19,10 @@ namespace Domain.ViewModel
         [NotNull]
         public int CodigoQuestao { get; set; }
         public DateTime DataResposta { get; set; }
+
+        public UsuariosResumedViewModel Usuario { get; set;}
+
+        public RespostasQuestoesViewModel Resposta { get; set;}
+        public QuestoesViewModel Questao { get; set;}
     }
 }

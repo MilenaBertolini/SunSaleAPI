@@ -13,5 +13,6 @@
         public DateTime Created { get; set; }
 
         public DateTime Updated { get; set; }
+        public int QuantidadeTentativas { get; set; }
     }
 }

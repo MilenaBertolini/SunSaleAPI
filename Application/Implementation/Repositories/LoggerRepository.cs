@@ -58,12 +58,21 @@ namespace Application.Implementation.Repositories
             return model;
         }
         
-        public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity)
+        public async Task<Tuple<IEnumerable<Main>, int>> GetAllPagged(int page, int quantity, string message)
         {
             var query = base.GetQueryable();
+
+            if(!string.IsNullOrEmpty(message))
+            {
+                query = query.Where(q => q.Descricao.Contains(message));
+            }
+
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity, orderBy: "Id:Desc");
+            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: "Id:Desc");
+            var qt = await query.CountAsync();
+
+            return Tuple.Create(response, qt);
         }
 
         public async Task<int> QuantidadeTotal()

@@ -10,7 +10,7 @@ namespace Application.Implementation.Repositories
 {
     public class RespostasUsuariosRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "RespostasQuestoes";
+        private static readonly string includes = "Usuario;Resposta;Questao;Questao.Prova";
 
         public RespostasUsuariosRepository(DataContext dataContext) : base(dataContext)
         {
@@ -66,7 +66,7 @@ namespace Application.Implementation.Repositories
             var query = base.GetQueryable().Where(u => u.CodigoUsuario.Equals(user)).Distinct();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
-            return await base.GetAllPagedAsync(query, page, quantity);
+            return await base.GetAllPagedAsync(query, page, quantity, orderBy:"Codigo:desc");
         }
 
         public async Task<IEnumerable<Main>> GetByUser(int user)
@@ -181,6 +181,13 @@ namespace Application.Implementation.Repositories
                          select r.CodigoResposta).Distinct();
 
             return query.Count();
+        }
+
+        public async Task<int> QuantidadeTotal()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from respostasusuarios").FirstOrDefaultAsync();
+
+            return response;
         }
 
         public void Dispose()

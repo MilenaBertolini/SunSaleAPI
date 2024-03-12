@@ -25,20 +25,19 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? message)
         {
             try
             {
-                var result = await _service.GetAllPagged(page, quantity);
-                var quantidade = await _service.QuantidadeTotal();
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var result = await _service.GetAllPagged(page, quantity, message);
+                var response = _mapper.Map<List<MainViewModel>>(result.Item1);
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = result.Count(),
-                    Total = quantidade
+                    Quantity = result.Item1.Count(),
+                    Total = result.Item2
                 };
             }
             catch (Exception ex)

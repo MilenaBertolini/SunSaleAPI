@@ -89,7 +89,7 @@ namespace APISunSale.Controllers
 
         [HttpGet("pagged")]
         [Authorize]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, string? email)
         {
             try
             {
@@ -103,16 +103,15 @@ namespace APISunSale.Controllers
                     };
                 }
 
-                var result = await _service.GetAllPagged(page, quantity);
-                var quantidade = await _service.QuantidadeTotal();
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var result = await _service.GetAllPagged(page, quantity, email);
+                var response = _mapper.Map<List<MainViewModel>>(result.Item1);
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
                     Quantity = response?.Count,
-                    Total = quantidade
+                    Total = result.Item2
                 };
             }
             catch (Exception ex)
@@ -548,6 +547,15 @@ namespace APISunSale.Controllers
 
                 var verificacao = await _serviceValidacao.GetByCodigoUsuario(user.Id);
 
+                if (verificacao.QuantidadeTentativas > 5)
+                {
+                    return new ResponseBase<Object>()
+                    {
+                        Message = "Já foi realizado a tentativa 5 vezes!",
+                        Success = false
+                    };
+                }
+
                 var email = new EmailViewModel()
                 {
                     Assunto = "Bem vindo ao QuestoesAqui",
@@ -555,6 +563,9 @@ namespace APISunSale.Controllers
                     Status = "0",
                     Texto = Utils.CrieEmail.CriaEmailBoasVindas(user, verificacao.GuidText)
                 };
+
+                verificacao.QuantidadeTentativas++;
+                await _serviceValidacao.Update(verificacao);
 
                 await _emailService.Add(_mapper.Map<Email>(email));
 
