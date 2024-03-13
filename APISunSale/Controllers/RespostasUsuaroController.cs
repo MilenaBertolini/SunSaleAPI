@@ -34,13 +34,13 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, int idUser=0)
         {
             try
             {
                 var user = await _utils.GetUserFromContextAsync();
 
-                var result = await _service.GetAllPagged(page, quantity, user.Id);
+                var result = await _service.GetAllPagged(page, quantity, idUser == 0 ? user.Id : idUser);
                 var response = _mapper.Map<List<MainViewModel>>(result);
                 return new ResponseBase<List<MainViewModel>>()
                 {

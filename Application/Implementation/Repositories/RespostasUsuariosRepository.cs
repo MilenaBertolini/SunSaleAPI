@@ -63,7 +63,7 @@ namespace Application.Implementation.Repositories
         
         public async Task<IEnumerable<Main>> GetAllPagged(int page, int quantity, int user)
         {
-            var query = base.GetQueryable().Where(u => u.CodigoUsuario.Equals(user)).Distinct();
+            var query = base.GetQueryable().Where(u => u.CodigoUsuario.Equals(user) || user == -1).Distinct();
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await base.GetAllPagedAsync(query, page, quantity, orderBy:"Codigo:desc");
