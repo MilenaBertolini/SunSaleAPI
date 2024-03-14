@@ -195,6 +195,8 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
+                await _loggerService.AddInfo($"Inserindo questão {result.Codigo}-{result.NumeroQuestao} pelo usuário {user.Id}-{user.Nome}");
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Created",
@@ -242,6 +244,8 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.Update(_mapper.Map<MainEntity>(main), user.Id);
+                await _loggerService.AddInfo($"Alterando questão {result.Codigo}-{result.NumeroQuestao} pelo usuário {user.Id}-{user.Nome}");
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",
@@ -386,6 +390,7 @@ namespace APISunSale.Controllers
 
                 var temp = await _respostasUserService.GetByUserQuestao(user.Id, response.Codigo);
                 response.RespostasUsuarios = _mapper.Map<IList<RespostasUsuariosViewModel>>(temp);
+                await _loggerService.AddInfo($"Solicitando verificação da questão {result.Codigo}-{result.NumeroQuestao} pelo usuário {user.Id}-{user.Nome}");
 
                 return new ResponseBase<MainViewModel>()
                 {

@@ -204,7 +204,7 @@ namespace APISunSale.Controllers
                     };
                 }
 
-                await _loggerService.AddInfo($"Inserindo nova avaliação pelo usuário {user.Nome}");
+                await _loggerService.AddInfo($"Editando avaliação pelo usuário {user.Nome}");
 
                 var result = await _service.Update(_mapper.Map<MainEntity>(main), user.Id);
                 return new ResponseBase<MainViewModel>()

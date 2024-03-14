@@ -150,6 +150,9 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
+
+                await _loggerService.AddInfo($"Inserindo prova {result.Codigo}-{result.NomeProva} pelo usuário {user.Id}-{user.Nome}");
+
                 return new OkObjectResult(
                     new ResponseBase<MainViewModel>()
                     {
@@ -201,6 +204,9 @@ namespace APISunSale.Controllers
                 }
 
                 var result = await _service.Update(_mapper.Map<MainEntity>(main), user.Id);
+
+                await _loggerService.AddInfo($"Alterando prova {result.Codigo}-{result.NomeProva} pelo usuário {user.Id}-{user.Nome}");
+
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Updated",
