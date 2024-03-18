@@ -40,10 +40,10 @@ namespace Domain.Entities
         public string? Assunto { get; set; }
 
         [ForeignKey("CodigoQuestao")]
-        public virtual ICollection<RespostasQuestoes> RespostasQuestoes { get; set; }
+        public virtual ICollection<RespostasQuestoes>? RespostasQuestoes { get; set; }
 
         [ForeignKey("CodigoQuestao")]
-        public virtual ICollection<AnexosQuestoes> AnexosQuestoes { get; set; }
+        public virtual ICollection<AnexosQuestoes>? AnexosQuestoes { get; set; }
 
     }
 }

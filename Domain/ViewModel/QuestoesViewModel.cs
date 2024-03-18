@@ -31,11 +31,11 @@ namespace Domain.ViewModel
         public int? CreatedBy { get; set; }
         public string? Assunto { get; set; }
 
-        public virtual ICollection<RespostasQuestoesViewModel> RespostasQuestoes { get; set; }
+        public virtual ICollection<RespostasQuestoesViewModel>? RespostasQuestoes { get; set; }
 
-        public virtual ICollection<AnexosQuestoesViewModel> AnexosQuestoes { get; set; }
+        public virtual ICollection<AnexosQuestoesViewModel>? AnexosQuestoes { get; set; }
 
-        public virtual ICollection<RespostasUsuariosViewModel> RespostasUsuarios { get; set; }
+        public virtual ICollection<RespostasUsuariosViewModel>? RespostasUsuarios { get; set; }
         public ProvaViewModel? prova { get; set; }
     }
 }
