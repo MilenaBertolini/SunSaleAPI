@@ -7,7 +7,7 @@ namespace Application.Implementation.Repositories
 {
     public class QuestoesAvaliacaoRepository : RepositoryBase<Main>, IRepository
     {
-        private static readonly string includes = "";
+        private static readonly string includes = "Questao;Questao.RespostasQuestoes;Questao.AnexosQuestoes;Questao.Prova";
 
         public QuestoesAvaliacaoRepository(DataContext dataContext) : base(dataContext)
         {
@@ -69,6 +69,7 @@ namespace Application.Implementation.Repositories
         public async Task<IEnumerable<Main>> GetAllByAvaliacao(int avaliacao)
         {
             var query = base.GetQueryable().Where(a => a.IdAvaliacao == avaliacao);
+            GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             return await query.ToListAsync();
         }

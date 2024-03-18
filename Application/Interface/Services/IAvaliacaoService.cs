@@ -13,5 +13,9 @@ namespace Application.Interface.Services
         Task<IEnumerable<Main>> GetByUserId(int id);
         Task<int> QuantidadeTotal();
         Task<IEnumerable<string>> GetAllProfessores();
+
+        Task<string> CriaDocumentoAvaliacao(int codigo);
+
+        Task<string> CriaDocumentoGabaritoAvaliacao(int codigo);
     }
 }

@@ -344,5 +344,79 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpGet("downloadProva")]
+        public async Task<ResponseBase<string>> GetProvaFile(int codigo)
+        {
+            try
+            {
+                var prova = await _service.CriaDocumentoAvaliacao(codigo);
+
+                if (prova == null)
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Simulado não encontrado",
+                        Success = false
+                    };
+                }
+
+                return new ResponseBase<string>()
+                {
+                    Message = "Listed",
+                    Success = true,
+                    Object = prova,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<string>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("downloadGabarito")]
+        public async Task<ResponseBase<string>> GetGabaritoFile(int codigo)
+        {
+            try
+            {
+                var prova = await _service.CriaDocumentoGabaritoAvaliacao(codigo);
+
+                if (prova == null)
+                {
+                    return new ResponseBase<string>()
+                    {
+                        Message = "Gabarito não encontrado",
+                        Success = false
+                    };
+                }
+
+                return new ResponseBase<string>()
+                {
+                    Message = "Listed",
+                    Success = true,
+                    Object = prova,
+                    Quantity = 1
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<string>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }
