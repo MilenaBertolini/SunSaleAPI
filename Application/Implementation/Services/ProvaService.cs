@@ -529,29 +529,29 @@ namespace Application.Implementation.Services
             return await _repository.UpdateStatus(id, active);
         }
 
-        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos, bool admin)
         {
-            return await _repository.GetBancas(provas, materias, assuntos, tipos);
+            return await _repository.GetBancas(provas, materias, assuntos, tipos, admin);
         }
 
-        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos, bool admin)
         {
-            return await _repository.GetProvas(bancas, materias, assuntos, tipos);
+            return await _repository.GetProvas(bancas, materias, assuntos, tipos, admin);
         }
 
-        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos, bool admin)
         {
-            return await _repository.GetMaterias(bancas, provas, assuntos, tipos);
+            return await _repository.GetMaterias(bancas, provas, assuntos, tipos, admin);
         }
 
-        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos)
+        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos, bool admin)
         {
-            return await _repository.GetAssuntos(bancas, provas, materias, tipos);
+            return await _repository.GetAssuntos(bancas, provas, materias, tipos, admin);
         }
 
-        public async Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias)
+        public async Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias, bool admin)
         {
-            return await _repository.GetTipos(bancas, provas, materias);
+            return await _repository.GetTipos(bancas, provas, materias, admin);
         }
 
         public void Dispose()

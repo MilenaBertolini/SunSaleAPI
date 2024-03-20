@@ -273,7 +273,9 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetBancas(provas, materias, assuntos, tipos);
+                var user = await _utils.GetUserFromContextAsync();
+
+                var result = await _service.GetBancas(provas, materias, assuntos, tipos, user.Admin.Equals("1"));
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -303,7 +305,8 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetProvas(bancas, materias, assuntos, tipos);
+                var user = await _utils.GetUserFromContextAsync();
+                var result = await _service.GetProvas(bancas, materias, assuntos, tipos, user.Admin.Equals("1"));
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -333,7 +336,8 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetMaterias(bancas, provas, assuntos, tipos);
+                var user = await _utils.GetUserFromContextAsync();
+                var result = await _service.GetMaterias(bancas, provas, assuntos, tipos, user.Admin.Equals("1"));
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -363,7 +367,8 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetAssuntos(bancas, provas, materias, tipos);
+                var user = await _utils.GetUserFromContextAsync();
+                var result = await _service.GetAssuntos(bancas, provas, materias, tipos, user.Admin.Equals("1"));
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()
@@ -393,7 +398,8 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var result = await _service.GetTipos(bancas, provas, materias);
+                var user = await _utils.GetUserFromContextAsync();
+                var result = await _service.GetTipos(bancas, provas, materias, user.Admin.Equals("1"));
                 List<string> response = _mapper.Map<List<string>>(result);
 
                 return new ResponseBase<List<string>>()

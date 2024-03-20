@@ -128,7 +128,7 @@ namespace Application.Implementation.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetBancas(string provas, string materias, string assuntos, string tipos, bool admin)
         {
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -140,7 +140,7 @@ namespace Application.Implementation.Repositories
                          join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
                          join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
 
-                         where q.Ativo.Equals("1") && p.IsActive.Equals("1") 
+                         where ((q.Ativo.Equals("1") && p.IsActive.Equals("1")) || admin == true)
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
@@ -150,7 +150,7 @@ namespace Application.Implementation.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetProvas(string bancas, string materias, string assuntos, string tipos, bool admin)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var materiasList = materias.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -161,7 +161,8 @@ namespace Application.Implementation.Repositories
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
                          join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
-                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
+                         where ((q.Ativo.Equals("1") && p.IsActive.Equals("1")) || admin == true)
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
@@ -171,7 +172,7 @@ namespace Application.Implementation.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos)
+        public async Task<IEnumerable<string>> GetMaterias(string bancas, string provas, string assuntos, string tipos, bool admin)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -182,7 +183,8 @@ namespace Application.Implementation.Repositories
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
                          join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
-                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
+                         where ((q.Ativo.Equals("1") && p.IsActive.Equals("1")) || admin == true)
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (assuntos.Contains(q.Assunto) || assuntos == "")
@@ -192,7 +194,7 @@ namespace Application.Implementation.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos)
+        public async Task<IEnumerable<string>> GetAssuntos(string bancas, string provas, string materias, string tipos, bool admin)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -203,7 +205,8 @@ namespace Application.Implementation.Repositories
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
                          join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
-                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
+                         where ((q.Ativo.Equals("1") && p.IsActive.Equals("1")) || admin == true)
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
@@ -213,7 +216,7 @@ namespace Application.Implementation.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias)
+        public async Task<IEnumerable<string>> GetTipos(string bancas, string provas, string materias, bool admin)
         {
             var bancasList = bancas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             var provasList = provas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -223,7 +226,8 @@ namespace Application.Implementation.Repositories
                          join q in _dataContext.Questoes on p.Codigo equals q.CodigoProva
                          join t in _dataContext.TipoProvaAssociado on p.Codigo equals t.CodigoProva
                          join tt in _dataContext.TipoProva on t.CodigoTipo equals tt.Codigo
-                         where q.Ativo.Equals("1") && p.IsActive.Equals("1")
+
+                         where ((q.Ativo.Equals("1") && p.IsActive.Equals("1")) || admin == true)
                          && (bancasList.Contains(p.Banca) || bancas == "")
                          && (provasList.Contains(p.NomeProva) || provas == "")
                          && (materiasList.Contains(q.Materia) || materias == "")
