@@ -58,6 +58,8 @@ namespace Application.Implementation.Repositories
         {
             var model = await GetByIdAsync(entity.Codigo);
             entity.DataRegistro = model.DataRegistro;
+            entity.IsActive = model.IsActive;
+
             if (model == null)
                 return null;
 
