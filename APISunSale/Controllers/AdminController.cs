@@ -159,5 +159,93 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpGet("getquantidadequestoescadastradasporusuarios")]
+        public async Task<ResponseBase<List<StringPlusIntViewModel>>> GetQuantidadeQuestoesCadastradasPorUsuarios()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<List<StringPlusIntViewModel>>()
+                    {
+                        Message = "You don't have access!",
+                        Object = null,
+                        Quantity = 0,
+                        Success = false,
+                        Total = 0
+                    };
+                }
+
+                var result = await _service.BuscaUsuariosSalvoQuestoes();
+
+                var response = _mapper.Map<List<StringPlusIntViewModel>>(result);
+                return new ResponseBase<List<StringPlusIntViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1,
+                    Total = response.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<StringPlusIntViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("getquantidadequestoesvalidadasporusuarios")]
+        public async Task<ResponseBase<List<StringPlusIntViewModel>>> GetQuantidadeQuestoesValidadasPorUsuarios()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<List<StringPlusIntViewModel>>()
+                    {
+                        Message = "You don't have access!",
+                        Object = null,
+                        Quantity = 0,
+                        Success = false,
+                        Total = 0
+                    };
+                }
+
+                var result = await _service.BuscaUsuariosVerificouQuestoes();
+
+                var response = _mapper.Map<List<StringPlusIntViewModel>>(result);
+                return new ResponseBase<List<StringPlusIntViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1,
+                    Total = response.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<StringPlusIntViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }

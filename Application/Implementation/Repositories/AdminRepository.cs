@@ -58,6 +58,34 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
+        public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<StringPlusInt>(@"
+                    select * from (
+                    select u.NOME as Descricao, count(q.CODIGO) as valor
+                    from QUESTOES q
+                    inner join USUARIOS u on q.CreatedBy = u.ID
+                    where q.ativo = '1'
+                    group by u.NOME) t
+                    order by t.valor desc
+                ").ToListAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes()
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<StringPlusInt>(@"
+                    select t.extracted_string as descricao, count(1) as valor from (select 
+                    trim(SUBSTRING(l.Descricao, CHARINDEX('usuário', l.Descricao) + LEN('usuário') + 1, LEN(l.Descricao))) AS extracted_string
+                    from Logger l
+                    where l.Descricao like 'Alterando questão%') t
+                    group by t.extracted_string
+                ").ToListAsync();
+
+            return response;
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

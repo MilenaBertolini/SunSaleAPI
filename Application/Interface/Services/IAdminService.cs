@@ -8,5 +8,7 @@ namespace Application.Interface.Services
         Task<Main> GetAllDados();
         Task<IEnumerable<Questoes>> BuscaQuestoesSolicitadasRevisao(int page, int quantity);
         Task<IEnumerable<Prova>> BuscaProvasSolicitadasRevisao(int page, int quantity);
+        Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes();
+        Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes();
     }
 }

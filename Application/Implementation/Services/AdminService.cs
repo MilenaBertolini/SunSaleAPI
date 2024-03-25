@@ -29,6 +29,16 @@ namespace Application.Implementation.Services
             return await _repository.BuscaProvasSolicitadasRevisao(page, quantity);
         }
 
+        public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes()
+        {
+            return await _repository.BuscaUsuariosSalvoQuestoes();
+        }
+
+        public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes()
+        {
+            return await _repository.BuscaUsuariosVerificouQuestoes();
+        }
+
         public void Dispose()
         {
             _repository.Dispose();

@@ -9,5 +9,7 @@ namespace Application.Interface.Repositories
         void Dispose();
         Task<IEnumerable<Questoes>> BuscaQuestoesSolicitadasRevisao(int page, int quantity);
         Task<IEnumerable<Prova>> BuscaProvasSolicitadasRevisao(int page, int quantity);
+        Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes();
+        Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes();
     }
 }

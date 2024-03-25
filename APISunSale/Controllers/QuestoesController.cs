@@ -543,153 +543,94 @@ namespace APISunSale.Controllers
             }
         }
 
-        [HttpGet("criaQuestao")]
-        public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
-        {
-            try
-            {
-                var user = await _utils.GetUserFromContextAsync();
-
-                if (user.Admin != "1")
-                {
-                    return new ResponseBase<List<MainViewModel>>()
-                    {
-                        Message = "Acesso não autorizado",
-                        Success = false
-                    };
-                }
-
-                List<MainViewModel> list = new List<MainViewModel>();
-                List<string> linhas = new List<string>();
-                string materia = "Matemática";
-                string assunto = "Potencialização e Raízes";
-                string texto = "Qual o resultado da equação";
-
-                for (int i = 0, cont = 1; i < 100; i ++, cont++)
-                {
-                    string equacao = "";
-                    List<string> ops = new List<string>();
-
-                    Random randon = new Random();
-                    int a = randon.Next(20);
-
-                    while (a == 0) a = randon.Next(20);
-
-                    if(randon.Next(10) % 2 == 0)
-                    {
-                        equacao = $"<span>&#8730;</span>{(a * a)}";
-                        ops.Add((a).ToString());
-                        ops.Add(((a) + 1).ToString());
-                        ops.Add(((a) - 1).ToString());
-                        ops.Add(((a) + 3).ToString());
-                        ops.Add(((a) - 4).ToString());
-                    }
-                    else
-                    {
-                        equacao = $"{a}²";
-                        ops.Add((a*a).ToString());
-                        ops.Add(((a * a) + 5).ToString());
-                        ops.Add(((a * a) - 5).ToString());
-                        ops.Add(((a * a) + 15).ToString());
-                        ops.Add(((a * a) - 15).ToString());
-                    }
-
-                    MainViewModel view = new MainViewModel();
-                    view.Ativo = "1";
-                    view.CodigoProva = 160;
-                    view.NumeroQuestao = cont;
-                    view.Materia = materia;
-                    view.Assunto = assunto;
-                    view.ObservacaoQuestao = string.Empty;
-                    view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
-                    view.CampoQuestao = $"<b>Questão {view.NumeroQuestao}</b><br><br>{texto}:{equacao}";
-                    view.DataRegistro = DateTime.Now;
-                    view.UpdatedOn = DateTime.Now;
-
-                    string correta = ops[0];
-                    ops = Shuffle(ops);
-
-                    foreach(string r in ops)
-                    {
-                        RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
-                        resposta.Certa = correta == r ? "1" : "0";
-                        resposta.TextoResposta = r;
-                        resposta.DataRegistro = DateTime.Now;
-
-                        view.RespostasQuestoes.Add(resposta);
-                    }
-                    
-
-                    await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
-
-                    list.Add(view);
-                }
-
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = "Search success",
-                    Success = true,
-                    Object = list,
-                    Quantity = 1
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
-
-                return new ResponseBase<List<MainViewModel>>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }
-        }
-
-        static List<string> Shuffle(List<string> list)
-        {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                string value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-
-            return list;
-        }
-
         //[HttpGet("criaQuestao")]
-        //public async Task<ResponseBase<MainViewModel>> criaQuestao()
+        //public async Task<ResponseBase<List<MainViewModel>>> CriaQuestao()
         //{
         //    try
         //    {
-        //        string[] texto = File.ReadAllLines("C:/provas/saida/json.json");
-        //        var mainList = JsonConvert.DeserializeObject<List<MainViewModel>>(texto[0]);
-
         //        var user = await _utils.GetUserFromContextAsync();
 
         //        if (user.Admin != "1")
         //        {
-        //            return new ResponseBase<MainViewModel>()
+        //            return new ResponseBase<List<MainViewModel>>()
         //            {
         //                Message = "Acesso não autorizado",
         //                Success = false
         //            };
         //        }
 
-        //        foreach (var main in mainList)
+        //        List<MainViewModel> list = new List<MainViewModel>();
+        //        List<string> linhas = new List<string>();
+        //        string materia = "Matemática";
+        //        string assunto = "Potencialização e Raízes";
+        //        string texto = "Qual o resultado da equação";
+
+        //        for (int i = 0, cont = 1; i < 100; i ++, cont++)
         //        {
-        //            var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
+        //            string equacao = "";
+        //            List<string> ops = new List<string>();
+
+        //            Random randon = new Random();
+        //            int a = randon.Next(20);
+
+        //            while (a == 0) a = randon.Next(20);
+
+        //            if(randon.Next(10) % 2 == 0)
+        //            {
+        //                equacao = $"<span>&#8730;</span>{(a * a)}";
+        //                ops.Add((a).ToString());
+        //                ops.Add(((a) + 1).ToString());
+        //                ops.Add(((a) - 1).ToString());
+        //                ops.Add(((a) + 3).ToString());
+        //                ops.Add(((a) - 4).ToString());
+        //            }
+        //            else
+        //            {
+        //                equacao = $"{a}²";
+        //                ops.Add((a*a).ToString());
+        //                ops.Add(((a * a) + 5).ToString());
+        //                ops.Add(((a * a) - 5).ToString());
+        //                ops.Add(((a * a) + 15).ToString());
+        //                ops.Add(((a * a) - 15).ToString());
+        //            }
+
+        //            MainViewModel view = new MainViewModel();
+        //            view.Ativo = "1";
+        //            view.CodigoProva = 160;
+        //            view.NumeroQuestao = cont;
+        //            view.Materia = materia;
+        //            view.Assunto = assunto;
+        //            view.ObservacaoQuestao = string.Empty;
+        //            view.RespostasQuestoes = new List<RespostasQuestoesViewModel>();
+        //            view.CampoQuestao = $"<b>Questão {view.NumeroQuestao}</b><br><br>{texto}:{equacao}";
+        //            view.DataRegistro = DateTime.Now;
+        //            view.UpdatedOn = DateTime.Now;
+
+        //            string correta = ops[0];
+        //            ops = Shuffle(ops);
+
+        //            foreach(string r in ops)
+        //            {
+        //                RespostasQuestoesViewModel resposta = new RespostasQuestoesViewModel();
+        //                resposta.Certa = correta == r ? "1" : "0";
+        //                resposta.TextoResposta = r;
+        //                resposta.DataRegistro = DateTime.Now;
+
+        //                view.RespostasQuestoes.Add(resposta);
+        //            }
+
+
+        //            await _service.Add(_mapper.Map<MainEntity>(view), user.Id);
+
+        //            list.Add(view);
         //        }
-        //        return new ResponseBase<MainViewModel>()
+
+        //        return new ResponseBase<List<MainViewModel>>()
         //        {
-        //            Message = "Created",
+        //            Message = "Search success",
         //            Success = true,
-        //            Quantity = mainList.Count
+        //            Object = list,
+        //            Quantity = 1
         //        };
         //    }
         //    catch (Exception ex)
@@ -697,13 +638,72 @@ namespace APISunSale.Controllers
         //        _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
         //        await _loggerService.AddException(ex);
 
-        //        return new ResponseBase<MainViewModel>()
+        //        return new ResponseBase<List<MainViewModel>>()
         //        {
         //            Message = ex.Message,
         //            Success = false
         //        };
         //    }
         //}
+
+        //static List<string> Shuffle(List<string> list)
+        //{
+        //    Random rng = new Random();
+        //    int n = list.Count;
+        //    while (n > 1)
+        //    {
+        //        n--;
+        //        int k = rng.Next(n + 1);
+        //        string value = list[k];
+        //        list[k] = list[n];
+        //        list[n] = value;
+        //    }
+
+        //    return list;
+        //}
+
+        [HttpGet("criaQuestao")]
+        public async Task<ResponseBase<MainViewModel>> criaQuestao()
+        {
+            try
+            {
+                string[] texto = File.ReadAllLines("C:/provas/saida/json.json");
+                var mainList = JsonConvert.DeserializeObject<List<MainViewModel>>(texto[0]);
+
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (user.Admin != "1")
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Acesso não autorizado",
+                        Success = false
+                    };
+                }
+
+                foreach (var main in mainList)
+                {
+                    var result = await _service.Add(_mapper.Map<MainEntity>(main), user.Id);
+                }
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = "Created",
+                    Success = true,
+                    Quantity = mainList.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainViewModel>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
 
         /*
 
