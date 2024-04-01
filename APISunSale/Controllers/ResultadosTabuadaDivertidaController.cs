@@ -8,6 +8,9 @@ using MainViewModel = Domain.ViewModel.ResultadosTabuadaDivertidaViewModel;
 using MainEntity = Domain.Entities.ResultadosTabuadaDivertida;
 using Service = Application.Interface.Services.IResultadosTabuadaDivertidaService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using UserService = Application.Interface.Services.IUsuariosService;
+using APISunSale.Utils;
+using Application.Model;
 
 namespace APISunSale.Controllers
 {
@@ -20,13 +23,15 @@ namespace APISunSale.Controllers
         private readonly Service _service;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
+        private readonly MainUtils _utils;
 
-        public ResultadosTabuadaDivertidaController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, LoggerService loggerService)
+        public ResultadosTabuadaDivertidaController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
+            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
@@ -128,6 +133,17 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Sem acesso",
+                        Success = false
+                    };
+                }
+
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -155,6 +171,19 @@ namespace APISunSale.Controllers
         {
             try
             {
+                var user = await _utils.GetUserFromContextAsync();
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<bool>()
+                    {
+                        Message = "Sem acesso",
+                        Success = false,
+                        Object = false
+                    };
+                }
+
+                await _loggerService.AddInfo($"Excluindo resposta do tabuada divertida {id} pelo usuário {user.Id}");
+
                 var result = await _service.DeleteById(id);
                 return new ResponseBase<bool>()
                 {
