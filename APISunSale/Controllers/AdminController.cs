@@ -247,5 +247,93 @@ namespace APISunSale.Controllers
                 };
             }
         }
+
+        [HttpGet("getquantidaderespostasporprova")]
+        public async Task<ResponseBase<List<RespostasPorProvaViewModel>>> GetQuantidadeRespostasPorProva()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                    {
+                        Message = "You don't have access!",
+                        Object = null,
+                        Quantity = 0,
+                        Success = false,
+                        Total = 0
+                    };
+                }
+
+                var result = await _service.BuscaRespostasPorProva();
+
+                var response = _mapper.Map<List<RespostasPorProvaViewModel>>(result);
+                return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1,
+                    Total = response.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("getquantidaderespostaspormateria")]
+        public async Task<ResponseBase<List<RespostasPorProvaViewModel>>> GetQuantidadeRespostasPorMateria()
+        {
+            try
+            {
+                var user = await _utils.GetUserFromContextAsync();
+
+                if (!user.Admin.Equals("1"))
+                {
+                    return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                    {
+                        Message = "You don't have access!",
+                        Object = null,
+                        Quantity = 0,
+                        Success = false,
+                        Total = 0
+                    };
+                }
+
+                var result = await _service.BuscaRespostasPorMateria();
+
+                var response = _mapper.Map<List<RespostasPorProvaViewModel>>(result);
+                return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = 1,
+                    Total = response.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<RespostasPorProvaViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Reflection;
+using Domain.Entities;
 
 namespace Application.Implementation.Repositories
 {
@@ -301,7 +302,14 @@ namespace Application.Implementation.Repositories
             }
 
             return includes.ToArray<string>();
-        } 
+        }
+
+        public async Task<IEnumerable<StringPlusInt>> BuscaConsultaDescricaoValor(string query)
+        {
+            var response = await _dataContext.Database.SqlQueryRaw<StringPlusInt>(query).ToListAsync();
+
+            return response;
+        }
 
         protected virtual void Dispose(bool disposing)
         {

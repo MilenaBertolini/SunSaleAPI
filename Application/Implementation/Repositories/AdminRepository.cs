@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Domain.ViewModel;
 using Data.Helper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Implementation.Repositories
 {
@@ -60,7 +61,7 @@ namespace Application.Implementation.Repositories
 
         public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes()
         {
-            var response = await _dataContext.Database.SqlQueryRaw<StringPlusInt>(@"
+            return await base.BuscaConsultaDescricaoValor(@"
                     select * from (
                     select u.NOME as Descricao, count(q.CODIGO) as valor
                     from QUESTOES q
@@ -68,20 +69,62 @@ namespace Application.Implementation.Repositories
                     where q.ativo = '1'
                     group by u.NOME) t
                     order by t.valor desc
-                ").ToListAsync();
-
-            return response;
+                ");
         }
 
         public async Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes()
         {
-            var response = await _dataContext.Database.SqlQueryRaw<StringPlusInt>(@"
+            return await base.BuscaConsultaDescricaoValor(@"
                     select t.extracted_string as descricao, count(1) as valor from (select 
                     trim(SUBSTRING(l.Descricao, CHARINDEX('usuário', l.Descricao) + LEN('usuário') + 1, LEN(l.Descricao))) AS extracted_string
                     from Logger l
                     where l.Descricao like 'Alterando questão%') t
                     group by t.extracted_string
-                ").ToListAsync();
+                ");
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva()
+        {
+           var query = @"
+                    with certas as (select count(1) as valor, p.NOMEPROVA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    where rq.CERTA = '1'
+                    group by p.NOMEPROVA), 
+                    erradas as (select count(1) as valor, p.NOMEPROVA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    where rq.CERTA <> '1'
+                    group by p.NOMEPROVA)
+
+                    select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
+                    inner join erradas on certas.Descricao = erradas.Descricao";
+
+            var response = await _dataContext.Database.SqlQueryRaw<RespostasPorProva>(query).ToListAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria()
+        {
+            var query = @"
+                    with certas as (select count(1) as valor, q.MATERIA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    where rq.CERTA = '1'
+                    group by q.MATERIA), 
+                    erradas as (select count(1) as valor, q.MATERIA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    where rq.CERTA <> '1'
+                    group by q.MATERIA)
+
+                    select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
+                    inner join erradas on certas.Descricao = erradas.Descricao";
+
+            var response = await _dataContext.Database.SqlQueryRaw<RespostasPorProva>(query).ToListAsync();
 
             return response;
         }

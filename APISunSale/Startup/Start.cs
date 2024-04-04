@@ -241,6 +241,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<StringPlusIntViewModel, StringPlusInt>();
                 cfg.CreateMap<StringPlusInt, StringPlusIntViewModel>();
+
+                cfg.CreateMap<RespostasPorProvaViewModel, RespostasPorProva>();
+                cfg.CreateMap<RespostasPorProva, RespostasPorProvaViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
