@@ -15,5 +15,9 @@
         public int QuantidadeRespostasTabuadaDivertida { get; set; }
         public int QuantidadeRespostasTabuadaDivertidaUltimas24Horas { get; set; }
         public IEnumerable<AdminUsuariosDate> UsuariosDates { get; set; }
+        public IEnumerable<RespostasPorProva> RespostasPorProvas { get; set; }
+        public IEnumerable<RespostasPorProva> RespostasPorMateria { get; set; }
+        public IEnumerable<RespostasPorProva> RespostasPorBanca { get; set; }
+        public IEnumerable<RespostasPorProva> RespostasPorTipo { get; set; }
     }
 }

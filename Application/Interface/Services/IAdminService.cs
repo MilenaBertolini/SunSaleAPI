@@ -12,5 +12,7 @@ namespace Application.Interface.Services
         Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes();
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva();
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria();
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca();
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo();
     }
 }

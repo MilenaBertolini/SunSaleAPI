@@ -25,7 +25,7 @@ namespace Application.Implementation.Repositories
             main.QuantidadeTotal = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS").FirstOrDefaultAsync();
             main.QuantidadeRespostas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS").FirstOrDefaultAsync();
             main.QuantidadeRespostasCertas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS where DATARESPOSTA >= GETDATE()-1").FirstOrDefaultAsync();
-            main.QuantidadeRespostasUltimas24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '0'").FirstOrDefaultAsync();
+            main.QuantidadeRespostasUltimas24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS r where r.DATARESPOSTA >= GETDATE()-1").FirstOrDefaultAsync();
             main.QuantidadeQuestoesAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where ativo = '1'").FirstOrDefaultAsync();
             main.QuantidadeQuestoesSolicitadasRevisao = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where ativo = '0'").FirstOrDefaultAsync();
             main.QuantidadeProvasAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '1'").FirstOrDefaultAsync();
@@ -83,20 +83,20 @@ namespace Application.Implementation.Repositories
                 ");
         }
 
-        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva()
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva(int user = -1)
         {
-           var query = @"
+           var query = @$"
                     with certas as (select count(1) as valor, p.NOMEPROVA as Descricao from RESPOSTASUSUARIOS r
                     inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
                     inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
                     inner join PROVA p on q.CODIGOPROVA = p.CODIGO
-                    where rq.CERTA = '1'
+                    where rq.CERTA = '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
                     group by p.NOMEPROVA), 
                     erradas as (select count(1) as valor, p.NOMEPROVA as Descricao from RESPOSTASUSUARIOS r
                     inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
                     inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
                     inner join PROVA p on q.CODIGOPROVA = p.CODIGO
-                    where rq.CERTA <> '1'
+                    where rq.CERTA <> '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
                     group by p.NOMEPROVA)
 
                     select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
@@ -107,19 +107,71 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
-        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria()
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria(int user = -1)
         {
-            var query = @"
+            var query = @$"
                     with certas as (select count(1) as valor, q.MATERIA as Descricao from RESPOSTASUSUARIOS r
                     inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
                     inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
-                    where rq.CERTA = '1'
+                    where rq.CERTA = '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
                     group by q.MATERIA), 
                     erradas as (select count(1) as valor, q.MATERIA as Descricao from RESPOSTASUSUARIOS r
                     inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
                     inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
-                    where rq.CERTA <> '1'
+                    where rq.CERTA <> '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
                     group by q.MATERIA)
+
+                    select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
+                    inner join erradas on certas.Descricao = erradas.Descricao";
+
+            var response = await _dataContext.Database.SqlQueryRaw<RespostasPorProva>(query).ToListAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca(int user = -1)
+        {
+            var query = $@"
+                    with certas as (select count(1) as valor, p.BANCA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    where rq.CERTA = '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
+                    group by p.BANCA), 
+                    erradas as (select count(1) as valor, p.BANCA as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    where rq.CERTA <> '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
+                    group by p.BANCA)
+
+                    select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
+                    inner join erradas on certas.Descricao = erradas.Descricao";
+
+            var response = await _dataContext.Database.SqlQueryRaw<RespostasPorProva>(query).ToListAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo(int user = -1)
+        {
+            var query = $@"
+                    with certas as (select count(1) as valor, tp.Descricao as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    inner join TipoProvaAssociado tpa on tpa.CodigoProva = p.CODIGO
+                    inner join TipoProva tp on tp.Codigo = tpa.CodigoTipo
+                    where rq.CERTA = '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
+                    group by tp.Descricao), 
+                    erradas as (select count(1) as valor, tp.Descricao as Descricao from RESPOSTASUSUARIOS r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.CODIGORESPOSTA
+                    inner join QUESTOES q on r.CODIGOQUESTAO = q.CODIGO
+                    inner join PROVA p on q.CODIGOPROVA = p.CODIGO
+                    inner join TipoProvaAssociado tpa on tpa.CodigoProva = p.CODIGO
+                    inner join TipoProva tp on tp.Codigo = tpa.CodigoTipo
+                    where rq.CERTA <> '1' and (r.CODIGOUSUARIO = {user} or {user} = -1)
+                    group by tp.Descricao)
 
                     select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
                     inner join erradas on certas.Descricao = erradas.Descricao";

@@ -11,7 +11,9 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<Prova>> BuscaProvasSolicitadasRevisao(int page, int quantity);
         Task<IEnumerable<StringPlusInt>> BuscaUsuariosSalvoQuestoes();
         Task<IEnumerable<StringPlusInt>> BuscaUsuariosVerificouQuestoes();
-        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva();
-        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria();
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorProva(int user = -1);
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria(int user = -1);
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca(int user = -1);
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo(int user = -1);
     }
 }

@@ -16,7 +16,14 @@ namespace Application.Implementation.Services
 
         public async Task<Main> GetAllDados()
         {
-            return await _repository.GetAllDados();
+            var retorno = await _repository.GetAllDados();
+
+            retorno.RespostasPorBanca = await this.BuscaRespostasPorBanca();
+            retorno.RespostasPorMateria = await this.BuscaRespostasPorMateria();
+            retorno.RespostasPorProvas = await this.BuscaRespostasPorProva();
+            retorno.RespostasPorTipo = await this.BuscaRespostasPorTipo();
+
+            return retorno;
         }
 
         public async Task<IEnumerable<Questoes>> BuscaQuestoesSolicitadasRevisao(int page, int quantity)
@@ -47,6 +54,16 @@ namespace Application.Implementation.Services
         public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria()
         {
             return await _repository.BuscaRespostasPorMateria();
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca()
+        {
+            return await _repository.BuscaRespostasPorBanca();
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo()
+        {
+            return await _repository.BuscaRespostasPorTipo();
         }
 
         public void Dispose()
