@@ -22,6 +22,7 @@ namespace Application.Implementation.Services
             retorno.RespostasPorMateria = await this.BuscaRespostasPorMateria();
             retorno.RespostasPorProvas = await this.BuscaRespostasPorProva();
             retorno.RespostasPorTipo = await this.BuscaRespostasPorTipo();
+            retorno.RespostasPorAvaliacao = await this.BuscaRespostasPorAvaliacao();
 
             return retorno;
         }
@@ -64,6 +65,11 @@ namespace Application.Implementation.Services
         public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo()
         {
             return await _repository.BuscaRespostasPorTipo();
+        }
+
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorAvaliacao()
+        {
+            return await _repository.BuscaRespostasPorAvaliacao();
         }
 
         public void Dispose()

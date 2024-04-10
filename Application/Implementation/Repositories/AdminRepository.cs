@@ -181,6 +181,30 @@ namespace Application.Implementation.Repositories
             return response;
         }
 
+        public async Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorAvaliacao(int user = -1)
+        {
+            var query = @$"
+                    with certas as (select count(1) as valor, p.Nome as Descricao from RespostasAvaliacoes r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.IdResposta
+                    inner join QUESTOES q on r.IdQuestao = q.CODIGO
+                    inner join Avaliacao p on r.IdAvaliacao = p.Id
+                    where rq.CERTA = '1' and (r.CreatedBy = {user} or {user} = -1)
+                    group by p.Nome), 
+                    erradas as (select count(1) as valor, p.NOME as Descricao from RespostasAvaliacoes r
+                    inner join RESPOSTASQUESTOES rq on rq.CODIGO = r.IdResposta
+                    inner join QUESTOES q on r.IdQuestao = q.CODIGO
+                    inner join Avaliacao p on r.IdAvaliacao = p.Id
+                    where rq.CERTA <> '1' and (r.CreatedBy = {user} or {user} = -1)
+                    group by p.NOME)
+
+                    select certas.valor as Certas, erradas.valor as Erradas, certas.Descricao as Descricao from certas
+                    inner join erradas on certas.Descricao = erradas.Descricao";
+
+            var response = await _dataContext.Database.SqlQueryRaw<RespostasPorProva>(query).ToListAsync();
+
+            return response;
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

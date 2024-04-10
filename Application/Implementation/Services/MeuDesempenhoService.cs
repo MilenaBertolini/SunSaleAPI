@@ -25,6 +25,7 @@ namespace Application.Implementation.Services
             desempenho.RespostasPorMateria = await _repositoryAdmin.BuscaRespostasPorMateria(user);
             desempenho.RespostasPorBanca = await _repositoryAdmin.BuscaRespostasPorBanca(user);
             desempenho.RespostasPorTipo = await _repositoryAdmin.BuscaRespostasPorTipo(user);
+            desempenho.RespostasPorAvaliacao = await _repositoryAdmin.BuscaRespostasPorAvaliacao(user);
             desempenho.QuantidadeQuestoesIncorretas = await _repository.BuscaQuestoesIncorretas(user);
             desempenho.QuantidadeQuestoesResolvidasCorretas = await _repository.BuscaQuestoesCorretas(user);
             desempenho.QuantidadeQuestoesTentadas = await _repository.BuscaQuestoesTentadas(user);

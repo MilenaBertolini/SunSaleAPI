@@ -19,5 +19,6 @@
         public IEnumerable<RespostasPorProvaViewModel> RespostasPorMateria { get; set; }
         public IEnumerable<RespostasPorProvaViewModel> RespostasPorBanca { get; set; }
         public IEnumerable<RespostasPorProvaViewModel> RespostasPorTipo { get; set; }
+        public IEnumerable<RespostasPorProvaViewModel> RespostasPorAvaliacao { get; set; }
     }
 }

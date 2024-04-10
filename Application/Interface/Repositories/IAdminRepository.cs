@@ -15,5 +15,6 @@ namespace Application.Interface.Repositories
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria(int user = -1);
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca(int user = -1);
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo(int user = -1);
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorAvaliacao(int user = -1);
     }
 }

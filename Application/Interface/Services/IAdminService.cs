@@ -14,5 +14,6 @@ namespace Application.Interface.Services
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorMateria();
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorBanca();
         Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorTipo();
+        Task<IEnumerable<RespostasPorProva>> BuscaRespostasPorAvaliacao();
     }
 }

@@ -9,5 +9,6 @@
         public IEnumerable<RespostasPorProva> RespostasPorMateria { get; set; }
         public IEnumerable<RespostasPorProva> RespostasPorBanca { get; set; }
         public IEnumerable<RespostasPorProva> RespostasPorTipo { get; set; }
+        public IEnumerable<RespostasPorProva> RespostasPorAvaliacao { get; set; }
     }
 }
