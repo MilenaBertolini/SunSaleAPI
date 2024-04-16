@@ -4,6 +4,7 @@
     {
         public int QuantidadeVerificados { get; set; }
         public int QuantidadeNaoVerificados { get; set; }
+        public int QuantidadeUsuarios24Horas { get; set; }
         public int QuantidadeTotal { get; set; }
         public int QuantidadeRespostas { get; set; }
         public int QuantidadeRespostasCertas { get; set; }

@@ -22,6 +22,7 @@ namespace Application.Implementation.Repositories
             var main = new Main();
             main.QuantidadeVerificados = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where IsVerified = '1'").FirstOrDefaultAsync();
             main.QuantidadeNaoVerificados = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where IsVerified = '0'").FirstOrDefaultAsync();
+            main.QuantidadeUsuarios24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where Created >= getdate()-1").FirstOrDefaultAsync();
             main.QuantidadeTotal = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS").FirstOrDefaultAsync();
             main.QuantidadeRespostas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS").FirstOrDefaultAsync();
             main.QuantidadeRespostasCertas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS where DATARESPOSTA >= GETDATE()-1").FirstOrDefaultAsync();
