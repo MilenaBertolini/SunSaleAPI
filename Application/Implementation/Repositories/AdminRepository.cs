@@ -22,17 +22,17 @@ namespace Application.Implementation.Repositories
             var main = new Main();
             main.QuantidadeVerificados = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where IsVerified = '1'").FirstOrDefaultAsync();
             main.QuantidadeNaoVerificados = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where IsVerified = '0'").FirstOrDefaultAsync();
-            main.QuantidadeUsuarios24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where Created >= getdate()-1").FirstOrDefaultAsync();
+            main.QuantidadeUsuarios30Dias = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS where Created >= getdate()-30").FirstOrDefaultAsync();
             main.QuantidadeTotal = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from USUARIOS").FirstOrDefaultAsync();
             main.QuantidadeRespostas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS").FirstOrDefaultAsync();
-            main.QuantidadeRespostasCertas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS where DATARESPOSTA >= GETDATE()-1").FirstOrDefaultAsync();
-            main.QuantidadeRespostasUltimas24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS r where r.DATARESPOSTA >= GETDATE()-1").FirstOrDefaultAsync();
+            main.QuantidadeRespostasCertas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS where DATARESPOSTA >= GETDATE()-30").FirstOrDefaultAsync();
+            main.QuantidadeRespostasUltimas30Dias = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from RESPOSTASUSUARIOS r where r.DATARESPOSTA >= GETDATE()-30").FirstOrDefaultAsync();
             main.QuantidadeQuestoesAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where ativo = '1'").FirstOrDefaultAsync();
             main.QuantidadeQuestoesSolicitadasRevisao = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from QUESTOES where ativo = '0'").FirstOrDefaultAsync();
             main.QuantidadeProvasAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '1'").FirstOrDefaultAsync();
             main.QuantidadeProvasDesativasAtivas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from PROVA where IsActive = '0'").FirstOrDefaultAsync();
             main.QuantidadeRespostasTabuadaDivertida = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida").FirstOrDefaultAsync();
-            main.QuantidadeRespostasTabuadaDivertidaUltimas24Horas = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida where Created >= GETDATE()-1").FirstOrDefaultAsync();
+            main.QuantidadeRespostasTabuadaDivertidaUltimas30Dias = await _dataContext.Database.SqlQueryRaw<int>("select count(1) as value from ResultadosTabuadaDivertida where Created >= GETDATE()-30").FirstOrDefaultAsync();
 
             main.UsuariosDates = await _dataContext.Database.SqlQueryRaw<AdminUsuariosDate>("SELECT  CONVERT(date, Created) AS Date, COUNT(*) AS Count FROM USUARIOS WHERE Created >= DATEADD(day, -30, GETDATE()) GROUP BY CONVERT(date, Created) ORDER BY CONVERT(date, Created) DESC").ToListAsync();
 
