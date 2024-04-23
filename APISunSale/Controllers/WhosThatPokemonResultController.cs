@@ -93,23 +93,23 @@ namespace APISunSale.Controllers
             {
                 var link = base.HttpContext.Request.Headers["Referer"];
                 
-                //if(link.Count == 0)
-                //{
-                //    return new ResponseBase<MainViewModel>()
-                //    {
-                //        Message = "Not authorized",
-                //        Success = false
-                //    };
-                //}
+                if(link.Count == 0)
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not authorized",
+                        Success = false
+                    };
+                }
 
-                //if (!link[0].ToString().Contains("http://localhost:4200/") && !link[0].ToString().Contains("whatsthatpokemon") && !link[0].ToString().Contains("qualpokemon"))
-                //{
-                //    return new ResponseBase<MainViewModel>()
-                //    {
-                //        Message = "Not authorized",
-                //        Success = false
-                //    };
-                //}
+                if (!link[0].ToString().Contains("http://localhost:4200/") && !link[0].ToString().Contains("whatsthatpokemon") && !link[0].ToString().Contains("qualpokemon"))
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not authorized",
+                        Success = false
+                    };
+                }
 
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
