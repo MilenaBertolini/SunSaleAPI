@@ -99,16 +99,16 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var link = base.HttpContext.Request.Headers["Referer"];
+                //var link = base.HttpContext.Request.Headers["Referer"];
 
-                if (!link[0].ToString().Contains("tabuadadivertida"))
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Not authorized",
-                        Success = false
-                    };
-                }
+                //if (!link[0].ToString().Contains("tabuadadivertida"))
+                //{
+                //    return new ResponseBase<MainViewModel>()
+                //    {
+                //        Message = "Not authorized",
+                //        Success = false
+                //    };
+                //}
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
