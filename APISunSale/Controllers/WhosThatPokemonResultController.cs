@@ -4,34 +4,29 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.ResultadosTabuadaDivertidaViewModel;
-using MainEntity = Domain.Entities.ResultadosTabuadaDivertida;
-using Service = Application.Interface.Services.IResultadosTabuadaDivertidaService;
+using MainViewModel = Domain.ViewModel.WhosThatPokemonResultViewModel;
+using MainEntity = Domain.Entities.WhosThatPokemonResult;
+using Service = Application.Interface.Services.IWhosThatPokemonResultService;
 using LoggerService = Application.Interface.Services.ILoggerService;
-using UserService = Application.Interface.Services.IUsuariosService;
-using APISunSale.Utils;
-using Application.Model;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ResultadosTabuadaDivertidaController : ControllerBase
+    public class WhosThatPokemonResultController : ControllerBase
     {
-        private readonly ILogger<AcaoUsuarioController> _logger;
+        private readonly ILogger<WhosThatPokemonResultController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
         private readonly LoggerService _loggerService;
-        private readonly MainUtils _utils;
 
-        public ResultadosTabuadaDivertidaController(ILogger<AcaoUsuarioController> logger, Service service, IMapper mapper, LoggerService loggerService, IHttpContextAccessor httpContextAccessor, UserService userService)
+        public WhosThatPokemonResultController(ILogger<WhosThatPokemonResultController> logger, Service service, IMapper mapper, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
             _loggerService = loggerService;
-            _utils = new MainUtils(httpContextAccessor, userService);
         }
 
         [HttpGet("pagged")]
@@ -41,15 +36,12 @@ namespace APISunSale.Controllers
             {
                 var result = await _service.GetAllPagged(page, quantity);
                 var response = _mapper.Map<List<MainViewModel>>(result);
-                var total = await _service.QuantidadeTotal();
-
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = response?.Count,
-                    Total = total
+                    Quantity = response?.Count
                 };
             }
             catch (Exception ex)
@@ -100,8 +92,8 @@ namespace APISunSale.Controllers
             try
             {
                 var link = base.HttpContext.Request.Headers["Referer"];
-
-                if (!link[0].ToString().Contains("tabuadadivertida"))
+                
+                if(link.Count == 0)
                 {
                     return new ResponseBase<MainViewModel>()
                     {
@@ -109,6 +101,16 @@ namespace APISunSale.Controllers
                         Success = false
                     };
                 }
+
+                if (!link[0].ToString().Contains("http://localhost:4200/") && !link[0].ToString().Contains("whatsthatpokemon") && !link[0].ToString().Contains("qualpokemon"))
+                {
+                    return new ResponseBase<MainViewModel>()
+                    {
+                        Message = "Not authorized",
+                        Success = false
+                    };
+                }
+
 
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
@@ -137,17 +139,6 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var user = await _utils.GetUserFromContextAsync();
-
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<MainViewModel>()
-                    {
-                        Message = "Sem acesso",
-                        Success = false
-                    };
-                }
-
                 var result = await _service.Update(_mapper.Map<MainEntity>(main));
                 return new ResponseBase<MainViewModel>()
                 {
@@ -175,19 +166,6 @@ namespace APISunSale.Controllers
         {
             try
             {
-                var user = await _utils.GetUserFromContextAsync();
-                if (!user.Admin.Equals("1"))
-                {
-                    return new ResponseBase<bool>()
-                    {
-                        Message = "Sem acesso",
-                        Success = false,
-                        Object = false
-                    };
-                }
-
-                await _loggerService.AddInfo($"Excluindo resposta do tabuada divertida {id} pelo usuário {user.Id}");
-
                 var result = await _service.DeleteById(id);
                 return new ResponseBase<bool>()
                 {
@@ -213,19 +191,26 @@ namespace APISunSale.Controllers
 
         [HttpGet("ranking")]
         [AllowAnonymous]
-        public async Task<ResponseBase<List<RankingTabuadaDivertida>>> GetRaking()
+        public async Task<ResponseBase<RankingWhosThatPokemon>> GetRaking()
         {
             try
             {
-                var result = await _service.GetRankingTabuada();
-                var qtTotal = await _service.GetAll();
-                return new ResponseBase<List<RankingTabuadaDivertida>>()
+                var resultCustom = await _service.GetRanking(true);
+                var resultClassic = await _service.GetRanking(false);
+
+                RankingWhosThatPokemon ranking = new RankingWhosThatPokemon()
+                {
+                    ListaClassic = _mapper.Map<List<MainViewModel>>(resultClassic),
+                    ListaCustom = _mapper.Map<List<MainViewModel>>(resultCustom)
+                };
+
+                return new ResponseBase<RankingWhosThatPokemon>()
                 {
                     Message = "Listed",
                     Success = true,
-                    Object = result,
-                    Quantity = result.Count,
-                    Total = qtTotal.Count()
+                    Object = ranking,
+                    Quantity = 1,
+                    Total = 1
                 };
             }
             catch (Exception ex)
@@ -233,7 +218,7 @@ namespace APISunSale.Controllers
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
                 await _loggerService.AddException(ex);
 
-                return new ResponseBase<List<RankingTabuadaDivertida>>()
+                return new ResponseBase<RankingWhosThatPokemon>()
                 {
                     Message = ex.Message,
                     Success = false,

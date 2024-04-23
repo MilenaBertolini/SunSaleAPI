@@ -62,6 +62,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IQuestoesAvaliacaoService, QuestoesAvaliacaoService>();
             _app.Services.AddScoped<IRespostasAvaliacoesService, RespostasAvaliacoesService>();
             _app.Services.AddScoped<IMeuDesempenhoService, MeuDesempenhoService>();
+            _app.Services.AddScoped<IWhosThatPokemonResultService, WhosThatPokemonResultService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -100,6 +101,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IQuestoesAvaliacaoRepository, QuestoesAvaliacaoRepository>();
             _app.Services.AddScoped<IRespostasAvaliacoesRepository, RespostasAvaliacoesRepository>();
             _app.Services.AddScoped<IMeuDesempenhoRepository, MeuDesempenhoRepository>();
+            _app.Services.AddScoped<IWhosThatPokemonResultRepository, WhosThatPokemonResultRepository>();
 
             Mapping();
 
@@ -249,6 +251,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<MeuDesempenhoViewModel, MeuDesempenho>();
                 cfg.CreateMap<MeuDesempenho, MeuDesempenhoViewModel>();
+
+                cfg.CreateMap<WhosThatPokemonResultViewModel, WhosThatPokemonResult>();
+                cfg.CreateMap<WhosThatPokemonResult, WhosThatPokemonResultViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
