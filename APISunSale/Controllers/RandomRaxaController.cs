@@ -32,11 +32,11 @@ namespace APISunSale.Controllers
         }
 
         [HttpPost("getRandomTeam")]
-        public ResponseBase<List<TeamResponse>> GetRandomTeam(List<Players> playears, int numeroJogadoresLinha = 4)
+        public async Task<ResponseBase<List<TeamResponse>>> GetRandomTeam(List<Players> playears, int numeroJogadoresLinha = 4)
         {
             try
             {
-                _loggerService.AddInfo("Buscando time random");
+                await _loggerService.AddInfo("Buscando time random");
                 var result = _service.GetTeams(playears, numeroJogadoresLinha);
 
                 List<TeamResponse> toReturn = new List<TeamResponse>();
@@ -66,7 +66,7 @@ namespace APISunSale.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                _loggerService.AddException(ex);
+                await _loggerService.AddException(ex);
 
                 return new ResponseBase<List<TeamResponse>>()
                 {
