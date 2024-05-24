@@ -9,6 +9,7 @@ using Domain.ViewModel;
 using System.Reflection;
 using Domain.Entities;
 using System.Collections.Generic;
+using Application.Implementation.Services;
 
 namespace APISunSale.Controllers
 {
@@ -35,7 +36,7 @@ namespace APISunSale.Controllers
         {
             try
             {
-                _logger.LogInformation("Buscando time random");
+                _loggerService.AddInfo("Buscando time random");
                 var result = _service.GetTeams(playears, numeroJogadoresLinha);
 
                 List<TeamResponse> toReturn = new List<TeamResponse>();
