@@ -35,6 +35,7 @@ namespace APISunSale.Controllers
         {
             try
             {
+                _logger.LogInformation("Buscando time random");
                 var result = _service.GetTeams(playears, numeroJogadoresLinha);
 
                 List<TeamResponse> toReturn = new List<TeamResponse>();
