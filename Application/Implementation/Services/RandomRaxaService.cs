@@ -12,19 +12,26 @@ namespace Application.Implementation.Services
 
         public List<Team> GetTeams(List<Players> players, int numeroJogadores = 4)
         {
+            if (players == null || players.Count == 0)
+            {
+                return new List<Team>();
+            }
+
             Random random = new Random();
 
             var groupedPlayers = players.OrderByDescending(g => g.Nota)
                                             .GroupBy(j => j.Nota)
                                             .ToList();
 
+            var randomList = new List<List<Players>>();
+
             foreach (var group in groupedPlayers)
             {
-                group.OrderBy(j => random.Next()).ToList();
+                randomList.Add(group.OrderBy(j => random.Next()).ToList());
             }
 
             List<Players> jogadoresOrdenados = new List<Players>();
-            foreach (var group in groupedPlayers)
+            foreach (var group in randomList)
             {
                 jogadoresOrdenados.AddRange(group.Select(i => i).ToList());
             }
