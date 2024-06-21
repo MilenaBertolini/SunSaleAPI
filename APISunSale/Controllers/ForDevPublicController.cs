@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using PessoaMainViewModel = Domain.ViewModel.PessoasForDevViewModel;
+using EscolaMainViewModel = Domain.ViewModel.EscolaForDevViewModel;
 using EmpresaMainViewModel = Domain.ViewModel.EmpresaForDevViewModel;
 using CartaoCreditoMainViewModel = Domain.ViewModel.CartaoCreditoDevToolsViewModel;
 using VeiculosMainViewModel = Domain.ViewModel.VeiculosForDevViewModel;
@@ -12,6 +13,8 @@ using ServiceEmpresa = Application.Interface.Services.IEmpresaForDevService;
 using ServiceCartao = Application.Interface.Services.ICartaoCreditoDevToolsService;
 using ServiceVeiculo = Application.Interface.Services.IVeiculosForDevService;
 using LoggerService = Application.Interface.Services.ILoggerService;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace APISunSale.Controllers
 {
@@ -273,6 +276,63 @@ namespace APISunSale.Controllers
                 await _loggerService.AddException(ex);
 
                 return new ResponseBase<List<VeiculosMainViewModel>>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet("escola/random")]
+        public async Task<ResponseBase<List<EscolaMainViewModel>>> GetRandomEscola(int? qt)
+        {
+            try
+            {
+                var pessoaEnumerable = await _servicePerson.GetRandom(qt);
+                var pessoa = pessoaEnumerable.ToList();
+                var empresaEnumerable = await _serviceEmpresa.GetRandom(qt);
+                var empresa = empresaEnumerable.ToList();
+
+                await _loggerService.AddInfo($"Busca {(qt.HasValue ? qt.Value : 1)} empresa aleatória");
+
+                List<EscolaMainViewModel> response = new List<EscolaMainViewModel>();
+                
+                for(int i = 0; i < pessoa.Count(); i++)
+                {
+                    response.Add(new EscolaMainViewModel()
+                    {
+                        Bairro = pessoa[i].Bairro,
+                        Celular = pessoa[i].Celular,
+                        CEP = pessoa[i].Cep,
+                        Cidade = pessoa[i].Cidade,
+                        CNPJ = pessoa[i].Celular,
+                        DataAbertura = empresa[i].DataAbertura,
+                        Email = pessoa[i].Email,
+                        Endereco = pessoa[i].Endereco,
+                        Estado = pessoa[i].Estado,
+                        IE = empresa[i].IE,
+                        Nome = "Escola " + pessoa[i].Nome,
+                        Numero = pessoa[i].Numero.ToString(),
+                        Site = empresa[i].Site,
+                        TelefoneFixo = pessoa[i].TelefoneFixo
+                    });
+                }
+
+                return new ResponseBase<List<EscolaMainViewModel>>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = response,
+                    Quantity = response?.Count,
+                    Total = response?.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<List<EscolaMainViewModel>>()
                 {
                     Message = ex.Message,
                     Success = false
