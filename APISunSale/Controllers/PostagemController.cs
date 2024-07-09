@@ -4,49 +4,47 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainViewModel = Domain.ViewModel.EmailViewModel;
-using MainEntity = Domain.Entities.Email;
-using Service = Application.Interface.Services.IEmailService;
-using Domain.Entities;
-using Microsoft.Extensions.Options;
+using MainViewModel = Domain.ViewModel.PostagemViewModel;
+using MainEntity = Domain.Entities.Postagem;
+using Service = Application.Interface.Services.IPostagemService;
 using LoggerService = Application.Interface.Services.ILoggerService;
-using Domain.ViewModel;
+using static Data.Helper.EnumeratorsTypes;
 
 namespace APISunSale.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class EmailController
+    public class PostagemController
     {
-        private readonly ILogger<EmailController> _logger;
+        private readonly ILogger<PostagemController> _logger;
         private readonly Service _service;
         private readonly IMapper _mapper;
-        private readonly EmailSettings _emailSettings;
         private readonly LoggerService _loggerService;
 
-        public EmailController(ILogger<EmailController> logger, Service service, IMapper mapper, IOptions<EmailSettings> emailSettings, LoggerService loggerService)
+        public PostagemController(ILogger<PostagemController> logger, Service service, IMapper mapper, LoggerService loggerService)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
-            _emailSettings = emailSettings.Value;
             _loggerService = loggerService;
         }
 
         [HttpGet("pagged")]
-        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity)
+        [AllowAnonymous]
+        public async Task<ResponseBase<List<MainViewModel>>> GetAllPagged(int page, int quantity, TipoPostagem tipoPostagem)
         {
             try
             {
-                var result = await _service.GetAllPagged(page, quantity);
-                var response = _mapper.Map<List<MainViewModel>>(result);
+                var result = await _service.GetAllPagged(page, quantity, tipoPostagem);
+                var response = _mapper.Map<List<MainViewModel>>(result.Item1);
                 return new ResponseBase<List<MainViewModel>>()
                 {
                     Message = "List created",
                     Success = true,
                     Object = response,
-                    Quantity = response?.Count
+                    Quantity = response?.Count,
+                    Total = result.Item2,
                 };
             }
             catch (Exception ex)
@@ -63,6 +61,7 @@ namespace APISunSale.Controllers
         }
 
         [HttpGet("getById")]
+        [AllowAnonymous]
         public async Task<ResponseBase<MainViewModel>> GetById(int id)
         {
             try
@@ -96,44 +95,6 @@ namespace APISunSale.Controllers
             try
             {
                 var result = await _service.Add(_mapper.Map<MainEntity>(main));
-                
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = "Created",
-                    Success = true,
-                    Object = _mapper.Map<MainViewModel>(result),
-                    Quantity = 1
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
-                await _loggerService.AddException(ex);
-
-                return new ResponseBase<MainViewModel>()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }
-        }
-
-        [HttpPost("enviaEmailContato")]
-        [AllowAnonymous]
-        public async Task<ResponseBase<MainViewModel>> EnviaEmailContato([FromBodyAttribute] EmailContato main)
-        {
-            try
-            {
-                MainViewModel mainView = new MainViewModel()
-                {
-                    Assunto = "Contato Portfolio",
-                    Destinatario = "rodrigoborgesmachado@gmail.com",
-                    Texto = $"{main.Email}|{main.Nome}|{main.Empresa}|{main.Escola}" + Environment.NewLine + main.Mensagem,
-                    Observacao = "Email enviado automaticamente"
-                };
-
-                var result = await _service.Add(_mapper.Map<MainEntity>(mainView));
-
                 return new ResponseBase<MainViewModel>()
                 {
                     Message = "Created",

@@ -62,5 +62,6 @@ namespace Data.Context
         public DbSet<QuestoesAvaliacao> QuestoesAvaliacao { get; set; }
         public DbSet<RespostasAvaliacoes> RespostasAvaliacoes { get; set; }
         public DbSet<WhosThatPokemonResult> WhosThatPokemonResult { get; set; }
+        public DbSet<Postagem> Postagem { get; set; }
     }
 }

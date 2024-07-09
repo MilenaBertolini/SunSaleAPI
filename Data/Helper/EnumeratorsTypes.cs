@@ -33,5 +33,11 @@ namespace Data.Helper
             QuestoesAqui = 0,
             CrudForms = 1
         }
+
+        public enum TipoPostagem
+        {
+            Featured_Projects = 0,
+            Articles = 1
+        }
     }
 }

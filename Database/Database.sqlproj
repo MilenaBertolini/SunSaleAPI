@@ -142,5 +142,7 @@
     <Build Include="Tables\QuestoesAvaliacao.sql" />
     <Build Include="Tables\RespostasAvaliacoes.sql" />
     <Build Include="Tables\WhosThatPokemonResult.sql" />
+    <Build Include="Tables\TipoPostagem.sql" />
+    <Build Include="Tables\Postagem.sql" />
   </ItemGroup>
 </Project>

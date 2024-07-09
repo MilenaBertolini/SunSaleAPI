@@ -64,6 +64,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IMeuDesempenhoService, MeuDesempenhoService>();
             _app.Services.AddScoped<IWhosThatPokemonResultService, WhosThatPokemonResultService>();
             _app.Services.AddScoped<IRandomRaxaService, RandomRaxaService>();
+            _app.Services.AddScoped<IPostagemService, PostagemService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -103,6 +104,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IRespostasAvaliacoesRepository, RespostasAvaliacoesRepository>();
             _app.Services.AddScoped<IMeuDesempenhoRepository, MeuDesempenhoRepository>();
             _app.Services.AddScoped<IWhosThatPokemonResultRepository, WhosThatPokemonResultRepository>();
+            _app.Services.AddScoped<IPostagemRepository, PostagemRepository>();
 
             Mapping();
 
@@ -258,6 +260,9 @@ namespace APISunSale.Startup
 
                 cfg.CreateMap<PlayearsViewModel, Players>();
                 cfg.CreateMap<Players, PlayearsViewModel>();
+
+                cfg.CreateMap<PostagemViewModel, Postagem>();
+                cfg.CreateMap<Postagem, PostagemViewModel>();
             });
             IMapper mapper = config.CreateMapper();
             _app.Services.AddSingleton(mapper);
