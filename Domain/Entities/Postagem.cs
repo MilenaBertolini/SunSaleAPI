@@ -30,5 +30,6 @@ namespace Domain.Entities
         [NotNull]
         public string Capa { get; set; }
         public string? Link { get; set; }
+        public int Curtidas { get; set; }
     }
 }

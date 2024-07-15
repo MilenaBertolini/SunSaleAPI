@@ -45,8 +45,26 @@ namespace Application.Implementation.Services
             return await _repository.GetById(id);
         }
 
+        public async Task<Main> Curtir(bool positivo, int postagemId)
+        {
+            var postagem = await _repository.GetById(postagemId);
+
+            if (positivo)
+            {
+                postagem.Curtidas++;
+            }
+            else
+            {
+                postagem.Curtidas--;
+            }
+
+            return await Update(postagem);
+        }
+
         public Task<Main> Update(Main entity)
         {
+            entity.Updated = DateTime.Now;
+
             return _repository.Update(entity);
         }
 

@@ -20,5 +20,6 @@ namespace Domain.ViewModel
         public int TipoPostagem { get; set; }
         public string Capa { get; set; }
         public string? Link { get; set; }
+        public int Curtidas { get; set; }
     }
 }

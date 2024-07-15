@@ -89,6 +89,46 @@ namespace APISunSale.Controllers
             }
         }
 
+        [HttpPost("like")]
+        [AllowAnonymous]
+        public async Task<IResult> Like(int postagemId)
+        {
+            try
+            {
+                var result = await _service.Curtir(true, postagemId);
+                var response = _mapper.Map<MainViewModel>(result);
+
+                return Results.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return Results.BadRequest(ex);
+            }
+        }
+
+        [HttpPost("dislike")]
+        [AllowAnonymous]
+        public async Task<IResult> Dislike(int postagemId)
+        {
+            try
+            {
+                var result = await _service.Curtir(false, postagemId);
+                var response = _mapper.Map<MainViewModel>(result);
+
+                return Results.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return Results.BadRequest(ex);
+            }
+        }
+
         [HttpPost]
         public async Task<ResponseBase<MainViewModel>> Add([FromBodyAttribute] MainViewModel main)
         {

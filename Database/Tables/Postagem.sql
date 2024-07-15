@@ -7,4 +7,5 @@
 	DescricaoEn varchar(max) not null,
 	TipoPostagem int,
 	Capa varchar(255) not null,
+	Curtidas int default 0 not null
 )
