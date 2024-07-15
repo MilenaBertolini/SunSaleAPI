@@ -126,9 +126,9 @@ namespace APISunSale.Controllers
             {
                 MainViewModel mainView = new MainViewModel()
                 {
-                    Assunto = "Contato Portfolio",
+                    Assunto = main.Assunto ?? "Contato Portfolio",
                     Destinatario = "rodrigoborgesmachado@gmail.com",
-                    Texto = $"{main.Email}|{main.Nome}|{main.Empresa}|{main.Escola}" + Environment.NewLine + main.Mensagem,
+                    Texto = $"{main.Email}{Environment.NewLine}{main.Nome}{Environment.NewLine}{main.Empresa}{Environment.NewLine}{main.Escola}{Environment.NewLine}{main.Mensagem}",
                     Observacao = "Email enviado automaticamente"
                 };
 
