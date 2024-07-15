@@ -128,7 +128,7 @@ namespace APISunSale.Controllers
                 {
                     Assunto = main.Assunto ?? "Contato Portfolio",
                     Destinatario = "rodrigoborgesmachado@gmail.com",
-                    Texto = $"{main.Email}{Environment.NewLine}{main.Nome}{Environment.NewLine}{main.Empresa}{Environment.NewLine}{main.Escola}{Environment.NewLine}{main.Mensagem}",
+                    Texto = $"Email: {main.Email}<br><br>Nome: {main.Nome}<br><br>Empresa: {main.Empresa}<br><br>Escola: {main.Escola}<br><br>Assunto: {main.Assunto}<br><br>Mensagem: {main.Mensagem}",
                     Observacao = "Email enviado automaticamente"
                 };
 
