@@ -37,7 +37,8 @@ namespace Data.Helper
         public enum TipoPostagem
         {
             Featured_Projects = 0,
-            Articles = 1
+            Articles = 1,
+            Psico = 2
         }
     }
 }

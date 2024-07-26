@@ -116,7 +116,7 @@ namespace Application.Implementation.Repositories
             return await query.CountAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllPagedAsync(IQueryable<TEntity> query, int page, int quantity, string[] includes = null, string orderBy = null)
+        public async Task<IEnumerable<TEntity>> GetAllPagedAsync(IQueryable<TEntity> query, int page, int quantity, string[] includes = null, string orderBy = null, bool random = false)
         {
             includes?.ToList().ForEach(item => query = query.Include(item));
 
@@ -151,10 +151,14 @@ namespace Application.Implementation.Repositories
                 }
             }
 
-            if (!string.IsNullOrEmpty(orderBy))
+            if (!string.IsNullOrEmpty(orderBy) && !random)
             {
                 var arr = orderBy.Split(':');
                 query = query.OrderBy(arr[0], arr[1]);
+            }
+            else if (random)
+            {
+                query = query.OrderBy(p => Guid.NewGuid());
             }
 
             return await query.ToListPagedAsync(page, quantity);

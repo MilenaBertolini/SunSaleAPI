@@ -65,7 +65,7 @@ namespace Application.Implementation.Repositories
             GetIncludes(includes).ToList().ForEach(p => query = query.Include(p));
 
             var qt = await base.GetAllPagedTotalAsync(query);
-            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: tipoPostagem == TipoPostagem.Articles ? "Curtidas:Desc" : "Id:Asc");
+            var response = await base.GetAllPagedAsync(query, page, quantity, orderBy: tipoPostagem == TipoPostagem.Articles ? "Curtidas:Desc" : "Id:Asc", random: tipoPostagem == TipoPostagem.Psico);
 
             return Tuple.Create(response, qt);
         }
