@@ -65,6 +65,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IWhosThatPokemonResultService, WhosThatPokemonResultService>();
             _app.Services.AddScoped<IRandomRaxaService, RandomRaxaService>();
             _app.Services.AddScoped<IPostagemService, PostagemService>();
+            _app.Services.AddScoped<IWppData, WppData>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
