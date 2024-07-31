@@ -4,11 +4,14 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.IO.Compression;
 using System.IO;
+using System.Globalization;
 
 namespace Application.Implementation.Services
 {
     public class WppData : IWppData
     {
+        private readonly string format = "dd/MM/yyyy HH:mm";
+        
         public List<DadosWpp> GetDadosWppsAsync(MemoryStream file)
         {
             List<DadosWpp> dados = new List<DadosWpp>();
@@ -57,11 +60,11 @@ namespace Application.Implementation.Services
             foreach (var item in map)
             {
                 var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
-                var qtHorarioComercial = item.Value.Where(j => DateTime.Parse(j.Split('-')[0].Trim()).Hour >= 8 && DateTime.Parse(j.Split('-')[0].Trim()).Hour <= 18).Count();
-                var qtDiasDaSemana = item.Value.Where(j => days.Contains(DateTime.Parse(j.Split('-')[0].Trim()).DayOfWeek)).Count();
-                var qtFds = item.Value.Where(j => !days.Contains(DateTime.Parse(j.Split('-')[0].Trim()).DayOfWeek)).Count();
-                var qtMsgMadrugada = item.Value.Where(j => DateTime.Parse(j.Split('-')[0].Trim()).Hour >= 0 && DateTime.Parse(j.Split('-')[0].Trim()).Hour <= 8).Count();
-                var qtMsgUltimos30Dias = item.Value.Where(j => DateTime.Parse(j.Split('-')[0].Trim()) >= DateTime.Now.AddMonths(-1)).Count();
+                var qtHorarioComercial = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 8 && DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 18).Count();
+                var qtDiasDaSemana = item.Value.Where(j => days.Contains(DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
+                var qtFds = item.Value.Where(j => !days.Contains(DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
+                var qtMsgMadrugada = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 0 && DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 8).Count();
+                var qtMsgUltimos30Dias = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture) >= DateTime.Now.AddMonths(-1)).Count();
                 int qtCaracteres = item.Value.Sum(i => i.Length);
                 var qtMensagens = item.Value.Count();
 
@@ -73,7 +76,7 @@ namespace Application.Implementation.Services
                     var mensagem = temp.Length > 1 ? temp[1].Trim() : texto.Replace(data, "");
                     mensagens.Add(new MensagemWpp()
                     {
-                        Date = DateTime.Parse(data),
+                        Date = DateTime.ParseExact(data, format, CultureInfo.InvariantCulture),
                         Mensagem = mensagem,
                     });
                 }
