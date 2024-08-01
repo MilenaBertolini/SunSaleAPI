@@ -7,7 +7,7 @@ namespace Domain.ViewModel
     public class UsuariosViewModel
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int Id { get; set; }
 
         public string Login { get; set; }

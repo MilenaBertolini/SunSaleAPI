@@ -7,7 +7,7 @@ namespace Domain.ViewModel
     public class QuestoesViewModel
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int Codigo { get; set; }
 
         public DateTime DataRegistro { get; set; }

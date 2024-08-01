@@ -7,7 +7,7 @@ namespace Domain.ViewModel
     public class ProvaViewModel
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int Codigo { get; set; }
 
         [NotNull]

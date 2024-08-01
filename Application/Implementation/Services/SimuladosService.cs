@@ -221,7 +221,7 @@ namespace Application.Implementation.Services
                 int i = 0;
                 questao.AnexosQuestoes?.ToList().ForEach(anexo =>
                 {
-                    textoQuestao = textoQuestao.Replace($"<img src=\"#\" alt=\"Anexo\" id=\"divAnexo0\"/>", $"<img src=\"{_mapper.Map<string>(anexo.Anexo)}\" alt=\"Anexo\" id=\"divAnexo${i}\"/>");
+                    textoQuestao = textoQuestao.Replace($"<img src=\"#\" alt=\"Anexo\" Id=\"divAnexo0\"/>", $"<img src=\"{_mapper.Map<string>(anexo.Anexo)}\" alt=\"Anexo\" Id=\"divAnexo${i}\"/>");
                     i++;
                 });
 

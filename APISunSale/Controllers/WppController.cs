@@ -4,10 +4,11 @@ using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using MainEntity = Domain.Entities.DadosWpp;
+using MainEntity = Domain.Entities.RelatorioGrupoWpp;
 using Service = Application.Interface.Services.IWppData;
 using LoggerService = Application.Interface.Services.ILoggerService;
 using System.IO.Compression;
+using Domain.ViewModel;
 
 namespace APISunSale.Controllers
 {
@@ -31,13 +32,13 @@ namespace APISunSale.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ResponseBase<List<MainEntity>>> Add(IFormFile file)
+        public async Task<ResponseBase<MainEntity>> Add(IFormFile file)
         {
             try
             {
                 if (file == null || file.Length == 0)
                 {
-                    return new ResponseBase<List<MainEntity>>()
+                    return new ResponseBase<MainEntity>()
                     {
                         Message = "File is empty",
                         Success = false
@@ -46,7 +47,7 @@ namespace APISunSale.Controllers
 
                 if (!file.FileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                 {
-                    return new ResponseBase<List<MainEntity>>()
+                    return new ResponseBase<MainEntity>()
                     {
                         Message = "File must be a .zip file",
                         Success = false
@@ -56,15 +57,15 @@ namespace APISunSale.Controllers
                 await _loggerService.AddInfo("Chamando dados wpp");
 
                 List<string> textFileContents = new List<string>();
-                List<MainEntity> result = new List<MainEntity>();
+                MainEntity result = new MainEntity();
                 using (var memoryStream = new MemoryStream())
                 {
                     await file.CopyToAsync(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
-                    result = _service.GetDadosWppsAsync(memoryStream);
+                    result = await _service.GetDadosWppsAsync(memoryStream);
                 }
 
-                return new ResponseBase<List<MainEntity>>()
+                return new ResponseBase<MainEntity>()
                 {
                     Message = "Created",
                     Success = true,
@@ -77,7 +78,35 @@ namespace APISunSale.Controllers
                 _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
                 await _loggerService.AddException(ex);
 
-                return new ResponseBase<List<MainEntity>>()
+                return new ResponseBase<MainEntity>()
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ResponseBase<MainEntity>> GetAll(int id)
+        {
+            try
+            {
+                var result = await _service.GetRelatorioById(id);
+                return new ResponseBase<MainEntity>()
+                {
+                    Message = "List created",
+                    Success = true,
+                    Object = result,
+                    Quantity = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Issue on {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", ex);
+                await _loggerService.AddException(ex);
+
+                return new ResponseBase<MainEntity>()
                 {
                     Message = ex.Message,
                     Success = false

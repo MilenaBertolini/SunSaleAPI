@@ -7,7 +7,7 @@ namespace Domain.ViewModel
     public class AnexosQuestoesViewModel
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int Codigo { get; set; }
         [NotNull]
         public int CodigoQuestao { get; set; }

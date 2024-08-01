@@ -8,7 +8,7 @@ namespace Domain.ViewModel
     public class RespostasUsuariosViewModel
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int Codigo { get; set; }
 
         [NotNull]

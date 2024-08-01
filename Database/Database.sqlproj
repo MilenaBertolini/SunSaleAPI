@@ -144,5 +144,6 @@
     <Build Include="Tables\WhosThatPokemonResult.sql" />
     <Build Include="Tables\TipoPostagem.sql" />
     <Build Include="Tables\Postagem.sql" />
+    <Build Include="Tables\SavedResultsWpp.sql" />
   </ItemGroup>
 </Project>

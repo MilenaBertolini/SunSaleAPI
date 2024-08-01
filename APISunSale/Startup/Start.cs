@@ -66,6 +66,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IRandomRaxaService, RandomRaxaService>();
             _app.Services.AddScoped<IPostagemService, PostagemService>();
             _app.Services.AddScoped<IWppData, WppData>();
+            _app.Services.AddScoped<ISavedResultsWppService, SavedResultsWppService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -106,6 +107,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IMeuDesempenhoRepository, MeuDesempenhoRepository>();
             _app.Services.AddScoped<IWhosThatPokemonResultRepository, WhosThatPokemonResultRepository>();
             _app.Services.AddScoped<IPostagemRepository, PostagemRepository>();
+            _app.Services.AddScoped<ISavedResultsWppRepository, SavedResultsWppRepository>();
 
             Mapping();
 
