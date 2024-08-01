@@ -35,6 +35,10 @@ namespace Application.Implementation.Services
                 {
                     finalLines[i - 1] += line;
                 }
+                else if(!Regex.IsMatch(line, pattern)) 
+                {
+                    continue;
+                }
                 else
                 {
                     finalLines.Add(line);
