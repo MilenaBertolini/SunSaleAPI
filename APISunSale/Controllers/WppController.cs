@@ -30,6 +30,7 @@ namespace APISunSale.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ResponseBase<List<MainEntity>>> Add(IFormFile file)
         {
             try
