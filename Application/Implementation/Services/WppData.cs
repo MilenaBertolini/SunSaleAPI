@@ -31,7 +31,7 @@ namespace Application.Implementation.Services
             foreach (var line in lines)
             {
                 string pattern = @"^\d{2}/\d{2}/\d{4} \d{2}:\d{2} - [A-Za-z\s]+:";
-                if (!Regex.IsMatch(line, pattern))
+                if (!Regex.IsMatch(line, pattern) && i > 0)
                 {
                     finalLines[i - 1] += line;
                 }
