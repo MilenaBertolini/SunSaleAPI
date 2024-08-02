@@ -66,6 +66,13 @@ namespace Application.Implementation.Repositories
             return await base.GetAllPagedAsync(query, page, quantity);
         }
 
+        public async Task<Main> GetByToken(string token)
+        {
+            var query = base.GetQueryable().Where(t => t.Token.Equals(token));
+
+            return await query.FirstAsync();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

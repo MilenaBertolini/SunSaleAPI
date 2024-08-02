@@ -42,6 +42,11 @@ namespace Application.Implementation.Services
             return await _repository.GetById(id);
         }
 
+        public async Task<Main> GetByToken(string token)
+        {
+            return await _repository.GetByToken(token);
+        }
+
         public Task<Main> Update(Main entity)
         {
             return _repository.Update(entity);
