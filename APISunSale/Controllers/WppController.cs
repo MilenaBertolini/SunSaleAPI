@@ -88,11 +88,11 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ResponseBase<MainEntity>> GetAll(int id)
+        public async Task<ResponseBase<MainEntity>> GetAll(string id)
         {
             try
             {
-                var result = await _service.GetRelatorioById(id);
+                var result = await _service.GetRelatorioByToken(id);
                 return new ResponseBase<MainEntity>()
                 {
                     Message = "List created",

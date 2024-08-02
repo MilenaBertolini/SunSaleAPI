@@ -194,9 +194,9 @@ namespace Application.Implementation.Services
             return relatorio;
         }
 
-        public async Task<RelatorioGrupoWpp> GetRelatorioById(int id)
+        public async Task<RelatorioGrupoWpp> GetRelatorioByToken(string id)
         {
-            var item = await _savedResultsWppService.GetById(id);
+            var item = await _savedResultsWppService.GetByToken(id);
 
             return JsonConvert.DeserializeObject<RelatorioGrupoWpp>(item.Json);
         }
