@@ -11,6 +11,7 @@ namespace Application.Implementation.Services
     public class WppData : IWppData
     {
         private string format = "dd/MM/yyyy HH:mm";
+        private char splitChar = '-';
         private readonly List<string> palavrasRacistas = new List<string>() { "A coisa tá preta", "Cabelo ruim", "cabelo bombril", "cabelo duro", "Cor de pele", "Crioulo ou crioula", "Da cor do pecado", "Denegrir", "Dia de branco", "Disputar a negra", "Esclarecer", "Escravo e escrava", "Estampa étnica", "Humor negro", "Inhaca", "Inveja branca", "Lista negra", "Magia negra", "Mercado negro", "Mulata ou mulato", "Mulata tipo exportação", "Não sou tuas negas!", "Nasceu com um pé na cozinha", "Nega maluca", "Negra com traços finos", "Negra de beleza exótica", "Negro de alma branca | Preto de alma branca", "Ovelha negra", "Quando não está preso está armado", "Samba do crioulo doido", "Serviço de preto", "Teta de nega", "Nego", "Negro", "Macaco", "Mamaco", "Pixe", "Preto", "suco de pneu", "memory card", "avatar defumado", "sombra 3D", "charuto de macumba", "capa de biblia", "combustivel de churrasqueira", "ze gotinha da Petrobras", "mico Leão queimado", "sabonete de mecânico", "testiculo de africano", "mumia de fita isolante", "metade de zebra", "oreo sem recheio", "enderman do minecraft", "inimigo da luz", "amigo da escuridão", "black out", "meianoite", "eclipse", "pedaço de coco de vaca", "tapioca de luto", "pretoshina e negrozaki", "parachoque da rotam", "personagem não desbloqueado", "adaptação da netflix", "ausente no arcoíris", "prêmio de PM", "guardanapo de mecânico", "lanterna queimada", "cotonete de escape", "papai noel da angola", "o preto de barro e os 7 carvões", "picolé de asfalto", "lata de macumba", "materia escura", "50 tons de preto", "corretivo de petróleo", "cirilo", "pelé", "unha de mendigo", "olaf de barro", "judeu cremado", "batizado na fogueira de são joão", "escondidinho de graxa", "raio x sem osso", "sofá de couro", "super choque", "madrugada ambulante", "gênio do pote de café" };
         private readonly List<string> palavrasHomofobicas = new List<string>() { "viado", "gay", "dar a bund", "viadinho", "baitola", "sapatão", "caminhoneira", "bixa", "viada" };
         private readonly List<string> palavrasGordofobicas = new List<string>() { "Gordo", "Balei", "Taís Carla", "Bola", "Redondo", "Dominic Torresmo", "Duque de Coxinhas", "Zumbi dos Jantares", "Estátua da Obesidade", "Bem Frito de Paula", "Amanteigado Batista", "Back Estria Boys", "Capitão Enchimento", "Dom Peso I", "Garfo Galático", "Fafá de Acém", "Mc Ronald Golias", "Balão da Pisadinha", "Lasanha Manoela", "Monteiro Carboidrato", "Elisa Lanches", "Chitãozinho Mocotó", "Poderoso Pratão", "Fábio Jumbo", "Leitão Jobim", "Padre Infarto de Melo", "Grande Bujão Branco", "Martin Burger King"};
@@ -70,6 +71,33 @@ namespace Application.Implementation.Services
                 }
                 format = "M/d/yy, h:mm tt";
             }
+
+            if (finalLines.Count == 0)
+            {
+                i = 0;
+                finalLines = new List<string>();
+                foreach (var line in lines)
+                {
+                    string pattern = @"^\[\d{2}/\d{2}/\d{4}, \d{2}:\d{2}:\d{2}\] [A-Za-z]+:";
+
+                    if (!Regex.IsMatch(line, pattern) && i > 0)
+                    {
+                        finalLines[i - 1] += line;
+                    }
+                    else if (!Regex.IsMatch(line, pattern))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        finalLines.Add(line);
+                        i++;
+                    }
+                }
+                format = "[dd/MM/yyyy, HH:mm:ss";
+                splitChar = ']';
+            }
+
             foreach (var line in finalLines)
             {
                 if (string.IsNullOrEmpty(line))
@@ -92,12 +120,12 @@ namespace Application.Implementation.Services
             foreach (var item in map)
             {
                 var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
-                var qtHorarioComercial = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 8 && DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 18).Count();
-                var qtTestemunhaGeova = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 5 && DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 8).Count();
-                var qtDiasDaSemana = item.Value.Where(j => days.Contains(DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
-                var qtFds = item.Value.Where(j => !days.Contains(DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
-                var qtMsgMadrugada = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 0 && DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 8).Count();
-                var qtMsgUltimos30Dias = item.Value.Where(j => DateTime.ParseExact(j.Split('-')[0].Trim(), format, CultureInfo.InvariantCulture) >= DateTime.Now.AddMonths(-1)).Count();
+                var qtHorarioComercial = item.Value.Where(j => DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 8 && DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 18).Count();
+                var qtTestemunhaGeova = item.Value.Where(j => DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 5 && DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 8).Count();
+                var qtDiasDaSemana = item.Value.Where(j => days.Contains(DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
+                var qtFds = item.Value.Where(j => !days.Contains(DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).DayOfWeek)).Count();
+                var qtMsgMadrugada = item.Value.Where(j => DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour >= 0 && DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture).Hour <= 8).Count();
+                var qtMsgUltimos30Dias = item.Value.Where(j => DateTime.ParseExact(j.Split(splitChar)[0].Trim(), format, CultureInfo.InvariantCulture) >= DateTime.Now.AddMonths(-1)).Count();
                 int qtCaracteres = item.Value.Sum(i => i.Length);
                 var qtMensagens = item.Value.Count();
 
@@ -107,7 +135,7 @@ namespace Application.Implementation.Services
                 int qtGordofobico = 0;
                 foreach (var texto in item.Value)
                 {
-                    var data = texto.Split('-')[0].Trim();
+                    var data = texto.Split(splitChar)[0].Trim();
                     var temp = texto.Replace(data, "").Split(":");
                     var mensagem = temp.Length > 1 ? temp[1].Trim() : texto.Replace(data, "");
 
@@ -203,7 +231,7 @@ namespace Application.Implementation.Services
 
         private string GetName(string linha)
         {
-            string nome = linha.Split('-')[1].Trim();
+            string nome = linha.Split(splitChar)[1].Trim();
             nome = nome.Split(":")[0].Trim().Split(' ')[0].Trim();
 
             if (string.IsNullOrEmpty(nome))
