@@ -70,7 +70,7 @@ namespace Application.Implementation.Repositories
         {
             var query = base.GetQueryable().Where(t => t.Token.Equals(token));
 
-            return await query.FirstAsync();
+            return await query.FirstOrDefaultAsync();
         }
 
         public void Dispose()
