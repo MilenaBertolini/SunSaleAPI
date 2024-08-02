@@ -2,7 +2,7 @@
 {
     public class RelatorioGrupoWpp
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string TopMensagens { get; set; }
         public string TopCaracteres { get; set; }
         public string TopDuranteSemana { get; set; }

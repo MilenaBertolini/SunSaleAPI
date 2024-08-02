@@ -17,6 +17,7 @@ namespace Application.Implementation.Services
             entity.Created = DateTime.Now;
             entity.Updated = DateTime.Now;
             entity.IsActive = "1";
+            entity.Token = Guid.NewGuid().ToString();
 
             return await _repository.Add(entity);
         }

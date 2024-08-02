@@ -8,5 +8,6 @@
         public DateTime Updated { get; set; }
         public string IsActive { get; set; }
         public string Json { get; set; }
+        public string Token { get; set; }
     }
 }

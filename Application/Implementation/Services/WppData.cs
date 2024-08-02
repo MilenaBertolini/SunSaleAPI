@@ -189,7 +189,7 @@ namespace Application.Implementation.Services
                 Json = JsonConvert.SerializeObject(relatorio)
             };
             var t = await _savedResultsWppService.Add(savedResult);
-            relatorio.Id = t.Id;
+            relatorio.Id = t.Token;
 
             return relatorio;
         }
