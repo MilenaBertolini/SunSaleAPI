@@ -10,7 +10,7 @@ namespace Application.Implementation.Services
 {
     public class WppData : IWppData
     {
-        private readonly string format = "dd/MM/yyyy HH:mm";
+        private string format = "dd/MM/yyyy HH:mm";
         private readonly List<string> palavrasRacistas = new List<string>() { "A coisa tá preta", "Cabelo ruim", "cabelo bombril", "cabelo duro", "Cor de pele", "Crioulo ou crioula", "Da cor do pecado", "Denegrir", "Dia de branco", "Disputar a negra", "Esclarecer", "Escravo e escrava", "Estampa étnica", "Humor negro", "Inhaca", "Inveja branca", "Lista negra", "Magia negra", "Mercado negro", "Mulata ou mulato", "Mulata tipo exportação", "Não sou tuas negas!", "Nasceu com um pé na cozinha", "Nega maluca", "Negra com traços finos", "Negra de beleza exótica", "Negro de alma branca | Preto de alma branca", "Ovelha negra", "Quando não está preso está armado", "Samba do crioulo doido", "Serviço de preto", "Teta de nega", "Nego", "Negro", "Macaco", "Mamaco", "Pixe", "Preto", "suco de pneu", "memory card", "avatar defumado", "sombra 3D", "charuto de macumba", "capa de biblia", "combustivel de churrasqueira", "ze gotinha da Petrobras", "mico Leão queimado", "sabonete de mecânico", "testiculo de africano", "mumia de fita isolante", "metade de zebra", "oreo sem recheio", "enderman do minecraft", "inimigo da luz", "amigo da escuridão", "black out", "meianoite", "eclipse", "pedaço de coco de vaca", "tapioca de luto", "pretoshina e negrozaki", "parachoque da rotam", "personagem não desbloqueado", "adaptação da netflix", "ausente no arcoíris", "prêmio de PM", "guardanapo de mecânico", "lanterna queimada", "cotonete de escape", "papai noel da angola", "o preto de barro e os 7 carvões", "picolé de asfalto", "lata de macumba", "materia escura", "50 tons de preto", "corretivo de petróleo", "cirilo", "pelé", "unha de mendigo", "olaf de barro", "judeu cremado", "batizado na fogueira de são joão", "escondidinho de graxa", "raio x sem osso", "sofá de couro", "super choque", "madrugada ambulante", "gênio do pote de café" };
         private readonly List<string> palavrasHomofobicas = new List<string>() { "viado", "gay", "dar a bund", "viadinho", "baitola", "sapatão", "caminhoneira", "bixa", "viada" };
         private readonly List<string> palavrasGordofobicas = new List<string>() { "Gordo", "Balei", "Taís Carla", "Bola", "Redondo", "Dominic Torresmo", "Duque de Coxinhas", "Zumbi dos Jantares", "Estátua da Obesidade", "Bem Frito de Paula", "Amanteigado Batista", "Back Estria Boys", "Capitão Enchimento", "Dom Peso I", "Garfo Galático", "Fafá de Acém", "Mc Ronald Golias", "Balão da Pisadinha", "Lasanha Manoela", "Monteiro Carboidrato", "Elisa Lanches", "Chitãozinho Mocotó", "Poderoso Pratão", "Fábio Jumbo", "Leitão Jobim", "Padre Infarto de Melo", "Grande Bujão Branco", "Martin Burger King"};
@@ -44,6 +44,31 @@ namespace Application.Implementation.Services
                     finalLines.Add(line);
                     i++;
                 }
+            }
+
+            if(finalLines.Count == 0)
+            {
+                i = 0;
+                finalLines = new List<string>();
+                foreach (var line in lines)
+                {
+                    string pattern = @"^\d{1,2}/\d{1,2}/\d{2}, \d{1,2}:\d{2}\s[APap][Mm]\s-\s[A-Za-z]+:";
+
+                    if (!Regex.IsMatch(line, pattern) && i > 0)
+                    {
+                        finalLines[i - 1] += line;
+                    }
+                    else if (!Regex.IsMatch(line, pattern))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        finalLines.Add(line);
+                        i++;
+                    }
+                }
+                format = "M/d/yy, h:mm tt";
             }
             foreach (var line in finalLines)
             {
@@ -146,18 +171,18 @@ namespace Application.Implementation.Services
             relatorio.RankingHomofobico = dados.Where(d => d.QtMsgHomofobica > 0).OrderByDescending(d => d.QtMsgHomofobica).Select(t => t.Nome).ToList();
             relatorio.RankingGordofobico = dados.Where(d => d.QtMsgGordofobicas > 0).OrderByDescending(d => d.QtMsgGordofobicas).Select(t => t.Nome).ToList();
 
-            relatorio.TopMensagens = relatorio.RankingMensagens.First();
-            relatorio.TopCaracteres = relatorio.RankingCaracteres.First();
-            relatorio.TopMadrugada = relatorio.RankingMadrugada.First();
-            relatorio.TopFds = relatorio.RankingFds.First();
-            relatorio.TopDuranteSemana = relatorio.RankingDuranteSemana.First();
-            relatorio.TopHorarioComercial = relatorio.RankingHorarioComercial.First();
-            relatorio.TopUltimos30Dias = relatorio.RankingUltimos30Dias.First();
-            relatorio.TopTestemunhaGeova = relatorio.RankingTestemunhaGeova.First();
-            relatorio.TopRacista = relatorio.RankingRacista.First();
-            relatorio.TopHomofobico = relatorio.RankingHomofobico.First();
-            relatorio.TopGordofobico = relatorio.RankingGordofobico.First();
-            relatorio.MenosMensagens = relatorio.RankingMensagens.Last();
+            relatorio.TopMensagens = relatorio.RankingMensagens.Count > 0 ? relatorio.RankingMensagens.First() : string.Empty;
+            relatorio.TopCaracteres = relatorio.RankingCaracteres.Count > 0 ?relatorio.RankingCaracteres.First() : string.Empty;
+            relatorio.TopMadrugada = relatorio.RankingMadrugada.Count > 0 ? relatorio.RankingMadrugada.First() : string.Empty;
+            relatorio.TopFds = relatorio.RankingFds.Count > 0 ? relatorio.RankingFds.First() : string.Empty;
+            relatorio.TopDuranteSemana = relatorio.RankingDuranteSemana.Count > 0 ? relatorio.RankingDuranteSemana.First() : string.Empty;
+            relatorio.TopHorarioComercial = relatorio.RankingHorarioComercial.Count > 0 ? relatorio.RankingHorarioComercial.First() : string.Empty;
+            relatorio.TopUltimos30Dias = relatorio.RankingUltimos30Dias.Count > 0 ? relatorio.RankingUltimos30Dias.First() : string.Empty;
+            relatorio.TopTestemunhaGeova = relatorio.RankingTestemunhaGeova.Count > 0 ? relatorio.RankingTestemunhaGeova.First() : string.Empty;
+            relatorio.TopRacista = relatorio.RankingRacista.Count > 0 ? relatorio.RankingRacista.First() : string.Empty;
+            relatorio.TopHomofobico = relatorio.RankingHomofobico.Count > 0 ? relatorio.RankingHomofobico.First() : string.Empty;
+            relatorio.TopGordofobico = relatorio.RankingGordofobico.Count > 0 ? relatorio.RankingGordofobico.First() : string.Empty;
+            relatorio.MenosMensagens = relatorio.RankingMensagens.Count > 0 ? relatorio.RankingMensagens.Last() : string.Empty;
 
             SavedResultsWpp savedResult = new SavedResultsWpp()
             {
