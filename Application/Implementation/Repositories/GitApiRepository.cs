@@ -60,6 +60,7 @@ namespace Application.Implementation.Repositories
                             Link = repo.git_url,
                             TipoPostagem = 3
                         });
+                        total++;
                     }
                     catch (HttpRequestException ex)
                     {
