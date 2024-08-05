@@ -25,11 +25,11 @@ namespace APISunSale.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ResponseBase<List<Postagem>>> GetAllPagged(int page, int quantity)
+        public async Task<ResponseBase<List<Postagem>>> GetAllPagged(int page, int quantity, int id = 0)
         {
             try
             {
-                var result = await _service.BuscaInformacoesPessoais(page, quantity);
+                var result = await _service.BuscaInformacoesPessoais(page, quantity, id);
                 return new ResponseBase<List<Postagem>>()
                 {
                     Message = "List created",

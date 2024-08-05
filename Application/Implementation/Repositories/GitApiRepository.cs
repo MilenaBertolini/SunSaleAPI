@@ -18,7 +18,7 @@ namespace Application.Implementation.Repositories
             _settings = options.Value;
         }
 
-        public async Task<Tuple<List<Postagem>, int>> BuscaInformacoesPessoais(int page, int quantity)
+        public async Task<Tuple<List<Postagem>, int>> BuscaInformacoesPessoais(int page, int quantity, int id = 0)
         {
             int total = 0;
             List < Postagem > posts = new List<Postagem>();
@@ -34,9 +34,19 @@ namespace Application.Implementation.Repositories
                 if (lista == null || lista.Count == 0)
                     return Tuple.Create(posts, 0);
 
+                if(id > 0)
+                    lista = lista.Where(i => i.id.Equals(id)).ToList();
+                lista = lista.OrderByDescending(i => i.created_at).ToList();
+                lista = lista.Where(i => !string.IsNullOrEmpty(i.description)).ToList();
+                total = lista.Count()-6;
+                int i = 0;
                 foreach (var repo in lista)
                 {
-                    if(string.IsNullOrEmpty(repo.description)) continue;
+                    i++;
+                    if(posts.Count == quantity || i < (page-1)*quantity)
+                    {
+                        continue;
+                    }
 
                     var repoName = repo.name.ToString();
                     var readmeUrl = $"https://api.github.com/repos/{_settings.Username}/{repoName}/readme";
@@ -51,23 +61,22 @@ namespace Application.Implementation.Repositories
                         var readmeDecoded = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(readmeContent));
                         posts.Add(new Postagem()
                         {
+                            Id = repo.id,
                             Curtidas = repo.watchers,
                             Created = repo.created_at,
                             Updated = repo.updated_at,
                             Descricao = readmeDecoded,
                             Titulo = repo.name,
                             Intro = repo.description,
-                            Link = repo.git_url,
+                            Link = repo.html_url,
                             TipoPostagem = 3
                         });
-                        total++;
                     }
                     catch (HttpRequestException ex)
                     {
                         Console.WriteLine($"Failed to retrieve README for {repoName}: {ex.Message}");
                     }
                 }
-                posts = posts.Skip(quantity * (page - 1)).Take(quantity).ToList();
             }
 
             return Tuple.Create(posts, total);

@@ -13,9 +13,9 @@ namespace Application.Implementation.Services
             _gitApi = gitApi;
         }
 
-        public async Task<Tuple<List<Postagem>, int>> BuscaInformacoesPessoais(int page, int quantity)
+        public async Task<Tuple<List<Postagem>, int>> BuscaInformacoesPessoais(int page, int quantity, int id = 0)
         {
-            return await _gitApi.BuscaInformacoesPessoais(page, quantity);
+            return await _gitApi.BuscaInformacoesPessoais(page, quantity, id);
         }
     }
 }
