@@ -1,7 +1,7 @@
 ﻿using Data.Context;
-using Main = Domain.Entities.SavedResultsWpp;
-using IRepository = Application.Interface.Repositories.ISavedResultsWppRepository;
 using Microsoft.EntityFrameworkCore;
+using IRepository = Application.Interface.Repositories.ISavedResultsWppRepository;
+using Main = Domain.Entities.SavedResultsWpp;
 
 namespace Application.Implementation.Repositories
 {

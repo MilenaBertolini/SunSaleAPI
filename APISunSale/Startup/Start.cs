@@ -67,6 +67,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IPostagemService, PostagemService>();
             _app.Services.AddScoped<IWppData, WppData>();
             _app.Services.AddScoped<ISavedResultsWppService, SavedResultsWppService>();
+            _app.Services.AddScoped<IGitApiService, GitApiService>();
 
             // Repositories
             _app.Services.AddScoped<IAcaoUsuarioRepository, AcaoUsuarioRepository>();
@@ -108,6 +109,7 @@ namespace APISunSale.Startup
             _app.Services.AddScoped<IWhosThatPokemonResultRepository, WhosThatPokemonResultRepository>();
             _app.Services.AddScoped<IPostagemRepository, PostagemRepository>();
             _app.Services.AddScoped<ISavedResultsWppRepository, SavedResultsWppRepository>();
+            _app.Services.AddScoped<IGitApiRepository, GitApiRepository>();
 
             Mapping();
 
@@ -130,6 +132,7 @@ namespace APISunSale.Startup
 
             _app.Services.AddSingleton(configuration);
             _app.Services.Configure<EmailSettings>(configuration.GetSection("Email"));
+            _app.Services.Configure<GitSettings>(configuration.GetSection("Git"));
 
             return this;
         }
