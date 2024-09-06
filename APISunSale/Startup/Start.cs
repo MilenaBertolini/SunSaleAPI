@@ -132,7 +132,12 @@ namespace APISunSale.Startup
 
             _app.Services.AddSingleton(configuration);
             _app.Services.Configure<EmailSettings>(configuration.GetSection("Email"));
-            _app.Services.Configure<GitSettings>(configuration.GetSection("Git"));
+            _app.Services.Configure<GitSettings>(options =>
+            {
+                configuration.GetSection("Git").Bind(options);
+                options.Token = _app.Configuration["GitToken"];
+            }
+            );
 
             return this;
         }
