@@ -131,7 +131,12 @@ namespace APISunSale.Startup
                 .Build();
 
             _app.Services.AddSingleton(configuration);
-            _app.Services.Configure<EmailSettings>(configuration.GetSection("Email"));
+            _app.Services.Configure<EmailSettings>(options =>
+            {
+                configuration.GetSection("Email").Bind(options);
+                options.Senha = _app.Configuration["EmailPass"];
+                options.SendGridApiKey = _app.Configuration["SendGridApiKey"];
+            });
             _app.Services.Configure<GitSettings>(options =>
             {
                 configuration.GetSection("Git").Bind(options);
